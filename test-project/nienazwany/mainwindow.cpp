@@ -18,13 +18,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::add_widget(QWidget* x)
 {
-    //ui->scrollArea->addScrollBarWidget(x, Qt::AlignLeft);
-    for (int i = 0; i < 10; ++i) {
-            QPushButton* button = new QPushButton();
-            button->setText(QString::number(i));
-            ui->scrollArea->addScrollBarWidget(button, Qt::AlignLeft);
 
-    }
+            QLayout* scrollbar_layout = ui->scrollAreaWidgetContents->layout();
+            scrollbar_layout->addWidget(x);
 
 }
 

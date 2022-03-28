@@ -1,5 +1,9 @@
 #include "mainwindow.h"
+#include "deck.h"
+#include "deck.cpp"
+
 #include "ui_mainwindow.h"
+#include "ui_deck.h"
 
 #include <QTime>
 #include <QTimer>
@@ -7,19 +11,38 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QFileInfo>
+#include <QDir>
 
 #include "libs/zip/src/zip.h"
 
+QDir deck_storage;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // Set up timer for time showing
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::showTime);
     timer->start(1000);
     showTime();
+
+    // Get current dir + deck storage paths
+    QDir work_dir;
+    work_dir.setPath(work_dir.currentPath());
+    qDebug() << "work_dir" << work_dir.path();
+
+    deck_storage.setPath(work_dir.path() + "/deck_storage");
+    qDebug() << "deck_storage" << deck_storage.path();
+    if (deck_storage.exists() == false) {
+         work_dir.mkdir("deck_storage");
+         qDebug() << "created deck_storage";
+    }
+
+
+    update_decks(deck_storage);
 }
 
 MainWindow::~MainWindow()
@@ -42,17 +65,7 @@ void MainWindow::showTime()
 
 void MainWindow::on_FileButton_clicked()
 {
-    QDir work_dir;
-    work_dir.setPath(work_dir.currentPath());
-    qDebug() << "work_dir" << work_dir.path();
 
-    QDir deck_storage;
-    deck_storage.setPath(work_dir.path() + "/deck_storage");
-    qDebug() << "deck_storage" << deck_storage.path();
-    if (deck_storage.exists() == false) {
-         work_dir.mkdir("deck_storage");
-         qDebug() << "created deck_storage";
-    }
 
     QString zip_path = QFileDialog::getOpenFileName(this,
         tr("Choose an .apkg file"), ".", tr("Anki deck ( .apkg ) (*.apkg)"));
@@ -63,7 +76,7 @@ void MainWindow::on_FileButton_clicked()
         qDebug() << "zip exists";
 
         /*
-        // libzip effors
+        // libzip try
         zip *zip_opened = zip_open(char_converted, 0, 0);
         int i;
         int buf_lenght;
@@ -75,6 +88,7 @@ void MainWindow::on_FileButton_clicked()
             qDebug() << "bufff" << buf_lenght;
         }
         */
+
         QDir new_deck;
         QFileInfo zip_file_info(zip_path);
         new_deck.setPath(deck_storage.path() + "/" + zip_file_info.baseName());
@@ -87,11 +101,27 @@ void MainWindow::on_FileButton_clicked()
         //
         int arg = 2; // why
         zip_extract(char_converted, new_deck.path().toLocal8Bit().data(), 0, &arg);
-
     }
 }
 
+void MainWindow::update_decks(QDir deck_storage)
+{
 
+    QFileInfoList dir_list = deck_storage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
+    QLayout* scrollbar_layout = ui->scrollAreaWidgetContents->layout();
+
+    //scrollbar_layout->addWidget(x);
+    for (QFileInfo file_info: dir_list) {
+        // Becouse of ".." and "."
+        if (file_info.baseName() == "") {
+            continue;
+        }
+        qDebug() << "file_info_dir" << file_info.baseName();
+        deck* new_deck = new deck();
+        new_deck->deck::set_deck_name(file_info.baseName());
+        scrollbar_layout->addWidget(new_deck);
+    }
+}
 
 
 
