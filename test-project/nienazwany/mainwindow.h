@@ -14,7 +14,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void add_widget(QWidget*);
+    void add_widget(QWidget*, int);
+    void add_widgetleft(QWidget*, int);
 
 private slots:
 
