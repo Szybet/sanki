@@ -26,6 +26,7 @@ public:
     QScrollArea *scrollArea;
     QWidget *scrollAreaWidgetContents;
     QGridLayout *gridLayout_2;
+    QGridLayout *grid3;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -41,9 +42,14 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 780, 580));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 776, 576));
         gridLayout_2 = new QGridLayout(scrollAreaWidgetContents);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        grid3 = new QGridLayout();
+        grid3->setObjectName(QString::fromUtf8("grid3"));
+
+        gridLayout_2->addLayout(grid3, 0, 0, 1, 1);
+
         scrollArea->setWidget(scrollAreaWidgetContents);
 
         gridLayout->addWidget(scrollArea, 0, 0, 1, 1);

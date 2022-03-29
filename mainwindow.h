@@ -16,11 +16,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void update_decks();
+
 private slots:
     void on_CloseButton_clicked();
     void showTime();
     void on_FileButton_clicked();
-    void update_decks(QDir);
 
 signals:
     void remove_decks();

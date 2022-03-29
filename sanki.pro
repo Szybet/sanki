@@ -11,15 +11,18 @@ CONFIG += \
 
 SOURCES += \
     deck.cpp \
+    edit_deck.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     deck.h \
+    edit_deck.h \
     mainwindow.h
 
 FORMS += \
     deck.ui \
+    edit_deck.ui \
     mainwindow.ui
 
 # Default rules for deployment.

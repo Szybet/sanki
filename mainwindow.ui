@@ -123,6 +123,9 @@
     </item>
     <item row="1" column="0">
      <widget class="QScrollArea" name="DeckScrollArea">
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
@@ -131,11 +134,15 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>780</width>
+         <width>766</width>
          <height>532</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout"/>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="DeckGrid"/>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>

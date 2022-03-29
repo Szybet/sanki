@@ -31,7 +31,7 @@
            <enum>Qt::LeftToRight</enum>
           </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string>Deck Stats</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>

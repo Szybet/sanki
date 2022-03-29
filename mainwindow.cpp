@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
 
-    update_decks(deck_storage);
+    update_decks();
 }
 
 MainWindow::~MainWindow()
@@ -101,16 +101,23 @@ void MainWindow::on_FileButton_clicked()
         //
         int arg = 2; // why
         zip_extract(char_converted, new_deck.path().toLocal8Bit().data(), 0, &arg);
+
+
     }
+    // Update decks
+    update_decks();
 }
 
-void MainWindow::update_decks(QDir deck_storage)
+void MainWindow::update_decks()
 {
+    qDebug() << "UPDATE";
+    emit remove_decks();
 
     QFileInfoList dir_list = deck_storage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
-    QLayout* scrollbar_layout = ui->scrollAreaWidgetContents->layout();
+    QGridLayout* scrollbar_layout = ui->DeckGrid;
 
-    //scrollbar_layout->addWidget(x);
+    int row = 0; // horizontal
+    int column = 0; // vertical
     for (QFileInfo file_info: dir_list) {
         // Becouse of ".." and "."
         if (file_info.baseName() == "") {
@@ -119,7 +126,17 @@ void MainWindow::update_decks(QDir deck_storage)
         qDebug() << "file_info_dir" << file_info.baseName();
         deck* new_deck = new deck();
         new_deck->deck::set_deck_name(file_info.baseName());
-        scrollbar_layout->addWidget(new_deck);
+        new_deck->deck_info = file_info;
+        // addWidget(QWidget *widget, int row, int column, Qt::Alignment alignment = Qt::Alignment())
+        connect(this, SIGNAL(remove_decks()), new_deck, SLOT(deleteLater()));
+        connect(new_deck, SIGNAL(refresh_decks_signal()), this, SLOT(update_decks()));
+        scrollbar_layout->addWidget(new_deck, row, column);
+        column = column + 1;
+        if (column == 2)
+        {
+            column = 0;
+            row = row + 1;
+        }
     }
 }
 

@@ -2,6 +2,7 @@
 #define DECK_H
 
 #include "ui_deck.h"
+#include <QDir>
 
 class deck : public QWidget
 {
@@ -9,11 +10,18 @@ class deck : public QWidget
 
 public:
     deck(QWidget *parent = nullptr);
+    QFileInfo deck_info;
 
 public slots:
     void set_deck_name(QString);
+    void refresh_decks_slot();
+
+signals:
+    void refresh_decks_signal();
 
 private slots:
+
+    void on_EditDeckbutton_clicked();
 
 private:
      Ui::MainQwidget *ui;
