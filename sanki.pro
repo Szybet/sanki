@@ -11,19 +11,25 @@ CONFIG += \
 
 SOURCES += \
     deck.cpp \
+    deckplay.cpp \
     edit_deck.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    status_bar.cpp
 
 HEADERS += \
     deck.h \
+    deckplay.h \
     edit_deck.h \
-    mainwindow.h
+    mainwindow.h \
+    status_bar.h
 
 FORMS += \
     deck.ui \
+    deckplay.ui \
     edit_deck.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    status_bar.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
