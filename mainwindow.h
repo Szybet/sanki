@@ -16,16 +16,16 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-public slots:
+signals:
     void update_decks();
+    void clear_mainwidget();
 
 private slots:
     void on_CloseButton_clicked();
     void on_FileButton_clicked();
     void exit_app();
-
-signals:
-    void remove_decks();
+    void deck_scroll_bar_show();
+    void deck_play_show();
 
 private:
     Ui::MainWindow *ui;

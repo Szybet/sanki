@@ -18,10 +18,13 @@ public slots:
 
 signals:
     void refresh_decks_signal();
+    void play_deck();
 
 private slots:
 
     void on_EditDeckbutton_clicked();
+
+    void on_DeckNamePlayButton_clicked();
 
 private:
      Ui::MainQwidget *ui;

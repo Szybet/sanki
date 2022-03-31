@@ -2,6 +2,7 @@
 #include "ui_deck.h"
 #include "edit_deck.h"
 #include "mainwindow.h"
+#include "deckplay.h"
 
 #include <QMainWindow>
 #include <QWidget>
@@ -32,5 +33,13 @@ void deck::on_EditDeckbutton_clicked()
     edit_widget->update_widget();
     edit_widget->show();
     connect(edit_widget, SIGNAL(refresh_decks_edit_signal()), this, SLOT(refresh_decks_slot()));
+}
+
+
+void deck::on_DeckNamePlayButton_clicked()
+{
+    QDir deck_dir = deck_info.dir();
+    qDebug() << "DECKPLAY - DECK";
+    emit play_deck();
 }
 

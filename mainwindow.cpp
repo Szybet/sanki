@@ -4,6 +4,8 @@
 #include "ui_mainwindow.h"
 #include "ui_deck.h"
 #include "status_bar.h"
+#include "decks_scroll_bar.h"
+#include "globals.h"
 
 #include <QTime>
 #include <QTimer>
@@ -14,8 +16,6 @@
 #include <QDir>
 
 #include "libs/zip/src/zip.h"
-
-QDir deck_storage;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -31,20 +31,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(status_bar_up, SIGNAL(close_button_signal()), this, SLOT(exit_app()));
     ui->gridStatus->addWidget(status_bar_up);
 
-    // Get current dir + deck storage paths
-    QDir work_dir;
-    work_dir.setPath(work_dir.currentPath());
-    qDebug() << "work_dir" << work_dir.path();
+    // show scroll bar
+    deck_scroll_bar_show();
 
-    deck_storage.setPath(work_dir.path() + "/deck_storage");
-    qDebug() << "deck_storage" << deck_storage.path();
-    if (deck_storage.exists() == false) {
-         work_dir.mkdir("deck_storage");
-         qDebug() << "created deck_storage";
-    }
-
-
-    update_decks();
 }
 
 MainWindow::~MainWindow()
@@ -52,16 +41,31 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::deck_scroll_bar_show()
+{
+    decks_scroll_bar* decks = new decks_scroll_bar;
+    auto central_layout = ui->centralwidget->layout();
+    connect(this, SIGNAL(update_decks()), decks, SLOT(update_decks()));
+    connect(decks, SIGNAL(play_deck_signal()), this, SLOT(deck_play_show()));
+    connect(this, SIGNAL(clear_mainwidget()), decks, SLOT(deleteLater()));
+    // Something is wrong the passing an argument with signal and slots
+    central_layout->addWidget(decks);
+    emit update_decks();
+}
+
+void MainWindow::deck_play_show()
+{
+    qDebug() << "DECKPLAY - MAIN";
+    auto central_layout = ui->centralwidget->layout();
+}
 
 void MainWindow::on_CloseButton_clicked()
 {
-    delete ui;
+    exit_app();
 }
 
 void MainWindow::on_FileButton_clicked()
 {
-
-
     QString zip_path = QFileDialog::getOpenFileName(this,
         tr("Choose an .apkg file"), ".", tr("Anki deck ( .apkg ) (*.apkg)"));
     qDebug() << "zip_path" << zip_path;
@@ -100,41 +104,8 @@ void MainWindow::on_FileButton_clicked()
 
     }
     // Update decks
-    update_decks();
+    emit update_decks();
 }
-
-void MainWindow::update_decks()
-{
-    qDebug() << "UPDATE";
-    emit remove_decks();
-
-    QFileInfoList dir_list = deck_storage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
-    QGridLayout* scrollbar_layout = ui->DeckGrid;
-
-    int row = 0; // horizontal
-    int column = 0; // vertical
-    for (QFileInfo file_info: dir_list) {
-        // Becouse of ".." and "."
-        if (file_info.baseName() == "") {
-            continue;
-        }
-        qDebug() << "file_info_dir" << file_info.baseName();
-        deck* new_deck = new deck();
-        new_deck->deck::set_deck_name(file_info.baseName());
-        new_deck->deck_info = file_info;
-        // addWidget(QWidget *widget, int row, int column, Qt::Alignment alignment = Qt::Alignment())
-        connect(this, SIGNAL(remove_decks()), new_deck, SLOT(deleteLater()));
-        connect(new_deck, SIGNAL(refresh_decks_signal()), this, SLOT(update_decks()));
-        scrollbar_layout->addWidget(new_deck, row, column);
-        column = column + 1;
-        if (column == 2)
-        {
-            column = 0;
-            row = row + 1;
-        }
-    }
-}
-
 
 void MainWindow::exit_app()
 {

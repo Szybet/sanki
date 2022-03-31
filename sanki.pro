@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,7 +13,9 @@ SOURCES += \
     card_true_false.cpp \
     deck.cpp \
     deckplay.cpp \
+    decks_scroll_bar.cpp \
     edit_deck.cpp \
+    globals.cpp \
     main.cpp \
     mainwindow.cpp \
     status_bar.cpp
@@ -22,7 +24,9 @@ HEADERS += \
     card_true_false.h \
     deck.h \
     deckplay.h \
+    decks_scroll_bar.h \
     edit_deck.h \
+    globals.h \
     mainwindow.h \
     status_bar.h
 
@@ -30,6 +34,7 @@ FORMS += \
     card_true_false.ui \
     deck.ui \
     deckplay.ui \
+    decks_scroll_bar.ui \
     edit_deck.ui \
     mainwindow.ui \
     status_bar.ui
