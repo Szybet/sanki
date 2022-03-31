@@ -21,7 +21,6 @@ public slots:
 
 private slots:
     void on_CloseButton_clicked();
-    void showTime();
     void on_FileButton_clicked();
 
 signals:

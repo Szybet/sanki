@@ -14,6 +14,10 @@ class status_bar : public QWidget
 public:
     explicit status_bar(QWidget *parent = nullptr);
     ~status_bar();
+    void option_button_set(QString, QIcon);
+
+private slots:
+    void showTime();
 
 private:
     Ui::status_bar *ui;

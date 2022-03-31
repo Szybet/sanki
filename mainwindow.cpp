@@ -1,9 +1,9 @@
 #include "mainwindow.h"
 #include "deck.h"
 #include "deck.cpp"
-
 #include "ui_mainwindow.h"
 #include "ui_deck.h"
+#include "status_bar.h"
 
 #include <QTime>
 #include <QTimer>
@@ -23,11 +23,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // Set up timer for time showing
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &MainWindow::showTime);
-    timer->start(1000);
-    showTime();
+    // Setup status bar
+    status_bar* status_bar_up = new status_bar();
+    QIcon file_chooser_button = QIcon("/Resources/")
+    status_bar_up->option_button_set("Add deck", );
+    ui->gridStatus->addWidget(status_bar_up);
 
     // Get current dir + deck storage paths
     QDir work_dir;
@@ -54,13 +54,6 @@ MainWindow::~MainWindow()
 void MainWindow::on_CloseButton_clicked()
 {
     delete ui;
-}
-
-void MainWindow::showTime()
-{
-    QTime time = QTime::currentTime();
-    QString text = time.toString("hh:mm");
-    ui->TimeLabel->setText(text);
 }
 
 void MainWindow::on_FileButton_clicked()
