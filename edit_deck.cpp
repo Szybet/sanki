@@ -36,7 +36,14 @@ void edit_deck::on_ButtonReset_clicked()
 
 void edit_deck::on_textEditDeckName_textChanged()
 {
-    updated_name = ui->textEditDeckName->toPlainText();
+    // Avoid enter key
+    if (ui->textEditDeckName->toPlainText().contains("\n") == true)
+    {
+        ui->textEditDeckName->setText(updated_name);
+    } else {
+        updated_name = ui->textEditDeckName->toPlainText();
+    }
+
 }
 
 void edit_deck::on_ButtonCancelEdit_clicked()

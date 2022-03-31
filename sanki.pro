@@ -10,6 +10,7 @@ CONFIG += \
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    card_true_false.cpp \
     deck.cpp \
     deckplay.cpp \
     edit_deck.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
     status_bar.cpp
 
 HEADERS += \
+    card_true_false.h \
     deck.h \
     deckplay.h \
     edit_deck.h \
@@ -25,6 +27,7 @@ HEADERS += \
     status_bar.h
 
 FORMS += \
+    card_true_false.ui \
     deck.ui \
     deckplay.ui \
     edit_deck.ui \

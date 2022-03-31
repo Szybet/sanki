@@ -22,6 +22,7 @@ public slots:
 private slots:
     void on_CloseButton_clicked();
     void on_FileButton_clicked();
+    void exit_app();
 
 signals:
     void remove_decks();

@@ -25,8 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Setup status bar
     status_bar* status_bar_up = new status_bar();
-    QIcon file_chooser_button = QIcon("/Resources/")
-    status_bar_up->option_button_set("Add deck", );
+    QIcon file_chooser_icon = QIcon(":/icons/folder.png");
+    status_bar_up->option_button_set("Add deck", file_chooser_icon);
+    connect(status_bar_up, SIGNAL(option_button_signal()), this, SLOT(on_FileButton_clicked()));
+    connect(status_bar_up, SIGNAL(close_button_signal()), this, SLOT(exit_app()));
     ui->gridStatus->addWidget(status_bar_up);
 
     // Get current dir + deck storage paths
@@ -134,6 +136,10 @@ void MainWindow::update_decks()
 }
 
 
+void MainWindow::exit_app()
+{
+    QApplication::closeAllWindows();
+}
 
 
 

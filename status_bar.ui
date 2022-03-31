@@ -51,7 +51,13 @@
      </property>
      <property name="icon">
       <iconset resource="Resources/sanki.qrc">
-       <normaloff>:/close.png</normaloff>:/close.png</iconset>
+       <normaloff>:/icons/close.png</normaloff>:/icons/close.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>40</width>
+       <height>40</height>
+      </size>
      </property>
     </widget>
    </item>

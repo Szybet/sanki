@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QTime>
+#include <QDebug>
 
 status_bar::status_bar(QWidget *parent) :
     QWidget(parent),
@@ -36,7 +37,16 @@ void status_bar::option_button_set(QString button_text, QIcon icon)
     ui->ButtonOption->setText(button_text);
     ui->ButtonOption->setIcon(icon);
 
-
-
-
 }
+
+void status_bar::on_ButtonExit_clicked()
+{
+    emit close_button_signal();
+}
+
+
+void status_bar::on_ButtonOption_clicked()
+{
+    emit option_button_signal();
+}
+

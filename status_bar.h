@@ -19,6 +19,14 @@ public:
 private slots:
     void showTime();
 
+    void on_ButtonExit_clicked();
+
+    void on_ButtonOption_clicked();
+
+signals:
+    void option_button_signal();
+    void close_button_signal();
+
 private:
     Ui::status_bar *ui;
 };

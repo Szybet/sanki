@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>150</height>
+    <height>152</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -94,6 +94,9 @@
      </property>
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="lineWrapColumnOrWidth">
+      <number>0</number>
      </property>
     </widget>
    </item>
