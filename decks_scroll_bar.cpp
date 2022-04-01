@@ -57,7 +57,7 @@ void decks_scroll_bar::update_decks()
         // addWidget(QWidget *widget, int row, int column, Qt::Alignment alignment = Qt::Alignment())
         connect(this, SIGNAL(remove_decks()), new_deck, SLOT());
         connect(new_deck, SIGNAL(refresh_decks_signal()), this, SLOT(update_decks()));
-        connect(new_deck, SIGNAL(play_deck()), this, SLOT(play_deck_slott()));
+        connect(new_deck, SIGNAL(play_deck(QDir)), this, SLOT(play_deck_slott(QDir)));
         scrollbar_layout->addWidget(new_deck, row, column);
         column = column + 1;
         if (column == 2)
@@ -68,8 +68,8 @@ void decks_scroll_bar::update_decks()
     }
 }
 
-void decks_scroll_bar::play_deck_slott()
+void decks_scroll_bar::play_deck_slott(QDir dir)
 {
     qDebug() << "DECKPLAY - SCROLL";
-    emit play_deck_signal();
+    emit play_deck_signal(dir);
 }

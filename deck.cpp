@@ -38,8 +38,8 @@ void deck::on_EditDeckbutton_clicked()
 
 void deck::on_DeckNamePlayButton_clicked()
 {
-    QDir deck_dir = deck_info.dir();
+    QDir deck_dir = deck_info.absoluteFilePath();
     qDebug() << "DECKPLAY - DECK";
-    emit play_deck();
+    emit play_deck(deck_dir);
 }
 

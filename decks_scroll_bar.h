@@ -18,11 +18,11 @@ public:
 
 public slots:
     void update_decks();
-    void play_deck_slott();
+    void play_deck_slott(QDir);
 
 signals:
     void remove_decks();
-    void play_deck_signal();
+    void play_deck_signal(QDir);
 
 private:
     Ui::decks_scroll_bar *ui;

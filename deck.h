@@ -18,7 +18,7 @@ public slots:
 
 signals:
     void refresh_decks_signal();
-    void play_deck();
+    void play_deck(QDir);
 
 private slots:
 

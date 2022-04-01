@@ -25,7 +25,7 @@ private slots:
     void on_FileButton_clicked();
     void exit_app();
     void deck_scroll_bar_show();
-    void deck_play_show();
+    void deck_play_show(QDir);
 
 private:
     Ui::MainWindow *ui;

@@ -46,17 +46,21 @@ void MainWindow::deck_scroll_bar_show()
     decks_scroll_bar* decks = new decks_scroll_bar;
     auto central_layout = ui->centralwidget->layout();
     connect(this, SIGNAL(update_decks()), decks, SLOT(update_decks()));
-    connect(decks, SIGNAL(play_deck_signal()), this, SLOT(deck_play_show()));
+    connect(decks, SIGNAL(play_deck_signal(QDir)), this, SLOT(deck_play_show(QDir)));
     connect(this, SIGNAL(clear_mainwidget()), decks, SLOT(deleteLater()));
     // Something is wrong the passing an argument with signal and slots
     central_layout->addWidget(decks);
     emit update_decks();
 }
 
-void MainWindow::deck_play_show()
+void MainWindow::deck_play_show(QDir dir)
 {
-    qDebug() << "DECKPLAY - MAIN";
+    qDebug() << "DECKPLAY - MAIN" << dir;
+    emit clear_mainwidget();
     auto central_layout = ui->centralwidget->layout();
+    DeckPlay* play_deck = new DeckPlay();
+    connect(this, SIGNAL(clear_mainwidget()), play_deck, SLOT(deleteLater()));
+    central_layout->addWidget(play_deck);
 }
 
 void MainWindow::on_CloseButton_clicked()
