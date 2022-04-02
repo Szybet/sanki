@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QDir>
+#include <QSqlDatabase>
 
 namespace Ui {
 class DeckPlay;
@@ -17,12 +18,16 @@ public:
     ~DeckPlay();
 
 public slots:
-    void provide_deck(QDir);
+    void update(QDir, int);
+
+private slots:
     void start();
 
 private:
     Ui::DeckPlay *ui;
     QDir deck_dir;
+    int mode;
+    QSqlDatabase db;
 };
 
 #endif // DECKPLAY_H

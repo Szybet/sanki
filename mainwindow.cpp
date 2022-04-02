@@ -6,6 +6,7 @@
 #include "status_bar.h"
 #include "decks_scroll_bar.h"
 #include "globals.h"
+#include "mode_chooser.h"
 
 #include <QTime>
 #include <QTimer>
@@ -56,9 +57,13 @@ void MainWindow::deck_scroll_bar_show()
 void MainWindow::deck_play_show(QDir dir)
 {
     qDebug() << "DECKPLAY - MAIN" << dir;
+    mode_chooser* choose_mode = new mode_chooser;
+    int mode = choose_mode->exec();
+
     emit clear_mainwidget();
     auto central_layout = ui->centralwidget->layout();
     DeckPlay* play_deck = new DeckPlay();
+    play_deck->update(dir, mode);
     connect(this, SIGNAL(clear_mainwidget()), play_deck, SLOT(deleteLater()));
     central_layout->addWidget(play_deck);
 }
