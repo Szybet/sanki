@@ -19,6 +19,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mode_chooser.cpp \
+    show_card.cpp \
     status_bar.cpp
 
 HEADERS += \
@@ -30,6 +31,7 @@ HEADERS += \
     globals.h \
     mainwindow.h \
     mode_chooser.h \
+    show_card.h \
     status_bar.h
 
 FORMS += \
@@ -40,6 +42,7 @@ FORMS += \
     edit_deck.ui \
     mainwindow.ui \
     mode_chooser.ui \
+    show_card.ui \
     status_bar.ui
 
 # Default rules for deployment.

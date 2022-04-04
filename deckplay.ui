@@ -23,10 +23,10 @@
      </widget>
     </item>
     <item row="0" column="0">
-     <layout class="QGridLayout" name="gridStatus"/>
+     <layout class="QGridLayout" name="gridCardTop"/>
     </item>
     <item row="2" column="0">
-     <layout class="QGridLayout" name="gridCard"/>
+     <layout class="QGridLayout" name="gridCardBottom"/>
     </item>
     <item row="4" column="0">
      <layout class="QGridLayout" name="gridManageCard"/>

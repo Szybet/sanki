@@ -22,12 +22,17 @@ public slots:
 
 private slots:
     void start();
+    void next_card();
+
+signals:
+    void remove_card();
 
 private:
     Ui::DeckPlay *ui;
     QDir deck_dir;
     int mode;
     QSqlDatabase db;
+    QString db_path_str;
 };
 
 #endif // DECKPLAY_H
