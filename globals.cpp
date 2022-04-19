@@ -9,3 +9,7 @@ QDir work_dir = QDir::current();
 
 QDir deck_storage = work_dir.path() + "/deck_storage";
 //qDebug() << "deck_storage" << deck_storage.path();
+
+QString kobo_model;
+
+bool running_on_kobo;

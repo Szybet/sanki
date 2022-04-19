@@ -15,8 +15,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include "libs/zip/src/zip.h"
-
 decks_scroll_bar::decks_scroll_bar(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::decks_scroll_bar)

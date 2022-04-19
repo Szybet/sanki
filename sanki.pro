@@ -1,4 +1,7 @@
-QT       += core gui sql
+QT += \
+    core \
+    gui \
+    sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -55,7 +58,10 @@ DISTFILES +=
 RESOURCES += \
     Resources/sanki.qrc
 
-unix:!macx: LIBS += -L$$PWD/libs/zip/build/ -lzip
+#unix:!macx: LIBS += -L$$PWD/libs/zip/build/ -lzip
+#INCLUDEPATH += $$PWD/libs/zip
+#DEPENDPATH += $$PWD/libs/zip
 
-INCLUDEPATH += $$PWD/libs/zip
-DEPENDPATH += $$PWD/libs/zip
+INCLUDEPATH += libraries/karchive/src/include
+
+#LIBS += -L"libraries/karchive/build/lib/" -lkarchive

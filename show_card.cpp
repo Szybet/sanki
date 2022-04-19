@@ -12,3 +12,13 @@ show_card::~show_card()
 {
     delete ui;
 }
+
+void show_card::on_pushButton_clicked()
+{
+    emit clicked();
+}
+
+void show_card::set_text(QString text)
+{
+    ui->pushButton->setText(text);
+}

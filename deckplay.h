@@ -23,9 +23,10 @@ public slots:
 private slots:
     void start();
     void next_card();
+    void show_back_next();
 
 signals:
-    void remove_card();
+    void show_button_text(QString);
 
 private:
     Ui::DeckPlay *ui;
@@ -33,6 +34,11 @@ private:
     int mode;
     QSqlDatabase db;
     QString db_path_str;
+    QString front_card;
+    QString back_card;
+    bool showed_back = false;
+
+
 };
 
 #endif // DECKPLAY_H

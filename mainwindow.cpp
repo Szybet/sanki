@@ -16,8 +16,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include "libs/zip/src/zip.h"
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -57,13 +55,13 @@ void MainWindow::deck_scroll_bar_show()
 void MainWindow::deck_play_show(QDir dir)
 {
     qDebug() << "DECKPLAY - MAIN" << dir;
-    mode_chooser* choose_mode = new mode_chooser;
-    int mode = choose_mode->exec();
+    //mode_chooser* choose_mode = new mode_chooser;
+    //int mode = choose_mode->exec();
 
     emit clear_mainwidget();
     auto central_layout = ui->centralwidget->layout();
     DeckPlay* play_deck = new DeckPlay();
-    play_deck->update(dir, mode);
+    play_deck->update(dir, 1);
     connect(this, SIGNAL(clear_mainwidget()), play_deck, SLOT(deleteLater()));
     central_layout->addWidget(play_deck);
 }
@@ -83,8 +81,9 @@ void MainWindow::on_FileButton_clicked()
     if (zip_file.exists()) {
         qDebug() << "zip exists";
 
-        /*
+
         // libzip try
+        /*
         zip *zip_opened = zip_open(char_converted, 0, 0);
         int i;
         int buf_lenght;
@@ -103,17 +102,13 @@ void MainWindow::on_FileButton_clicked()
         qDebug() << "new_deck" << new_deck.path();
         deck_storage.mkdir(zip_file_info.baseName());
 
-        // Converting to acceptable string
-        QByteArray ba = zip_path.toLocal8Bit();
-        const char *char_converted = ba.data();
-        //
-        int arg = 2; // why
-        zip_extract(char_converted, new_deck.path().toLocal8Bit().data(), 0, &arg);
+
 
 
     }
     // Update decks
     emit update_decks();
+
 }
 
 void MainWindow::exit_app()

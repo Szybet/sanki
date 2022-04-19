@@ -13,6 +13,10 @@ DeckPlay::DeckPlay(QWidget *parent) :
     ui(new Ui::DeckPlay)
 {
     ui->setupUi(this);
+    show_card* show_card_widget = new show_card;
+    connect(show_card_widget, SIGNAL(clicked()), this, SLOT(show_back_next()));
+    connect(this, SIGNAL(show_button_text(QString)), show_card_widget, SLOT(set_text(QString))); // It works, but there is no color
+    ui->gridManageCard->addWidget(show_card_widget);
 }
 
 DeckPlay::~DeckPlay()
@@ -35,6 +39,7 @@ void DeckPlay::start()
 
     if (db_path.exists() == true)
     {
+        qDebug() << "SQLITE DATABSE OPEN";
         db = QSqlDatabase::addDatabase("QSQLITE");
         db.setDatabaseName(db_path_str);
         // http://katecpp.github.io/sqlite-with-qt/
@@ -67,8 +72,6 @@ void DeckPlay::start()
 
 void DeckPlay::next_card()
 {
-    show_card* show_card_widget = new show_card;
-    ui->gridManageCard->addWidget(show_card_widget);
     QSqlQuery query_id = db.exec("SELECT id FROM notes ORDER BY RANDOM() LIMIT 1");
     // int id = query.value(1).toInt();
     query_id.next();
@@ -80,15 +83,40 @@ void DeckPlay::next_card()
 
     QSqlQuery front_query = db.exec(front_std_sql);
     front_query.next();
-    QString front_card = front_query.value(0).toString();
+    front_card = front_query.value(0).toString();
     qDebug() << "Database front_card" << front_card;
 
     QSqlQuery back_query = db.exec(back_std_sql);
     back_query.next();
-    QString back_card = back_query.value(0).toString();
+    back_card = back_query.value(0).toString();
     qDebug() << "Database back_card" << back_card;
     // On the back is this:
     // front_card + this character https://unicode-table.com/en/001F/
     // and then the important rest
+
+    ui->textFrontCard->setText(front_card);
+
+}
+
+void DeckPlay::show_back_next()
+{
+    qDebug() << "play_deck show_back" << back_card;
+    if (showed_back == false)
+    {
+        showed_back = true;
+        int char_to_remove = front_card.count() + 1;
+        QString new_back = back_card.remove(0, char_to_remove);
+        qDebug() << "play_deck better_back" << new_back;
+        ui->textBackCard->setText(new_back);
+        emit show_button_text("Next Card");
+    }
+    else
+    {
+        showed_back = false;
+        emit show_button_text("Show");
+        ui->textBackCard->setText("");
+        next_card();
+
+    }
 
 }

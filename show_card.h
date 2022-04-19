@@ -15,6 +15,15 @@ public:
     explicit show_card(QWidget *parent = nullptr);
     ~show_card();
 
+public slots:
+    void set_text(QString);
+
+signals:
+    void clicked();
+
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::show_card *ui;
 };

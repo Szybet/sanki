@@ -28,5 +28,6 @@ void mode_chooser::on_ButtonConfirm_clicked()
     {
         qDebug() << "DECKPLAY - mode_emit" << mode;
         this->done(mode);
+        this->close();
     }
 }
