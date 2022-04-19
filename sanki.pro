@@ -64,4 +64,12 @@ RESOURCES += \
 
 INCLUDEPATH += libraries/karchive/src/include
 
-#LIBS += -L"libraries/karchive/build/lib/" -lkarchive
+IOS_ARCH = $$(IOS_ARCH)
+# https://stackoverflow.com/questions/39338987/how-to-detect-target-ios-architecture-in-qmake
+if(IOS_ARCH == Kobo)
+{
+
+}
+
+
+LIBS += -L"libraries/karchive/build/lib/" -lkarchive
