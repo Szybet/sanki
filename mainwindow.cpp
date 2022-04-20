@@ -7,6 +7,7 @@
 #include "decks_scroll_bar.h"
 #include "globals.h"
 #include "mode_chooser.h"
+#include "zip.h"
 
 #include <QTime>
 #include <QTimer>
@@ -15,6 +16,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -102,7 +104,12 @@ void MainWindow::on_FileButton_clicked()
         qDebug() << "new_deck" << new_deck.path();
         deck_storage.mkdir(zip_file_info.baseName());
 
-
+        // Converting to acceptable string
+        QByteArray ba = zip_path.toLocal8Bit();
+        const char *char_converted = ba.data();
+        //
+        int arg = 2; // why
+        zip_extract(char_converted, new_deck.path().toLocal8Bit().data(), 0, &arg);
 
 
     }

@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    qDebug() << "Sanki started";
+    qDebug() << "Sanki started kurwa co jest";
     // This checks if the device is running on a e-reader, and on which device model
     QFile device_file("/opt/device");
     if(device_file.exists() == true)

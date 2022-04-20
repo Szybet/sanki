@@ -17,6 +17,8 @@ status_bar::status_bar(QWidget *parent) :
     timer->start(1000);
     showTime();
 
+    ui->ButtonExit->setStyleSheet("border: none;");
+    ui->ButtonSettings->setStyleSheet("border: none;");
 
 }
 
@@ -34,9 +36,9 @@ void status_bar::showTime()
 
 void status_bar::option_button_set(QString button_text, QIcon icon)
 {
-    ui->ButtonOption->setText(button_text);
+    ui->ButtonOption->setStyleSheet("font-size: 10pt");
     ui->ButtonOption->setIcon(icon);
-
+    ui->ButtonOption->setText(button_text);
 }
 
 void status_bar::on_ButtonExit_clicked()

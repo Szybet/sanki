@@ -2,5 +2,6 @@
     <qresource prefix="/icons">
         <file>close.png</file>
         <file>folder.png</file>
+        <file>settings.png</file>
     </qresource>
 </RCC>

@@ -13,11 +13,13 @@ deck::deck(QWidget *parent)
     , ui(new Ui::MainQwidget)
 {
     ui->setupUi(this);
+    ui->ButtonDeckNamePlay->setStyleSheet("font-size: 10pt");
+    ui->ButtonEditDeck->setStyleSheet("font-size: 10pt");
 }
 
 void deck::set_deck_name(QString text)
 {
-    ui->DeckNamePlayButton->setText(text);
+    ui->ButtonDeckNamePlay->setText(text);
 }
 
 void deck::refresh_decks_slot()
