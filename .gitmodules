@@ -1,0 +1,6 @@
+[submodule "libraries/zip_libraries/zip"]
+	path = libraries/zip_libraries/zip
+	url = https://github.com/kuba--/zip
+[submodule "libraries/zip_libraries/zlib"]
+	path = libraries/zip_libraries/zlib
+	url = https://github.com/madler/zlib
