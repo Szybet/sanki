@@ -14,6 +14,8 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
+#include <QScrollBar>
+#include <QSpacerItem>
 
 decks_scroll_bar::decks_scroll_bar(QWidget *parent) :
     QWidget(parent),
@@ -26,6 +28,9 @@ decks_scroll_bar::decks_scroll_bar(QWidget *parent) :
          qDebug() << "created deck_storage";
     }
 
+    // This could be editable in settings
+    ui->DeckScrollArea->verticalScrollBar()->setStyleSheet(
+        "QScrollBar:vertical { width: 50px; }");
 }
 
 decks_scroll_bar::~decks_scroll_bar()
@@ -63,6 +68,7 @@ void decks_scroll_bar::update_decks()
             column = 0;
             row = row + 1;
         }
+
     }
 }
 

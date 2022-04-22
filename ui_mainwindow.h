@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.1
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -13,6 +13,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -21,7 +22,7 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QGridLayout *gridLayout_2;
+    QVBoxLayout *verticalLayout;
     QGridLayout *gridStatus;
     QGridLayout *gridMain;
 
@@ -29,20 +30,27 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(800, 600);
+        MainWindow->resize(706, 601);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        gridLayout_2 = new QGridLayout(centralwidget);
-        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        centralwidget->setLayoutDirection(Qt::LeftToRight);
+        verticalLayout = new QVBoxLayout(centralwidget);
+        verticalLayout->setSpacing(0);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setContentsMargins(3, 3, 3, 3);
         gridStatus = new QGridLayout();
+        gridStatus->setSpacing(0);
         gridStatus->setObjectName(QString::fromUtf8("gridStatus"));
+        gridStatus->setSizeConstraint(QLayout::SetMinimumSize);
 
-        gridLayout_2->addLayout(gridStatus, 0, 0, 1, 1);
+        verticalLayout->addLayout(gridStatus);
 
         gridMain = new QGridLayout();
+        gridMain->setSpacing(0);
         gridMain->setObjectName(QString::fromUtf8("gridMain"));
+        gridMain->setSizeConstraint(QLayout::SetMaximumSize);
 
-        gridLayout_2->addLayout(gridMain, 1, 0, 1, 1);
+        verticalLayout->addLayout(gridMain);
 
         MainWindow->setCentralWidget(centralwidget);
 

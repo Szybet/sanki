@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(status_bar_up, SIGNAL(close_button_signal()), this, SLOT(exit_app()));
     ui->gridStatus->addWidget(status_bar_up);
 
+
     // show scroll bar
     deck_scroll_bar_show();
 

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QDir>
+#include <QLayout>
 
 namespace Ui {
 class decks_scroll_bar;
@@ -15,6 +16,7 @@ class decks_scroll_bar : public QWidget
 public:
     explicit decks_scroll_bar(QWidget *parent = nullptr);
     ~decks_scroll_bar();
+
 
 public slots:
     void update_decks();

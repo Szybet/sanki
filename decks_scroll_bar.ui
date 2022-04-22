@@ -73,6 +73,9 @@
        </property>
        <item row="0" column="0">
         <layout class="QGridLayout" name="DeckGrid">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMinimumSize</enum>
+         </property>
          <property name="spacing">
           <number>0</number>
          </property>

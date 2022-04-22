@@ -7,19 +7,32 @@
 #include <QMainWindow>
 #include <QWidget>
 #include <QDebug>
+#include <QAbstractTextDocumentLayout>
+#include <QToolTip>
 
 deck::deck(QWidget *parent)
     :QWidget(parent)
     , ui(new Ui::MainQwidget)
 {
     ui->setupUi(this);
-    ui->ButtonDeckNamePlay->setStyleSheet("font-size: 10pt");
-    ui->ButtonEditDeck->setStyleSheet("font-size: 10pt");
+    ui->deck->setStyleSheet("font-size: 8pt");
+    ui->ButtonEditDeck->setStyleSheet("font-size: 8pt");
+    ui->LabelStats->setStyleSheet("font-size: 8pt");
+    ui->ButtonDeckPlay->setStyleSheet("font-size: 8pt");
+
 }
 
 void deck::set_deck_name(QString text)
 {
-    ui->ButtonDeckNamePlay->setText(text);
+    // https://stackoverflow.com/questions/25855024/aligning-text-in-qtextedit
+    ui->deck->setText(text);
+    /*
+    QTextCursor cursor = ui->deck->textCursor();
+    QTextBlockFormat textBlockFormat = cursor.blockFormat();
+    textBlockFormat.setAlignment(Qt::AlignCenter);
+    cursor.mergeBlockFormat(textBlockFormat);
+    ui->deck->setTextCursor(cursor);
+    */
 }
 
 void deck::refresh_decks_slot()
@@ -38,11 +51,18 @@ void deck::on_EditDeckbutton_clicked()
 }
 
 
-void deck::on_DeckNamePlayButton_clicked()
+void deck::on_ButtonDeckPlay_clicked()
 {
 
     QDir deck_dir = deck_info.absoluteFilePath();
     qDebug() << "DECKPLAY - DECK";
     emit play_deck(deck_dir);
+}
+
+void deck::on_deck_selectionChanged()
+{
+    // This shows the full name when clicked
+    ui->deck->setSelection(0, 0);
+    QToolTip::showText( ui->deck->mapToGlobal( QPoint( 0, 0 ) ), deck_info.fileName() );
 }
 

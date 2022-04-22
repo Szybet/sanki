@@ -24,7 +24,9 @@ private slots:
 
     void on_EditDeckbutton_clicked();
 
-    void on_DeckNamePlayButton_clicked();
+    void on_ButtonDeckPlay_clicked();
+
+    void on_deck_selectionChanged();
 
 private:
      Ui::MainQwidget *ui;

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'deck.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.1
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -13,9 +13,12 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -23,69 +26,119 @@ QT_BEGIN_NAMESPACE
 class Ui_MainQwidget
 {
 public:
-    QGridLayout *gridLayout_3;
+    QVBoxLayout *verticalLayout_2;
     QFrame *frame;
     QGridLayout *gridLayout;
-    QGridLayout *gridLayout_2;
-    QLabel *CardNumberLabel;
+    QVBoxLayout *verticalLayout;
+    QHBoxLayout *horizontalLayout;
+    QLineEdit *deck;
     QFrame *line;
+    QLabel *LabelStats;
     QSpacerItem *verticalSpacer;
-    QPushButton *DeckNamePlayButton;
-    QPushButton *EditDeckbutton;
+    QHBoxLayout *horizontalLayout_2;
+    QSpacerItem *horizontalSpacer_3;
+    QPushButton *ButtonDeckPlay;
+    QSpacerItem *horizontalSpacer_5;
+    QPushButton *ButtonEditDeck;
+    QSpacerItem *horizontalSpacer_4;
 
     void setupUi(QWidget *MainQwidget)
     {
         if (MainQwidget->objectName().isEmpty())
             MainQwidget->setObjectName(QString::fromUtf8("MainQwidget"));
-        MainQwidget->resize(400, 175);
-        gridLayout_3 = new QGridLayout(MainQwidget);
-        gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
+        MainQwidget->setEnabled(true);
+        MainQwidget->resize(332, 305);
+        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(MainQwidget->sizePolicy().hasHeightForWidth());
+        MainQwidget->setSizePolicy(sizePolicy);
+        verticalLayout_2 = new QVBoxLayout(MainQwidget);
+        verticalLayout_2->setSpacing(0);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        verticalLayout_2->setSizeConstraint(QLayout::SetMaximumSize);
+        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
         frame = new QFrame(MainQwidget);
         frame->setObjectName(QString::fromUtf8("frame"));
         frame->setFrameShape(QFrame::StyledPanel);
         frame->setFrameShadow(QFrame::Raised);
         gridLayout = new QGridLayout(frame);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        gridLayout_2 = new QGridLayout();
-        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        CardNumberLabel = new QLabel(frame);
-        CardNumberLabel->setObjectName(QString::fromUtf8("CardNumberLabel"));
-        CardNumberLabel->setLayoutDirection(Qt::LeftToRight);
-        CardNumberLabel->setAlignment(Qt::AlignCenter);
+        verticalLayout = new QVBoxLayout();
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setSizeConstraint(QLayout::SetMinimumSize);
+        deck = new QLineEdit(frame);
+        deck->setObjectName(QString::fromUtf8("deck"));
+        sizePolicy.setHeightForWidth(deck->sizePolicy().hasHeightForWidth());
+        deck->setSizePolicy(sizePolicy);
+        deck->setMouseTracking(false);
+        deck->setTabletTracking(true);
+        deck->setAlignment(Qt::AlignCenter);
+        deck->setReadOnly(true);
+        deck->setCursorMoveStyle(Qt::VisualMoveStyle);
 
-        gridLayout_2->addWidget(CardNumberLabel, 2, 0, 1, 1);
+        horizontalLayout->addWidget(deck);
+
+
+        verticalLayout->addLayout(horizontalLayout);
 
         line = new QFrame(frame);
         line->setObjectName(QString::fromUtf8("line"));
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Maximum);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(line->sizePolicy().hasHeightForWidth());
+        line->setSizePolicy(sizePolicy1);
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
 
-        gridLayout_2->addWidget(line, 1, 0, 1, 1);
+        verticalLayout->addWidget(line);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        LabelStats = new QLabel(frame);
+        LabelStats->setObjectName(QString::fromUtf8("LabelStats"));
+        LabelStats->setLayoutDirection(Qt::LeftToRight);
+        LabelStats->setAlignment(Qt::AlignCenter);
 
-        gridLayout_2->addItem(verticalSpacer, 5, 0, 1, 1);
+        verticalLayout->addWidget(LabelStats);
 
-        DeckNamePlayButton = new QPushButton(frame);
-        DeckNamePlayButton->setObjectName(QString::fromUtf8("DeckNamePlayButton"));
-        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(DeckNamePlayButton->sizePolicy().hasHeightForWidth());
-        DeckNamePlayButton->setSizePolicy(sizePolicy);
+        verticalSpacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout_2->addWidget(DeckNamePlayButton, 0, 0, 1, 1);
+        verticalLayout->addItem(verticalSpacer);
 
-        EditDeckbutton = new QPushButton(frame);
-        EditDeckbutton->setObjectName(QString::fromUtf8("EditDeckbutton"));
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalSpacer_3 = new QSpacerItem(20, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
 
-        gridLayout_2->addWidget(EditDeckbutton, 6, 0, 1, 1);
+        horizontalLayout_2->addItem(horizontalSpacer_3);
+
+        ButtonDeckPlay = new QPushButton(frame);
+        ButtonDeckPlay->setObjectName(QString::fromUtf8("ButtonDeckPlay"));
+
+        horizontalLayout_2->addWidget(ButtonDeckPlay);
+
+        horizontalSpacer_5 = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_5);
+
+        ButtonEditDeck = new QPushButton(frame);
+        ButtonEditDeck->setObjectName(QString::fromUtf8("ButtonEditDeck"));
+
+        horizontalLayout_2->addWidget(ButtonEditDeck);
+
+        horizontalSpacer_4 = new QSpacerItem(20, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_4);
 
 
-        gridLayout->addLayout(gridLayout_2, 0, 0, 1, 1);
+        verticalLayout->addLayout(horizontalLayout_2);
 
 
-        gridLayout_3->addWidget(frame, 0, 0, 1, 1);
+        gridLayout->addLayout(verticalLayout, 2, 0, 1, 1);
+
+
+        verticalLayout_2->addWidget(frame);
 
 
         retranslateUi(MainQwidget);
@@ -96,9 +149,10 @@ public:
     void retranslateUi(QWidget *MainQwidget)
     {
         MainQwidget->setWindowTitle(QCoreApplication::translate("MainQwidget", "Form", nullptr));
-        CardNumberLabel->setText(QCoreApplication::translate("MainQwidget", "Deck Stats", nullptr));
-        DeckNamePlayButton->setText(QCoreApplication::translate("MainQwidget", "Deck Name", nullptr));
-        EditDeckbutton->setText(QCoreApplication::translate("MainQwidget", "Edit", nullptr));
+        deck->setPlaceholderText(QString());
+        LabelStats->setText(QCoreApplication::translate("MainQwidget", "Deck Stats", nullptr));
+        ButtonDeckPlay->setText(QCoreApplication::translate("MainQwidget", "Play", nullptr));
+        ButtonEditDeck->setText(QCoreApplication::translate("MainQwidget", "Edit", nullptr));
     } // retranslateUi
 
 };

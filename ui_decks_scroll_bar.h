@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'decks_scroll_bar.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.1
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -32,18 +32,27 @@ public:
             decks_scroll_bar->setObjectName(QString::fromUtf8("decks_scroll_bar"));
         decks_scroll_bar->resize(400, 300);
         gridLayout_2 = new QGridLayout(decks_scroll_bar);
+        gridLayout_2->setSpacing(0);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        gridLayout_2->setContentsMargins(0, 0, 0, 0);
         DeckScrollArea = new QScrollArea(decks_scroll_bar);
         DeckScrollArea->setObjectName(QString::fromUtf8("DeckScrollArea"));
         DeckScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        DeckScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        DeckScrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
         DeckScrollArea->setWidgetResizable(true);
+        DeckScrollArea->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 380, 280));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 398, 298));
         gridLayout = new QGridLayout(scrollAreaWidgetContents);
+        gridLayout->setSpacing(0);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setContentsMargins(0, 0, 0, 0);
         DeckGrid = new QGridLayout();
+        DeckGrid->setSpacing(0);
         DeckGrid->setObjectName(QString::fromUtf8("DeckGrid"));
+        DeckGrid->setSizeConstraint(QLayout::SetMinimumSize);
 
         gridLayout->addLayout(DeckGrid, 0, 0, 1, 1);
 

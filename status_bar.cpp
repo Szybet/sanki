@@ -36,7 +36,7 @@ void status_bar::showTime()
 
 void status_bar::option_button_set(QString button_text, QIcon icon)
 {
-    ui->ButtonOption->setStyleSheet("font-size: 10pt");
+    ui->ButtonOption->setStyleSheet("font-size: 9pt");
     ui->ButtonOption->setIcon(icon);
     ui->ButtonOption->setText(button_text);
 }

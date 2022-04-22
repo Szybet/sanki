@@ -17,6 +17,8 @@ DeckPlay::DeckPlay(QWidget *parent) :
     connect(show_card_widget, SIGNAL(clicked()), this, SLOT(show_back_next()));
     connect(this, SIGNAL(show_button_text(QString)), show_card_widget, SLOT(set_text(QString))); // It works, but there is no color
     ui->gridManageCard->addWidget(show_card_widget);
+
+
 }
 
 DeckPlay::~DeckPlay()
