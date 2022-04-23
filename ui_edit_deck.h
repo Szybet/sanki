@@ -11,13 +11,14 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QDialog>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QTextEdit>
-#include <QtWidgets/QWidget>
+#include <QtWidgets/QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
@@ -25,122 +26,102 @@ class Ui_edit_deck
 {
 public:
     QGridLayout *gridLayout;
-    QHBoxLayout *horizontalLayout;
-    QPushButton *ButtonReset;
-    QFrame *line_3;
-    QPushButton *ButtonRemoveDeck;
-    QFrame *line_2;
-    QTextEdit *textEditDeckName;
+    QFrame *frame;
+    QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *ButtonCancelEdit;
-    QSpacerItem *horizontalSpacer_2;
-    QFrame *line;
     QSpacerItem *horizontalSpacer;
     QPushButton *ButtonSaveExit;
+    QLineEdit *lineEditDeckName;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *ButtonReset;
+    QSpacerItem *horizontalSpacer_4;
+    QPushButton *ButtonRemoveDeck;
 
-    void setupUi(QWidget *edit_deck)
+    void setupUi(QDialog *edit_deck)
     {
         if (edit_deck->objectName().isEmpty())
             edit_deck->setObjectName(QString::fromUtf8("edit_deck"));
         edit_deck->resize(400, 152);
         gridLayout = new QGridLayout(edit_deck);
+        gridLayout->setSpacing(0);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        horizontalLayout->setSizeConstraint(QLayout::SetMinimumSize);
-        ButtonReset = new QPushButton(edit_deck);
-        ButtonReset->setObjectName(QString::fromUtf8("ButtonReset"));
-        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(ButtonReset->sizePolicy().hasHeightForWidth());
-        ButtonReset->setSizePolicy(sizePolicy);
-
-        horizontalLayout->addWidget(ButtonReset);
-
-        line_3 = new QFrame(edit_deck);
-        line_3->setObjectName(QString::fromUtf8("line_3"));
-        line_3->setFrameShape(QFrame::VLine);
-        line_3->setFrameShadow(QFrame::Sunken);
-
-        horizontalLayout->addWidget(line_3);
-
-        ButtonRemoveDeck = new QPushButton(edit_deck);
-        ButtonRemoveDeck->setObjectName(QString::fromUtf8("ButtonRemoveDeck"));
-        sizePolicy.setHeightForWidth(ButtonRemoveDeck->sizePolicy().hasHeightForWidth());
-        ButtonRemoveDeck->setSizePolicy(sizePolicy);
-
-        horizontalLayout->addWidget(ButtonRemoveDeck);
-
-
-        gridLayout->addLayout(horizontalLayout, 3, 0, 1, 1);
-
-        line_2 = new QFrame(edit_deck);
-        line_2->setObjectName(QString::fromUtf8("line_2"));
-        line_2->setFrameShape(QFrame::HLine);
-        line_2->setFrameShadow(QFrame::Sunken);
-
-        gridLayout->addWidget(line_2, 2, 0, 1, 1);
-
-        textEditDeckName = new QTextEdit(edit_deck);
-        textEditDeckName->setObjectName(QString::fromUtf8("textEditDeckName"));
-        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Minimum);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(textEditDeckName->sizePolicy().hasHeightForWidth());
-        textEditDeckName->setSizePolicy(sizePolicy1);
-        textEditDeckName->setMinimumSize(QSize(0, 40));
-        textEditDeckName->setMaximumSize(QSize(16777215, 50));
-        QFont font;
-        font.setPointSize(13);
-        textEditDeckName->setFont(font);
-        textEditDeckName->setLineWidth(1);
-        textEditDeckName->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        textEditDeckName->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        textEditDeckName->setLineWrapColumnOrWidth(0);
-
-        gridLayout->addWidget(textEditDeckName, 1, 0, 1, 1);
-
+        gridLayout->setContentsMargins(0, 0, 0, 0);
+        frame = new QFrame(edit_deck);
+        frame->setObjectName(QString::fromUtf8("frame"));
+        frame->setFrameShape(QFrame::Box);
+        frame->setFrameShadow(QFrame::Plain);
+        frame->setLineWidth(4);
+        verticalLayout = new QVBoxLayout(frame);
+        verticalLayout->setSpacing(5);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setContentsMargins(10, 10, 10, 10);
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_2->setSizeConstraint(QLayout::SetMinimumSize);
-        ButtonCancelEdit = new QPushButton(edit_deck);
+        ButtonCancelEdit = new QPushButton(frame);
         ButtonCancelEdit->setObjectName(QString::fromUtf8("ButtonCancelEdit"));
-        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(ButtonCancelEdit->sizePolicy().hasHeightForWidth());
-        ButtonCancelEdit->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(ButtonCancelEdit->sizePolicy().hasHeightForWidth());
+        ButtonCancelEdit->setSizePolicy(sizePolicy);
 
         horizontalLayout_2->addWidget(ButtonCancelEdit);
-
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_2->addItem(horizontalSpacer_2);
-
-        line = new QFrame(edit_deck);
-        line->setObjectName(QString::fromUtf8("line"));
-        line->setFrameShape(QFrame::VLine);
-        line->setFrameShadow(QFrame::Sunken);
-
-        horizontalLayout_2->addWidget(line);
 
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_2->addItem(horizontalSpacer);
 
-        ButtonSaveExit = new QPushButton(edit_deck);
+        ButtonSaveExit = new QPushButton(frame);
         ButtonSaveExit->setObjectName(QString::fromUtf8("ButtonSaveExit"));
-        QSizePolicy sizePolicy3(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(ButtonSaveExit->sizePolicy().hasHeightForWidth());
-        ButtonSaveExit->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(ButtonSaveExit->sizePolicy().hasHeightForWidth());
+        ButtonSaveExit->setSizePolicy(sizePolicy1);
 
         horizontalLayout_2->addWidget(ButtonSaveExit);
 
 
-        gridLayout->addLayout(horizontalLayout_2, 0, 0, 1, 1);
+        verticalLayout->addLayout(horizontalLayout_2);
+
+        lineEditDeckName = new QLineEdit(frame);
+        lineEditDeckName->setObjectName(QString::fromUtf8("lineEditDeckName"));
+        lineEditDeckName->setTabletTracking(false);
+        lineEditDeckName->setFocusPolicy(Qt::ClickFocus);
+
+        verticalLayout->addWidget(lineEditDeckName);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setSizeConstraint(QLayout::SetMinimumSize);
+        ButtonReset = new QPushButton(frame);
+        ButtonReset->setObjectName(QString::fromUtf8("ButtonReset"));
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(ButtonReset->sizePolicy().hasHeightForWidth());
+        ButtonReset->setSizePolicy(sizePolicy2);
+
+        horizontalLayout->addWidget(ButtonReset);
+
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer_4);
+
+        ButtonRemoveDeck = new QPushButton(frame);
+        ButtonRemoveDeck->setObjectName(QString::fromUtf8("ButtonRemoveDeck"));
+        sizePolicy2.setHeightForWidth(ButtonRemoveDeck->sizePolicy().hasHeightForWidth());
+        ButtonRemoveDeck->setSizePolicy(sizePolicy2);
+
+        horizontalLayout->addWidget(ButtonRemoveDeck);
+
+
+        verticalLayout->addLayout(horizontalLayout);
+
+
+        gridLayout->addWidget(frame, 1, 0, 1, 1);
 
 
         retranslateUi(edit_deck);
@@ -148,13 +129,13 @@ public:
         QMetaObject::connectSlotsByName(edit_deck);
     } // setupUi
 
-    void retranslateUi(QWidget *edit_deck)
+    void retranslateUi(QDialog *edit_deck)
     {
         edit_deck->setWindowTitle(QCoreApplication::translate("edit_deck", "Form", nullptr));
-        ButtonReset->setText(QCoreApplication::translate("edit_deck", "Reset deck", nullptr));
-        ButtonRemoveDeck->setText(QCoreApplication::translate("edit_deck", "Remove deck", nullptr));
         ButtonCancelEdit->setText(QCoreApplication::translate("edit_deck", "Cancel", nullptr));
         ButtonSaveExit->setText(QCoreApplication::translate("edit_deck", "Save and Exit", nullptr));
+        ButtonReset->setText(QCoreApplication::translate("edit_deck", "Reset deck", nullptr));
+        ButtonRemoveDeck->setText(QCoreApplication::translate("edit_deck", "Remove deck", nullptr));
     } // retranslateUi
 
 };

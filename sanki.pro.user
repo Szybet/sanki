@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 7.0.0, 2022-04-23T01:09:03. -->
+<!-- Written by QtCreator 7.0.0, 2022-04-23T22:20:55. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -105,15 +105,29 @@
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">sanki || EXIT_CODE=0</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Command">rm</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.WorkingDirectory">%{buildDir}</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.ProcessStep</value>
+     </valuemap>
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">clean</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Command">make</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.WorkingDirectory">%{buildDir}</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.ProcessStep</value>
+     </valuemap>
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.2">
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
       <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
       <valuelist type="QVariantList" key="QtProjectManager.QMakeBuildStep.SelectedAbis"/>
      </valuemap>
-     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.3">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
      </valuemap>
-     <value type="qlonglong" key="ProjectExplorer.BuildStepList.StepsCount">2</value>
+     <value type="qlonglong" key="ProjectExplorer.BuildStepList.StepsCount">4</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Build</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
@@ -253,34 +267,40 @@
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedSysroots"/>
       <valuelist type="QVariantList" key="RemoteLinux.LastDeployedLocalTimes"/>
       <valuelist type="QVariantList" key="RemoteLinux.LastDeployedRemoteTimes"/>
-      <value type="QString" key="RemoteLinuxCustomCommandDeploymentStep.CommandLine">rm /kobo/sanki || EXIT_CODE=0</value>
+      <value type="QString" key="RemoteLinuxCustomCommandDeploymentStep.CommandLine">rm /kobo/tmp/sanki || EXIT_CODE=0</value>
      </valuemap>
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">RemoteLinux.DirectUploadStep</value>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedFiles">
-       <value type="QString">/mnt/HDD/Project/Public/sanki/sanki</value>
        <value type="QString">/mnt/HDD/Project/Public/sanki/Build/sanki</value>
+       <value type="QString">/mnt/HDD/Project/Public/sanki/sanki</value>
+       <value type="QString">/mnt/HDD/Project/Public/sanki/sanki</value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedHosts">
+       <value type="QString">10.42.0.28</value>
        <value type="QString">10.42.0.28</value>
        <value type="QString">10.42.0.28</value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedRemotePaths">
        <value type="QString">/kobo</value>
+       <value type="QString">/kobo/tmp/</value>
        <value type="QString">/kobo</value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedSysroots">
        <value type="QString"></value>
        <value type="QString"></value>
+       <value type="QString"></value>
       </valuelist>
       <valuelist type="QVariantList" key="RemoteLinux.LastDeployedLocalTimes">
-       <value type="QDateTime">2022-04-23T01:02:34.806</value>
        <value type="QDateTime">2022-04-20T20:26:25.560</value>
+       <value type="QDateTime">2022-04-23T22:15:12.905</value>
+       <value type="QDateTime">2022-04-23T18:58:21.521</value>
       </valuelist>
       <valuelist type="QVariantList" key="RemoteLinux.LastDeployedRemoteTimes">
-       <value type="QDateTime">2022-04-23T01:02:35.000</value>
        <value type="QDateTime">2022-04-20T20:41:27.000</value>
+       <value type="QDateTime">2022-04-23T22:15:14.000</value>
+       <value type="QDateTime">2022-04-23T18:58:24.000</value>
       </valuelist>
      </valuemap>
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.2">
@@ -323,7 +343,7 @@
     </valuemap>
     <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">1</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.DeployConfiguration.CustomData">
-     <value type="QString" key="/mnt/HDD/Project/Public/sanki/sanki">/kobo</value>
+     <value type="QString" key="/mnt/HDD/Project/Public/sanki/sanki">/kobo/tmp/</value>
     </valuemap>
     <value type="bool" key="ProjectExplorer.DeployConfiguration.CustomDataEnabled">true</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">DeployToGenericLinux</value>
@@ -547,7 +567,6 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/mnt/HDD/Project/Public/sanki</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

@@ -23,8 +23,8 @@ decks_scroll_bar::decks_scroll_bar(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    if (deck_storage.exists() == false) {
-         work_dir.mkdir("deck_storage");
+    if (global_var::directories::deck_storage.exists() == false) {
+        global_var::directories::work_dir.mkdir("deck_storage");
          qDebug() << "created deck_storage";
     }
 
@@ -43,7 +43,7 @@ void decks_scroll_bar::update_decks()
     qDebug() << "UPDATE";
     emit remove_decks();
 
-    QFileInfoList dir_list = deck_storage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
+    QFileInfoList dir_list = global_var::directories::deck_storage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
     QGridLayout* scrollbar_layout = ui->DeckGrid;
 
     int row = 0; // horizontal

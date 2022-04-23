@@ -197,7 +197,7 @@ public:
         status_bar->setWindowTitle(QCoreApplication::translate("status_bar", "Form", nullptr));
         ButtonExit->setText(QString());
         ButtonOption->setText(QCoreApplication::translate("status_bar", "Option", nullptr));
-        LabelStatus->setText(QCoreApplication::translate("status_bar", "Sanki3", nullptr));
+        LabelStatus->setText(QCoreApplication::translate("status_bar", "Sanki", nullptr));
         ButtonSettings->setText(QString());
         labelTime->setText(QCoreApplication::translate("status_bar", "00:00", nullptr));
     } // retranslateUi

@@ -101,9 +101,9 @@ void MainWindow::on_FileButton_clicked()
 
         QDir new_deck;
         QFileInfo zip_file_info(zip_path);
-        new_deck.setPath(deck_storage.path() + "/" + zip_file_info.baseName());
+        new_deck.setPath(global_var::directories::deck_storage.path() + "/" + zip_file_info.baseName());
         qDebug() << "new_deck" << new_deck.path();
-        deck_storage.mkdir(zip_file_info.baseName());
+        global_var::directories::deck_storage.mkdir(zip_file_info.baseName());
 
         // Converting to acceptable string
         QByteArray ba = zip_path.toLocal8Bit();

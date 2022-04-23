@@ -22,7 +22,7 @@ signals:
 
 private slots:
 
-    void on_EditDeckbutton_clicked();
+    void on_ButtonEditDeck_clicked();
 
     void on_ButtonDeckPlay_clicked();
 

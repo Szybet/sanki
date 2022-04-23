@@ -16,7 +16,7 @@ CC            = arm-kobo-linux-gnueabihf-gcc
 CXX           = arm-kobo-linux-gnueabihf-g++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe --sysroot=/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/sysroot -O3 -march=armv7-a -mfpu=neon -mfloat-abi=hard -D__arm__ -D__ARM_NEON__ -fPIC -fno-omit-frame-pointer -funwind-tables -Wl,--no-merge-exidx-entries -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe --sysroot=/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/sysroot -O3 -march=armv7-a -mfpu=neon -mfloat-abi=hard -D__arm__ -D__ARM_NEON__ -fPIC -fno-omit-frame-pointer -funwind-tables -Wl,--no-merge-exidx-entries -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe --sysroot=/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/sysroot -O3 -march=armv7-a -mfpu=neon -mfloat-abi=hard -D__arm__ -D__ARM_NEON__ -fPIC -fno-omit-frame-pointer -funwind-tables -Wl,--no-merge-exidx-entries -std=gnu++1z -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -Ilibraries/zip_libraries/zip/src -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtSql -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore -I. -I. -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/linux-kobo-gnueabihf-g++
 QMAKE         = /opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/qmake
 DEL_FILE      = rm -f
@@ -56,7 +56,7 @@ SOURCES       = card_true_false.cpp \
 		deckplay.cpp \
 		decks_scroll_bar.cpp \
 		edit_deck.cpp \
-		globals.cpp \
+		keyboard.cpp \
 		main.cpp \
 		mainwindow.cpp \
 		mode_chooser.cpp \
@@ -67,6 +67,7 @@ SOURCES       = card_true_false.cpp \
 		moc_deckplay.cpp \
 		moc_decks_scroll_bar.cpp \
 		moc_edit_deck.cpp \
+		moc_keyboard.cpp \
 		moc_mainwindow.cpp \
 		moc_mode_chooser.cpp \
 		moc_show_card.cpp \
@@ -75,7 +76,7 @@ OBJECTS       = card_true_false.o \
 		deckplay.o \
 		decks_scroll_bar.o \
 		edit_deck.o \
-		globals.o \
+		keyboard.o \
 		main.o \
 		mainwindow.o \
 		mode_chooser.o \
@@ -87,6 +88,7 @@ OBJECTS       = card_true_false.o \
 		moc_deckplay.o \
 		moc_decks_scroll_bar.o \
 		moc_edit_deck.o \
+		moc_keyboard.o \
 		moc_mainwindow.o \
 		moc_mode_chooser.o \
 		moc_show_card.o \
@@ -187,6 +189,7 @@ DIST          = /opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/features/spe
 		decks_scroll_bar.h \
 		edit_deck.h \
 		globals.h \
+		keyboard.h \
 		mainwindow.h \
 		mode_chooser.h \
 		show_card.h \
@@ -194,7 +197,7 @@ DIST          = /opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/features/spe
 		deckplay.cpp \
 		decks_scroll_bar.cpp \
 		edit_deck.cpp \
-		globals.cpp \
+		keyboard.cpp \
 		main.cpp \
 		mainwindow.cpp \
 		mode_chooser.cpp \
@@ -208,7 +211,7 @@ TARGET        = sanki
 first: all
 ####### Build rules
 
-sanki: ui_card_true_false.h ui_deck.h ui_deckplay.h ui_decks_scroll_bar.h ui_edit_deck.h ui_mainwindow.h ui_mode_chooser.h ui_show_card.h ui_status_bar.h $(OBJECTS)  
+sanki: ui_card_true_false.h ui_deck.h ui_deckplay.h ui_decks_scroll_bar.h ui_edit_deck.h ui_keyboard.h ui_mainwindow.h ui_mode_chooser.h ui_show_card.h ui_status_bar.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: sanki.pro /opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/linux-kobo-gnueabihf-g++/qmake.conf /opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/features/spec_pre.prf \
@@ -412,9 +415,9 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents Resources/sanki.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents card_true_false.h deck.h deckplay.h decks_scroll_bar.h edit_deck.h globals.h mainwindow.h mode_chooser.h show_card.h status_bar.h $(DISTDIR)/
-	$(COPY_FILE) --parents card_true_false.cpp deckplay.cpp decks_scroll_bar.cpp edit_deck.cpp globals.cpp main.cpp mainwindow.cpp mode_chooser.cpp show_card.cpp status_bar.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents card_true_false.ui deck.ui deckplay.ui decks_scroll_bar.ui edit_deck.ui mainwindow.ui mode_chooser.ui show_card.ui status_bar.ui $(DISTDIR)/
+	$(COPY_FILE) --parents card_true_false.h deck.h deckplay.h decks_scroll_bar.h edit_deck.h globals.h keyboard.h mainwindow.h mode_chooser.h show_card.h status_bar.h $(DISTDIR)/
+	$(COPY_FILE) --parents card_true_false.cpp deckplay.cpp decks_scroll_bar.cpp edit_deck.cpp keyboard.cpp main.cpp mainwindow.cpp mode_chooser.cpp show_card.cpp status_bar.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents card_true_false.ui deck.ui deckplay.ui decks_scroll_bar.ui edit_deck.ui keyboard.ui mainwindow.ui mode_chooser.ui show_card.ui status_bar.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -444,6 +447,7 @@ compiler_rcc_clean:
 qrc_sanki.cpp: Resources/sanki.qrc \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/rcc \
 		Resources/close.png \
+		Resources/backspace.png \
 		Resources/folder.png \
 		Resources/settings.png
 	/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/rcc -name sanki Resources/sanki.qrc -o qrc_sanki.cpp
@@ -452,11 +456,11 @@ compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
 moc_predefs.h: /opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/features/data/dummy.cpp
-	arm-kobo-linux-gnueabihf-g++ -pipe --sysroot=/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/sysroot -O3 -march=armv7-a -mfpu=neon -mfloat-abi=hard -D__arm__ -D__ARM_NEON__ -fPIC -fno-omit-frame-pointer -funwind-tables -Wl,--no-merge-exidx-entries -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/features/data/dummy.cpp
+	arm-kobo-linux-gnueabihf-g++ -pipe --sysroot=/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/sysroot -O3 -march=armv7-a -mfpu=neon -mfloat-abi=hard -D__arm__ -D__ARM_NEON__ -fPIC -fno-omit-frame-pointer -funwind-tables -Wl,--no-merge-exidx-entries -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_card_true_false.cpp moc_deck.cpp moc_deckplay.cpp moc_decks_scroll_bar.cpp moc_edit_deck.cpp moc_mainwindow.cpp moc_mode_chooser.cpp moc_show_card.cpp moc_status_bar.cpp
+compiler_moc_header_make_all: moc_card_true_false.cpp moc_deck.cpp moc_deckplay.cpp moc_decks_scroll_bar.cpp moc_edit_deck.cpp moc_keyboard.cpp moc_mainwindow.cpp moc_mode_chooser.cpp moc_show_card.cpp moc_status_bar.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_card_true_false.cpp moc_deck.cpp moc_deckplay.cpp moc_decks_scroll_bar.cpp moc_edit_deck.cpp moc_mainwindow.cpp moc_mode_chooser.cpp moc_show_card.cpp moc_status_bar.cpp
+	-$(DEL_FILE) moc_card_true_false.cpp moc_deck.cpp moc_deckplay.cpp moc_decks_scroll_bar.cpp moc_edit_deck.cpp moc_keyboard.cpp moc_mainwindow.cpp moc_mode_chooser.cpp moc_show_card.cpp moc_status_bar.cpp
 moc_card_true_false.cpp: card_true_false.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QWidget \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qwidget.h \
@@ -866,8 +870,8 @@ moc_decks_scroll_bar.cpp: decks_scroll_bar.h \
 	/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/moc $(DEFINES) --include /mnt/HDD/Project/Public/sanki/moc_predefs.h -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/linux-kobo-gnueabihf-g++ -I/mnt/HDD/Project/Public/sanki -I/mnt/HDD/Project/Public/sanki/libraries/zip_libraries/zip/src -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtSql -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include/c++/11.1.0 -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include/c++/11.1.0/arm-kobo-linux-gnueabihf -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include/c++/11.1.0/backward -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/lib/gcc/arm-kobo-linux-gnueabihf/11.1.0/include -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/lib/gcc/arm-kobo-linux-gnueabihf/11.1.0/include-fixed -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/sysroot/usr/include decks_scroll_bar.h -o moc_decks_scroll_bar.cpp
 
 moc_edit_deck.cpp: edit_deck.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QWidget \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qwidget.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QDialog \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdialog.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qtwidgetsglobal.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtguiglobal.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qglobal.h \
@@ -893,6 +897,7 @@ moc_edit_deck.cpp: edit_deck.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qversiontagging.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtgui-config.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qtwidgets-config.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qwidget.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qwindowdefs.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobjectdefs.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qnamespace.h \
@@ -975,6 +980,115 @@ moc_edit_deck.cpp: edit_deck.h \
 		moc_predefs.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/moc
 	/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/moc $(DEFINES) --include /mnt/HDD/Project/Public/sanki/moc_predefs.h -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/linux-kobo-gnueabihf-g++ -I/mnt/HDD/Project/Public/sanki -I/mnt/HDD/Project/Public/sanki/libraries/zip_libraries/zip/src -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtSql -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include/c++/11.1.0 -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include/c++/11.1.0/arm-kobo-linux-gnueabihf -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include/c++/11.1.0/backward -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/lib/gcc/arm-kobo-linux-gnueabihf/11.1.0/include -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/lib/gcc/arm-kobo-linux-gnueabihf/11.1.0/include-fixed -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/sysroot/usr/include edit_deck.h -o moc_edit_deck.cpp
+
+moc_keyboard.cpp: keyboard.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QDialog \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdialog.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qtwidgetsglobal.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtguiglobal.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qglobal.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qconfig-bootstrapped.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qconfig.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qtcore-config.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qsystemdetection.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qprocessordetection.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcompilerdetection.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qtypeinfo.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qsysinfo.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qlogging.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qflags.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qatomic.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qbasicatomic.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qatomic_bootstrap.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qgenericatomic.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qatomic_cxx11.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qatomic_msvc.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qglobalstatic.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qmutex.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qnumeric.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qversiontagging.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtgui-config.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qtwidgets-config.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qwidget.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qwindowdefs.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobjectdefs.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qnamespace.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobjectdefs_impl.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qwindowdefs_win.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobject.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstring.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qchar.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qbytearray.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qrefcount.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qarraydata.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstringliteral.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstringalgorithms.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstringview.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstringbuilder.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qlist.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qalgorithms.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qiterator.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qhashfunctions.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qpair.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qvector.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcontainertools_impl.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qpoint.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qbytearraylist.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstringlist.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qregexp.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstringmatcher.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcoreevent.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qscopedpointer.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qmetatype.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qvarlengtharray.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcontainerfwd.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobject_impl.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qmargins.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qpaintdevice.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qrect.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qsize.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qpalette.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qcolor.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qrgb.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qrgba64.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qbrush.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qmatrix.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qpolygon.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qregion.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qdatastream.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qiodevice.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qline.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtransform.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qimage.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qpixelformat.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qpixmap.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qsharedpointer.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qshareddata.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qhash.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qsharedpointer_impl.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qfont.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qfontmetrics.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qfontinfo.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qsizepolicy.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qcursor.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qkeysequence.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qevent.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qvariant.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qmap.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qdebug.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qtextstream.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qlocale.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qset.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcontiguouscache.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qurl.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qurlquery.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qfile.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qfiledevice.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qvector2d.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtouchdevice.h \
+		moc_predefs.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/moc
+	/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/moc $(DEFINES) --include /mnt/HDD/Project/Public/sanki/moc_predefs.h -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/mkspecs/linux-kobo-gnueabihf-g++ -I/mnt/HDD/Project/Public/sanki -I/mnt/HDD/Project/Public/sanki/libraries/zip_libraries/zip/src -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtSql -I/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include/c++/11.1.0 -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include/c++/11.1.0/arm-kobo-linux-gnueabihf -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include/c++/11.1.0/backward -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/lib/gcc/arm-kobo-linux-gnueabihf/11.1.0/include -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/lib/gcc/arm-kobo-linux-gnueabihf/11.1.0/include-fixed -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/include -I/home/szybet/x-tools/arm-kobo-linux-gnueabihf/arm-kobo-linux-gnueabihf/sysroot/usr/include keyboard.h -o moc_keyboard.cpp
 
 moc_mainwindow.cpp: mainwindow.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QMainWindow \
@@ -1419,9 +1533,9 @@ compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_card_true_false.h ui_deck.h ui_deckplay.h ui_decks_scroll_bar.h ui_edit_deck.h ui_mainwindow.h ui_mode_chooser.h ui_show_card.h ui_status_bar.h
+compiler_uic_make_all: ui_card_true_false.h ui_deck.h ui_deckplay.h ui_decks_scroll_bar.h ui_edit_deck.h ui_keyboard.h ui_mainwindow.h ui_mode_chooser.h ui_show_card.h ui_status_bar.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_card_true_false.h ui_deck.h ui_deckplay.h ui_decks_scroll_bar.h ui_edit_deck.h ui_mainwindow.h ui_mode_chooser.h ui_show_card.h ui_status_bar.h
+	-$(DEL_FILE) ui_card_true_false.h ui_deck.h ui_deckplay.h ui_decks_scroll_bar.h ui_edit_deck.h ui_keyboard.h ui_mainwindow.h ui_mode_chooser.h ui_show_card.h ui_status_bar.h
 ui_card_true_false.h: card_true_false.ui \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/uic
 	/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/uic card_true_false.ui -o ui_card_true_false.h
@@ -1441,6 +1555,10 @@ ui_decks_scroll_bar.h: decks_scroll_bar.ui \
 ui_edit_deck.h: edit_deck.ui \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/uic
 	/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/uic edit_deck.ui -o ui_edit_deck.h
+
+ui_keyboard.h: keyboard.ui \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/uic
+	/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/uic keyboard.ui -o ui_keyboard.h
 
 ui_mainwindow.h: mainwindow.ui \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/bin/uic
@@ -1826,6 +1944,21 @@ decks_scroll_bar.o: decks_scroll_bar.cpp decks_scroll_bar.h \
 		ui_mainwindow.h \
 		status_bar.h \
 		globals.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QDebug \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QFile \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QGuiApplication \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qguiapplication.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcoreapplication.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qeventloop.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qinputmethod.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QScreen \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qscreen.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QList \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QObject \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QRect \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QSize \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QSizeF \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QTransform \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QTime \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qdatetime.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QTimer \
@@ -1833,15 +1966,10 @@ decks_scroll_bar.o: decks_scroll_bar.cpp decks_scroll_bar.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qbasictimer.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QApplication \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qapplication.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcoreapplication.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qeventloop.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdesktopwidget.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qguiapplication.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qinputmethod.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QFileDialog \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qfiledialog.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdialog.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QDebug \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QFileInfo \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QScrollBar \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qscrollbar.h \
@@ -1850,8 +1978,8 @@ decks_scroll_bar.o: decks_scroll_bar.cpp decks_scroll_bar.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o decks_scroll_bar.o decks_scroll_bar.cpp
 
 edit_deck.o: edit_deck.cpp edit_deck.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QWidget \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qwidget.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QDialog \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdialog.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qtwidgetsglobal.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtguiglobal.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qglobal.h \
@@ -1877,6 +2005,7 @@ edit_deck.o: edit_deck.cpp edit_deck.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qversiontagging.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtgui-config.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qtwidgets-config.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qwidget.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qwindowdefs.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobjectdefs.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qnamespace.h \
@@ -1962,14 +2091,36 @@ edit_deck.o: edit_deck.cpp edit_deck.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qmainwindow.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qtabwidget.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qicon.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QDebug
+		globals.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QDebug \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QFile \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QGuiApplication \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qguiapplication.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcoreapplication.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qeventloop.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qinputmethod.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QScreen \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qscreen.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QList \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QObject \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QRect \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QSize \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QSizeF \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QTransform \
+		keyboard.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QApplication \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qapplication.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdesktopwidget.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QTimer \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qtimer.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qbasictimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o edit_deck.o edit_deck.cpp
 
-globals.o: globals.cpp globals.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QDir \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qdir.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstring.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qchar.h \
+keyboard.o: keyboard.cpp keyboard.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QDialog \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdialog.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qtwidgetsglobal.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtguiglobal.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qglobal.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qconfig-bootstrapped.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qconfig.h \
@@ -1991,21 +2142,24 @@ globals.o: globals.cpp globals.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qmutex.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qnumeric.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qversiontagging.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtgui-config.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qtwidgets-config.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qwidget.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qwindowdefs.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobjectdefs.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qnamespace.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobjectdefs_impl.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qwindowdefs_win.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobject.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstring.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qchar.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qbytearray.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qrefcount.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qnamespace.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qarraydata.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstringliteral.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstringalgorithms.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstringview.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qstringbuilder.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qfileinfo.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qfile.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qfiledevice.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qiodevice.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobject.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobjectdefs.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobjectdefs_impl.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qlist.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qalgorithms.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qiterator.h \
@@ -2024,19 +2178,70 @@ globals.o: globals.cpp globals.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qvarlengtharray.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcontainerfwd.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qobject_impl.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qmargins.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qpaintdevice.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qrect.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qsize.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qpalette.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qcolor.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qrgb.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qrgba64.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qbrush.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qmatrix.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qpolygon.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qregion.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qdatastream.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qiodevice.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qline.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtransform.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qimage.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qpixelformat.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qpixmap.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qsharedpointer.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qshareddata.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qhash.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QDebug \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qdebug.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qsharedpointer_impl.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qfont.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qfontmetrics.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qfontinfo.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qsizepolicy.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qcursor.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qkeysequence.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qevent.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qvariant.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qmap.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qdebug.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qtextstream.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qlocale.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qvariant.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qset.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcontiguouscache.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qsharedpointer.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qsharedpointer_impl.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o globals.o globals.cpp
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qurl.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qurlquery.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qfile.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qfiledevice.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qvector2d.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtouchdevice.h \
+		ui_keyboard.h \
+		globals.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QDir \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qdir.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qfileinfo.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QDebug \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QFile \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QGuiApplication \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qguiapplication.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcoreapplication.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qeventloop.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qinputmethod.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QScreen \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qscreen.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QList \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QObject \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QRect \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QSize \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QSizeF \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QTransform
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o keyboard.o keyboard.cpp
 
 main.o: main.cpp mainwindow.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QMainWindow \
@@ -2149,14 +2354,24 @@ main.o: main.cpp mainwindow.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qdir.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qfileinfo.h \
 		globals.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QApplication \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qapplication.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QDebug \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QFile \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QGuiApplication \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qguiapplication.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcoreapplication.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qeventloop.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdesktopwidget.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qguiapplication.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qinputmethod.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QDebug
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QScreen \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qscreen.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QList \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QObject \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QRect \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QSize \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QSizeF \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QTransform \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QApplication \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qapplication.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdesktopwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
@@ -2273,13 +2488,30 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		ui_deck.h \
 		deck.cpp \
 		edit_deck.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QWidget \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QDialog \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdialog.h \
 		deckplay.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtSql/QSqlDatabase \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtSql/qsqldatabase.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtSql/qtsqlglobal.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtSql/qtsql-config.h \
+		globals.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QDebug \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QFile \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QGuiApplication \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qguiapplication.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcoreapplication.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qeventloop.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qinputmethod.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QScreen \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qscreen.h \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QList \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QObject \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QRect \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QSize \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QSizeF \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QTransform \
+		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QWidget \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/QAbstractTextDocumentLayout \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qabstracttextdocumentlayout.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qtextlayout.h \
@@ -2301,10 +2533,7 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qlayoutitem.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qboxlayout.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qgridlayout.h \
-		globals.h \
 		mode_chooser.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QDialog \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdialog.h \
 		libraries/zip_libraries/zip/src/zip.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QTime \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qdatetime.h \
@@ -2313,11 +2542,7 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qbasictimer.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QApplication \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qapplication.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qcoreapplication.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/qeventloop.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qdesktopwidget.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qguiapplication.h \
-		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtGui/qinputmethod.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/QFileDialog \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtWidgets/qfiledialog.h \
 		/opt/inkbox-qt-compile/qt-linux-5.15.2-kobo/include/QtCore/QFileInfo
@@ -2669,6 +2894,9 @@ moc_decks_scroll_bar.o: moc_decks_scroll_bar.cpp
 
 moc_edit_deck.o: moc_edit_deck.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_edit_deck.o moc_edit_deck.cpp
+
+moc_keyboard.o: moc_keyboard.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_keyboard.o moc_keyboard.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

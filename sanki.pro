@@ -7,6 +7,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += \
     c++11 \
+    c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -18,7 +19,7 @@ SOURCES += \
     deckplay.cpp \
     decks_scroll_bar.cpp \
     edit_deck.cpp \
-    globals.cpp \
+    keyboard.cpp \
     main.cpp \
     mainwindow.cpp \
     mode_chooser.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
     decks_scroll_bar.h \
     edit_deck.h \
     globals.h \
+    keyboard.h \
     mainwindow.h \
     mode_chooser.h \
     show_card.h \
@@ -43,6 +45,7 @@ FORMS += \
     deckplay.ui \
     decks_scroll_bar.ui \
     edit_deck.ui \
+    keyboard.ui \
     mainwindow.ui \
     mode_chooser.ui \
     show_card.ui \

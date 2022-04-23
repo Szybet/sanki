@@ -3,6 +3,7 @@
 #include "edit_deck.h"
 #include "mainwindow.h"
 #include "deckplay.h"
+#include "globals.h"
 
 #include <QMainWindow>
 #include <QWidget>
@@ -24,30 +25,26 @@ deck::deck(QWidget *parent)
 
 void deck::set_deck_name(QString text)
 {
-    // https://stackoverflow.com/questions/25855024/aligning-text-in-qtextedit
     ui->deck->setText(text);
-    /*
-    QTextCursor cursor = ui->deck->textCursor();
-    QTextBlockFormat textBlockFormat = cursor.blockFormat();
-    textBlockFormat.setAlignment(Qt::AlignCenter);
-    cursor.mergeBlockFormat(textBlockFormat);
-    ui->deck->setTextCursor(cursor);
-    */
 }
 
 void deck::refresh_decks_slot()
 {
-    qDebug() << "UPDATE - deck signal";
+    global_fun::log("Refresh decks slot received, emitting along", "deck.cpp", "refresh_decks_slot()");
     emit refresh_decks_signal();
 }
 
-void deck::on_EditDeckbutton_clicked()
+void deck::on_ButtonEditDeck_clicked()
 {
+    global_fun::log("Edit button clicked", "deck.cpp", "on_ButtonEditDeck_clicked()");
+
+
     edit_deck* edit_widget = new edit_deck();
     edit_widget->deck_info = deck_info;
-    edit_widget->update_widget();
-    edit_widget->show();
+    edit_widget->update_widget("", 0);
     connect(edit_widget, SIGNAL(refresh_decks_edit_signal()), this, SLOT(refresh_decks_slot()));
+    edit_widget->exec();
+
 }
 
 
