@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 7.0.0, 2022-04-23T22:20:55. -->
+<!-- Written by QtCreator 7.0.0, 2022-04-24T14:00:04. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -284,8 +284,8 @@
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedRemotePaths">
        <value type="QString">/kobo</value>
-       <value type="QString">/kobo/tmp/</value>
        <value type="QString">/kobo</value>
+       <value type="QString">/kobo/tmp/</value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedSysroots">
        <value type="QString"></value>
@@ -294,13 +294,13 @@
       </valuelist>
       <valuelist type="QVariantList" key="RemoteLinux.LastDeployedLocalTimes">
        <value type="QDateTime">2022-04-20T20:26:25.560</value>
-       <value type="QDateTime">2022-04-23T22:15:12.905</value>
        <value type="QDateTime">2022-04-23T18:58:21.521</value>
+       <value type="QDateTime">2022-04-24T13:55:28.330</value>
       </valuelist>
       <valuelist type="QVariantList" key="RemoteLinux.LastDeployedRemoteTimes">
        <value type="QDateTime">2022-04-20T20:41:27.000</value>
-       <value type="QDateTime">2022-04-23T22:15:14.000</value>
        <value type="QDateTime">2022-04-23T18:58:24.000</value>
+       <value type="QDateTime">2022-04-24T13:55:28.000</value>
       </valuelist>
      </valuemap>
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.2">

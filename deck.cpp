@@ -41,7 +41,8 @@ void deck::on_ButtonEditDeck_clicked()
 
     edit_deck* edit_widget = new edit_deck();
     edit_widget->deck_info = deck_info;
-    edit_widget->update_widget("", 0);
+    edit_widget->update_deck();
+
     connect(edit_widget, SIGNAL(refresh_decks_edit_signal()), this, SLOT(refresh_decks_slot()));
     edit_widget->exec();
 

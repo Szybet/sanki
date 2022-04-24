@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QDir>
+#include <QProxyStyle>
 
 namespace Ui {
 class edit_deck;
@@ -21,9 +22,10 @@ public:
     // + no variables
     Q_INVOKABLE void log();
 
+
 public slots:
     void update_widget(QString string, int cursor);
-
+    void update_deck();
 
 signals:
     void refresh_decks_edit_signal();
@@ -40,6 +42,8 @@ private slots:
 
     void on_lineEditDeckName_cursorPositionChanged(int arg1, int arg2);
 
+    void keyboard_closed();
+
 private:
     Ui::edit_deck *ui;
     QString updated_name;
@@ -49,6 +53,7 @@ private:
     QVector<QString> log_message;
     QVector<QString> log_function;
     bool first_open = true; // this is changed to false after launching in on_lineEditDeckName_cursorPositionChanged
+    bool keyboard_opened = false;
 };
 
 #endif // EDIT_DECK_H
