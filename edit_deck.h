@@ -44,6 +44,8 @@ private slots:
 
     void keyboard_closed();
 
+    void on_lineEditDeckName_selectionChanged();
+
 private:
     Ui::edit_deck *ui;
     QString updated_name;

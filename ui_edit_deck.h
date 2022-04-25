@@ -89,7 +89,7 @@ public:
         lineEditDeckName = new QLineEdit(frame);
         lineEditDeckName->setObjectName(QString::fromUtf8("lineEditDeckName"));
         lineEditDeckName->setTabletTracking(false);
-        lineEditDeckName->setFocusPolicy(Qt::ClickFocus);
+        lineEditDeckName->setFocusPolicy(Qt::StrongFocus);
 
         verticalLayout->addWidget(lineEditDeckName);
 

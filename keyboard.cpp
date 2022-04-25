@@ -26,6 +26,8 @@ keyboard::~keyboard()
 
 void keyboard::update_string(QString new_string)
 {
+    edited_string.remove("|");
+
     edited_string.insert(cursor_main, new_string);
     QString message = "Emiting update_data, edited_string: ";
     message.append(edited_string);
@@ -130,6 +132,8 @@ void keyboard::on_Button_space_clicked()
 
 void keyboard::on_Button_backspace_clicked()
 {
+    edited_string.remove("|");
+
     if(cursor_main != 0)
     {
         cursor_main = cursor_main - 1;
@@ -144,6 +148,7 @@ void keyboard::on_Button_Special_clicked()
     if(special == false)
     {
         special = true;
+        ui->Button_Special->setStyleSheet("font-weight: bold");
         ui->Button_q->setText("1");
         ui->Button_w->setText("2");
         ui->Button_e->setText("3");
@@ -158,6 +163,7 @@ void keyboard::on_Button_Special_clicked()
         ui->Button_Confirm->setText("⟶");
     } else {
         special = false;
+        ui->Button_Special->setStyleSheet("font-weight: normal");
         ui->Button_Cancel->setText("Cancel");
         ui->Button_Confirm->setText("Confirm");
         if(lower_case == true)
@@ -187,10 +193,12 @@ void keyboard::on_Button_Confirm_clicked()
 {
     if(ui->Button_Confirm->text() == "Confirm")
     {
+        edited_string.remove("|");
         emit keyboard_closed();
         this->close();
     } else {
         cursor_main = cursor_main + 1;
+        edited_string.remove("|");
         emit update_data(edited_string, cursor_main);
     }
 }

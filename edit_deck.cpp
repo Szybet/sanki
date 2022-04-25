@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <QTimer>
+#include <QCursor>
 
 edit_deck::edit_deck(QDialog *parent) :
     QDialog(parent),
@@ -25,6 +26,12 @@ edit_deck::edit_deck(QDialog *parent) :
     int y = (global_var::screen_y / 3) - ( this->height() / 2);
     this->move(x, y);
     ui->lineEditDeckName->setCursorPosition(10);
+
+    /* doesn't work at all
+    QPixmap pixmap = QPixmap(":cursor");
+    QCursor cursor = QCursor(pixmap, 0, 0);
+    QGuiApplication::setOverrideCursor(QCursor(cursor));
+    */
 }
 
 edit_deck::~edit_deck()
@@ -39,13 +46,22 @@ void edit_deck::update_widget(QString string, int cursor)
          message.append(" int: ");
          message.append(QString::number(cursor));
          global_fun::log(message, "edit_deck.cpp", "update_widget");
-         ui->lineEditDeckName->setText(string);
-         ui->lineEditDeckName->setCursorPosition(cursor);
-         if(string == "" and cursor == 0)
+
+         // Adding cursor, this is so stupid
+         QString string_with_cursor = string;
+         if(cursor == 0)
          {
-             ui->lineEditDeckName->setText(" ");
-             ui->lineEditDeckName->setText(string);
+             if(string == "")
+             {
+                 ui->lineEditDeckName->setText(" ");
+             }
+             string_with_cursor.insert(cursor, "|");
+         } else {
+             string_with_cursor.insert(cursor, "|");
          }
+
+         ui->lineEditDeckName->setText(string_with_cursor);
+         ui->lineEditDeckName->setCursorPosition(cursor);
 }
 
 void edit_deck::update_deck()
@@ -136,6 +152,7 @@ void edit_deck::on_lineEditDeckName_cursorPositionChanged(int oldpos, int newpos
                 connect(keyboard_nameedit, SIGNAL(update_data(QString, int)), this, SLOT(update_widget(QString, int)));
                 connect(keyboard_nameedit, SIGNAL(keyboard_closed()), this, SLOT(keyboard_closed()));
                 keyboard_opened = true;
+                update_widget(ui->lineEditDeckName->text(), ui->lineEditDeckName->cursorPosition()); // to create the cursor
                 keyboard_nameedit->exec();
             }
         }
@@ -150,6 +167,8 @@ void edit_deck::on_lineEditDeckName_cursorPositionChanged(int oldpos, int newpos
 
 void edit_deck::keyboard_closed()
 {
+    ui->lineEditDeckName->setText(ui->lineEditDeckName->text().remove("|"));
+    ui->lineEditDeckName->setCursorPosition(0);
     keyboard_opened = false;
 }
 
@@ -161,3 +180,9 @@ void edit_deck::log()
     log_message.removeFirst();
     log_function.removeFirst();
 }
+
+void edit_deck::on_lineEditDeckName_selectionChanged()
+{
+    ui->lineEditDeckName->setSelection(0, 0);
+}
+

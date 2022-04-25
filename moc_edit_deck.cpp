@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_edit_deck_t {
-    QByteArrayData data[17];
-    char stringdata0[267];
+    QByteArrayData data[18];
+    char stringdata0[304];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -48,7 +48,8 @@ QT_MOC_LITERAL(12, 195, 41), // "on_lineEditDeckName_cursorPos..."
 QT_MOC_LITERAL(13, 237, 4), // "arg1"
 QT_MOC_LITERAL(14, 242, 4), // "arg2"
 QT_MOC_LITERAL(15, 247, 15), // "keyboard_closed"
-QT_MOC_LITERAL(16, 263, 3) // "log"
+QT_MOC_LITERAL(16, 263, 36), // "on_lineEditDeckName_selection..."
+QT_MOC_LITERAL(17, 300, 3) // "log"
 
     },
     "edit_deck\0refresh_decks_edit_signal\0"
@@ -58,7 +59,9 @@ QT_MOC_LITERAL(16, 263, 3) // "log"
     "on_ButtonCancelEdit_clicked\0"
     "on_ButtonSaveExit_clicked\0"
     "on_lineEditDeckName_cursorPositionChanged\0"
-    "arg1\0arg2\0keyboard_closed\0log"
+    "arg1\0arg2\0keyboard_closed\0"
+    "on_lineEditDeckName_selectionChanged\0"
+    "log"
 };
 #undef QT_MOC_LITERAL
 
@@ -68,7 +71,7 @@ static const uint qt_meta_data_edit_deck[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -76,21 +79,22 @@ static const uint qt_meta_data_edit_deck[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   69,    2, 0x06 /* Public */,
-       3,    2,   70,    2, 0x06 /* Public */,
+       1,    0,   74,    2, 0x06 /* Public */,
+       3,    2,   75,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       6,    2,   75,    2, 0x0a /* Public */,
-       7,    0,   80,    2, 0x0a /* Public */,
-       8,    0,   81,    2, 0x08 /* Private */,
-       9,    0,   82,    2, 0x08 /* Private */,
-      10,    0,   83,    2, 0x08 /* Private */,
-      11,    0,   84,    2, 0x08 /* Private */,
-      12,    2,   85,    2, 0x08 /* Private */,
-      15,    0,   90,    2, 0x08 /* Private */,
+       6,    2,   80,    2, 0x0a /* Public */,
+       7,    0,   85,    2, 0x0a /* Public */,
+       8,    0,   86,    2, 0x08 /* Private */,
+       9,    0,   87,    2, 0x08 /* Private */,
+      10,    0,   88,    2, 0x08 /* Private */,
+      11,    0,   89,    2, 0x08 /* Private */,
+      12,    2,   90,    2, 0x08 /* Private */,
+      15,    0,   95,    2, 0x08 /* Private */,
+      16,    0,   96,    2, 0x08 /* Private */,
 
  // methods: name, argc, parameters, tag, flags
-      16,    0,   91,    2, 0x02 /* Public */,
+      17,    0,   97,    2, 0x02 /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -104,6 +108,7 @@ static const uint qt_meta_data_edit_deck[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,   13,   14,
+    QMetaType::Void,
     QMetaType::Void,
 
  // methods: parameters
@@ -128,7 +133,8 @@ void edit_deck::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 7: _t->on_ButtonSaveExit_clicked(); break;
         case 8: _t->on_lineEditDeckName_cursorPositionChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 9: _t->keyboard_closed(); break;
-        case 10: _t->log(); break;
+        case 10: _t->on_lineEditDeckName_selectionChanged(); break;
+        case 11: _t->log(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -179,13 +185,13 @@ int edit_deck::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 12)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 11;
+        _id -= 12;
     }
     return _id;
 }
