@@ -13,46 +13,48 @@ CONFIG += \
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+
+# Cleaning
 SOURCES += \
-    card_true_false.cpp \
-    deck.cpp \
-    deckplay.cpp \
-    decks_scroll_bar.cpp \
-    edit_deck.cpp \
-    keyboard.cpp \
+    card_view/card_true_false.cpp \
+    main_menu/deck.cpp \
+    card_view/deckplay.cpp \
+    main_menu/decks_scroll_bar.cpp \
+    main_menu/edit_deck.cpp \
+    components/keyboard.cpp \
     main.cpp \
-    mainwindow.cpp \
-    mode_chooser.cpp \
-    show_card.cpp \
-    status_bar.cpp \
-    toast.cpp
+    main_menu/mainwindow.cpp \
+    card_view/mode_chooser.cpp \
+    card_view/show_card.cpp \
+    components/status_bar.cpp \
+    components/toast.cpp
 
 HEADERS += \
-    card_true_false.h \
-    deck.h \
-    deckplay.h \
-    decks_scroll_bar.h \
-    edit_deck.h \
+    card_view/card_true_false.h \
+    main_menu/deck.h \
+    card_view/deckplay.h \
+    main_menu/decks_scroll_bar.h \
+    main_menu/edit_deck.h \
     globals.h \
-    keyboard.h \
-    mainwindow.h \
-    mode_chooser.h \
-    show_card.h \
-    status_bar.h \
-    toast.h
+    components/keyboard.h \
+    main_menu/mainwindow.h \
+    card_view/mode_chooser.h \
+    card_view/show_card.h \
+    components/status_bar.h \
+    components/toast.h
 
 FORMS += \
-    card_true_false.ui \
-    deck.ui \
-    deckplay.ui \
-    decks_scroll_bar.ui \
-    edit_deck.ui \
-    keyboard.ui \
-    mainwindow.ui \
-    mode_chooser.ui \
-    show_card.ui \
-    status_bar.ui \
-    toast.ui
+    card_view/card_true_false.ui \
+    main_menu/deck.ui \
+    card_view/deckplay.ui \
+    main_menu/decks_scroll_bar.ui \
+    main_menu/edit_deck.ui \
+    components/keyboard.ui \
+    main_menu/mainwindow.ui \
+    card_view/mode_chooser.ui \
+    card_view/show_card.ui \
+    components/status_bar.ui \
+    components/toast.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -63,10 +65,6 @@ DISTFILES +=
 
 RESOURCES += \
     Resources/sanki.qrc
-
-#unix:!macx: LIBS += -L$$PWD/libs/zip/build/ -lzip
-#INCLUDEPATH += $$PWD/libs/zip
-#DEPENDPATH += $$PWD/libs/zip
 
 INCLUDEPATH += $$PWD/libraries/zip_libraries/zip/src/
 DEPENDPATH += $$PWD/libraries/zip_libraries/zip/src/
