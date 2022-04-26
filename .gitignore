@@ -83,3 +83,4 @@ compile_commands.json
 # Build dir for Qt, if it works
 Build
 Makefile
+sanki
