@@ -36,13 +36,13 @@
     <number>0</number>
    </property>
    <property name="leftMargin">
-    <number>0</number>
+    <number>3</number>
    </property>
    <property name="topMargin">
     <number>5</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>3</number>
    </property>
    <property name="bottomMargin">
     <number>5</number>
@@ -202,7 +202,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Sanki2</string>
+        <string>Sanki</string>
        </property>
       </widget>
      </item>

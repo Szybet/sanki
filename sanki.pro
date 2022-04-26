@@ -24,7 +24,8 @@ SOURCES += \
     mainwindow.cpp \
     mode_chooser.cpp \
     show_card.cpp \
-    status_bar.cpp
+    status_bar.cpp \
+    toast.cpp
 
 HEADERS += \
     card_true_false.h \
@@ -37,7 +38,8 @@ HEADERS += \
     mainwindow.h \
     mode_chooser.h \
     show_card.h \
-    status_bar.h
+    status_bar.h \
+    toast.h
 
 FORMS += \
     card_true_false.ui \
@@ -49,7 +51,8 @@ FORMS += \
     mainwindow.ui \
     mode_chooser.ui \
     show_card.ui \
-    status_bar.ui
+    status_bar.ui \
+    toast.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

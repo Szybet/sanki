@@ -28,6 +28,7 @@ signals:
 
 private:
     Ui::decks_scroll_bar *ui;
+    QString log_file = "decks_scroll_bar";
 
 };
 

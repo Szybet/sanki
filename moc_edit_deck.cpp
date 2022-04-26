@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_edit_deck_t {
-    QByteArrayData data[18];
-    char stringdata0[304];
+    QByteArrayData data[19];
+    char stringdata0[316];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -48,8 +48,9 @@ QT_MOC_LITERAL(12, 195, 41), // "on_lineEditDeckName_cursorPos..."
 QT_MOC_LITERAL(13, 237, 4), // "arg1"
 QT_MOC_LITERAL(14, 242, 4), // "arg2"
 QT_MOC_LITERAL(15, 247, 15), // "keyboard_closed"
-QT_MOC_LITERAL(16, 263, 36), // "on_lineEditDeckName_selection..."
-QT_MOC_LITERAL(17, 300, 3) // "log"
+QT_MOC_LITERAL(16, 263, 11), // "update_name"
+QT_MOC_LITERAL(17, 275, 36), // "on_lineEditDeckName_selection..."
+QT_MOC_LITERAL(18, 312, 3) // "log"
 
     },
     "edit_deck\0refresh_decks_edit_signal\0"
@@ -59,7 +60,7 @@ QT_MOC_LITERAL(17, 300, 3) // "log"
     "on_ButtonCancelEdit_clicked\0"
     "on_ButtonSaveExit_clicked\0"
     "on_lineEditDeckName_cursorPositionChanged\0"
-    "arg1\0arg2\0keyboard_closed\0"
+    "arg1\0arg2\0keyboard_closed\0update_name\0"
     "on_lineEditDeckName_selectionChanged\0"
     "log"
 };
@@ -90,11 +91,11 @@ static const uint qt_meta_data_edit_deck[] = {
       10,    0,   88,    2, 0x08 /* Private */,
       11,    0,   89,    2, 0x08 /* Private */,
       12,    2,   90,    2, 0x08 /* Private */,
-      15,    0,   95,    2, 0x08 /* Private */,
-      16,    0,   96,    2, 0x08 /* Private */,
+      15,    1,   95,    2, 0x08 /* Private */,
+      17,    0,   98,    2, 0x08 /* Private */,
 
  // methods: name, argc, parameters, tag, flags
-      17,    0,   97,    2, 0x02 /* Public */,
+      18,    0,   99,    2, 0x02 /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -108,7 +109,7 @@ static const uint qt_meta_data_edit_deck[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,   13,   14,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::Bool,   16,
     QMetaType::Void,
 
  // methods: parameters
@@ -132,7 +133,7 @@ void edit_deck::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 6: _t->on_ButtonCancelEdit_clicked(); break;
         case 7: _t->on_ButtonSaveExit_clicked(); break;
         case 8: _t->on_lineEditDeckName_cursorPositionChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 9: _t->keyboard_closed(); break;
+        case 9: _t->keyboard_closed((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 10: _t->on_lineEditDeckName_selectionChanged(); break;
         case 11: _t->log(); break;
         default: ;

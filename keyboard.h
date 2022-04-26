@@ -20,7 +20,7 @@ public:
 
 signals:
     void update_data(QString string, int cursor);
-    void keyboard_closed();
+    void keyboard_closed(bool save_string);
 
 private slots:
     void update_string(QString new_string);

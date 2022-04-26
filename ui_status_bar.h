@@ -57,7 +57,7 @@ public:
         verticalLayout = new QVBoxLayout(status_bar);
         verticalLayout->setSpacing(0);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 5, 0, 5);
+        verticalLayout->setContentsMargins(3, 5, 3, 5);
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(0);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
@@ -197,7 +197,7 @@ public:
         status_bar->setWindowTitle(QCoreApplication::translate("status_bar", "Form", nullptr));
         ButtonExit->setText(QString());
         ButtonOption->setText(QCoreApplication::translate("status_bar", "Option", nullptr));
-        LabelStatus->setText(QCoreApplication::translate("status_bar", "Sanki2", nullptr));
+        LabelStatus->setText(QCoreApplication::translate("status_bar", "Sanki", nullptr));
         ButtonSettings->setText(QString());
         labelTime->setText(QCoreApplication::translate("status_bar", "00:00", nullptr));
     } // retranslateUi

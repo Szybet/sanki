@@ -40,10 +40,21 @@ decks_scroll_bar::~decks_scroll_bar()
 
 void decks_scroll_bar::update_decks()
 {
-    qDebug() << "UPDATE";
+    global_fun::log("update_decks slot called", log_file, "update_decks");
     emit remove_decks();
 
     QFileInfoList dir_list = global_var::directories::deck_storage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
+    QString message = "gathered dir_list: ";
+    for (QFileInfo file_info: dir_list) {
+        if (file_info.baseName() == "") {
+            continue;
+        }
+        message.append(file_info.baseName());
+        message.append(",");
+    }
+    global_fun::log(message, log_file, "update_decks");
+
+
     QGridLayout* scrollbar_layout = ui->DeckGrid;
 
     int row = 0; // horizontal
@@ -58,7 +69,7 @@ void decks_scroll_bar::update_decks()
         new_deck->deck::set_deck_name(file_info.baseName());
         new_deck->deck_info = file_info;
         // addWidget(QWidget *widget, int row, int column, Qt::Alignment alignment = Qt::Alignment())
-        connect(this, SIGNAL(remove_decks()), new_deck, SLOT());
+        connect(this, SIGNAL(remove_decks()), new_deck, SLOT(close()));
         connect(new_deck, SIGNAL(refresh_decks_signal()), this, SLOT(update_decks()));
         connect(new_deck, SIGNAL(play_deck(QDir)), this, SLOT(play_deck_slott(QDir)));
         scrollbar_layout->addWidget(new_deck, row, column);

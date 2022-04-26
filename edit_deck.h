@@ -42,13 +42,13 @@ private slots:
 
     void on_lineEditDeckName_cursorPositionChanged(int arg1, int arg2);
 
-    void keyboard_closed();
+    void keyboard_closed(bool update_name);
 
     void on_lineEditDeckName_selectionChanged();
 
 private:
     Ui::edit_deck *ui;
-    QString updated_name;
+    bool updated_name;
     bool reset_deck = false;
     bool remove_deck = false;
     QString log_file = "edit_deck.cpp";

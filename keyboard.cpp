@@ -180,7 +180,7 @@ void keyboard::on_Button_Cancel_clicked()
     if(ui->Button_Cancel->text() == "Cancel")
     {
         emit update_data(main_string, 0);
-        emit keyboard_closed();
+        emit keyboard_closed(false);
         this->close();
     } else {
         cursor_main = cursor_main - 1;
@@ -194,7 +194,7 @@ void keyboard::on_Button_Confirm_clicked()
     if(ui->Button_Confirm->text() == "Confirm")
     {
         edited_string.remove("|");
-        emit keyboard_closed();
+        emit keyboard_closed(true);
         this->close();
     } else {
         cursor_main = cursor_main + 1;

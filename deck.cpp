@@ -36,8 +36,9 @@ void deck::refresh_decks_slot()
 
 void deck::on_ButtonEditDeck_clicked()
 {
-    global_fun::log("Edit button clicked", "deck.cpp", "on_ButtonEditDeck_clicked()");
-
+    QString message = "Edit button clicked, editing deck: ";
+    message.append(deck_info.baseName());
+    global_fun::log(message, "deck.cpp", "on_ButtonEditDeck_clicked()");
 
     edit_deck* edit_widget = new edit_deck();
     edit_widget->deck_info = deck_info;
