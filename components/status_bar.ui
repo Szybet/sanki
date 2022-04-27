@@ -79,7 +79,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="Resources/sanki.qrc">
+        <iconset resource="../Resources/sanki.qrc">
          <normaloff>:/icons/close.png</normaloff>:/icons/close.png</iconset>
        </property>
        <property name="iconSize">
@@ -170,7 +170,7 @@
         <string>Option</string>
        </property>
        <property name="icon">
-        <iconset resource="Resources/sanki.qrc">
+        <iconset resource="../Resources/sanki.qrc">
          <normaloff>:/icons/folder.png</normaloff>:/icons/folder.png</iconset>
        </property>
        <property name="iconSize">
@@ -231,7 +231,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="Resources/sanki.qrc">
+        <iconset resource="../Resources/sanki.qrc">
          <normaloff>:/icons/settings.png</normaloff>:/icons/settings.png</iconset>
        </property>
        <property name="iconSize">
@@ -341,7 +341,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="Resources/sanki.qrc"/>
+  <include location="../Resources/sanki.qrc"/>
  </resources>
  <connections/>
 </ui>

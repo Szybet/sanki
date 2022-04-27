@@ -8,6 +8,7 @@
 #include "globals.h"
 #include "card_view/mode_chooser.h"
 #include "zip.h"
+#include "components/file_chooser.h"
 
 #include <QTime>
 #include <QTimer>
@@ -76,10 +77,16 @@ void MainWindow::on_CloseButton_clicked()
 
 void MainWindow::on_FileButton_clicked()
 {
-    QString zip_path = QFileDialog::getOpenFileName(this,
-        tr("Choose an .apkg file"), ".", tr("Anki deck ( .apkg ) (*.apkg)"));
-    qDebug() << "zip_path" << zip_path;
+    file_chooser* file_chooser_qdialog = new file_chooser;
 
+    file_chooser_qdialog->update_files();
+
+    auto idk = file_chooser_qdialog->exec();
+
+    qDebug() << "LOG: idk from file chooser" << idk;
+
+
+    QString zip_path = "test it is";
     QFile zip_file{zip_path};
     if (zip_file.exists()) {
         qDebug() << "zip exists";
