@@ -20,10 +20,16 @@ public:
 public slots:
     void update_files();
     void file_clicked(QString);
+    void enter_dir();
 
 signals:
     void remove_buttons();
     void remove_bold();
+
+private slots:
+    void on_ButtonConfirm_clicked();
+
+    void on_ButtonUpPath_clicked();
 
 private:
     Ui::file_chooser *ui;

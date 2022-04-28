@@ -19,6 +19,7 @@ public:
 
 signals:
     void im_clicked(QString);
+    void enter_dir();
 
 public slots:
     void remove_bold();

@@ -40,6 +40,14 @@ void file::remove_bold()
 
 void file::on_pushButton_clicked()
 {
+    if(is_directory == true)
+    {
+        // this checks if its clicked, if yes then enter the dir
+        if(ui->pushButton->text().contains(" →") == true)
+        {
+            emit enter_dir();
+        }
+    }
     ignore_remove_bold_signal = true;
 
     emit im_clicked(ui->pushButton->text());
