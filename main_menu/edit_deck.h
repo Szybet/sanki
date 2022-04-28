@@ -33,17 +33,11 @@ signals:
 
 private slots:
     void on_ButtonRemoveDeck_clicked();
-
     void on_ButtonReset_clicked();
-
     void on_ButtonCancelEdit_clicked();
-
     void on_ButtonSaveExit_clicked();
-
     void on_lineEditDeckName_cursorPositionChanged(int arg1, int arg2);
-
     void keyboard_closed(bool update_name);
-
     void on_lineEditDeckName_selectionChanged();
 
 private:

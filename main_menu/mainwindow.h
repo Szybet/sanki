@@ -16,6 +16,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void get_file(QString file);
+
 signals:
     void update_decks();
     void clear_mainwidget();
@@ -29,5 +32,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QString log_file = "MainWindow";
+    QString zip_file_path;
+
 };
 #endif // MAINWINDOW_H

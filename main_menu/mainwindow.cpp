@@ -78,16 +78,11 @@ void MainWindow::on_CloseButton_clicked()
 void MainWindow::on_FileButton_clicked()
 {
     file_chooser* file_chooser_qdialog = new file_chooser;
-
     file_chooser_qdialog->update_files();
+    connect(file_chooser_qdialog, SIGNAL(provide_file(QString)), this, SLOT(get_file(QString)));
+    file_chooser_qdialog->exec();
 
-    auto idk = file_chooser_qdialog->exec();
-
-    qDebug() << "LOG: idk from file chooser" << idk;
-
-
-    QString zip_path = "test it is";
-    QFile zip_file{zip_path};
+    QFile zip_file{zip_file_path};
     if (zip_file.exists()) {
         qDebug() << "zip exists";
 
@@ -107,13 +102,13 @@ void MainWindow::on_FileButton_clicked()
         */
 
         QDir new_deck;
-        QFileInfo zip_file_info(zip_path);
+        QFileInfo zip_file_info(zip_file_path);
         new_deck.setPath(global_var::directories::deck_storage.path() + "/" + zip_file_info.baseName());
         qDebug() << "new_deck" << new_deck.path();
         global_var::directories::deck_storage.mkdir(zip_file_info.baseName());
 
         // Converting to acceptable string
-        QByteArray ba = zip_path.toLocal8Bit();
+        QByteArray ba = zip_file_path.toLocal8Bit();
         const char *char_converted = ba.data();
         //
         int arg = 2; // why
@@ -132,5 +127,13 @@ void MainWindow::exit_app()
 }
 
 
+void MainWindow::get_file(QString file)
+{
+    zip_file_path = file;
 
+    QString message = "Slot activated, received: ";
+    message.append(file);
+    global_fun::log(message, log_file, "get_file");
+
+}
 
