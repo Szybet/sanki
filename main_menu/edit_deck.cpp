@@ -37,7 +37,7 @@ edit_deck::edit_deck(QDialog *parent) :
 
 edit_deck::~edit_deck()
 {
-    //delete ui;
+    delete ui;
 }
 
 void edit_deck::update_widget(QString string, int cursor)
@@ -70,8 +70,6 @@ void edit_deck::update_deck()
     QString deck_name = deck_info.baseName();
     ui->lineEditDeckName->setText(deck_name);
 }
-
-
 
 void edit_deck::on_ButtonRemoveDeck_clicked()
 {
@@ -192,6 +190,7 @@ void edit_deck::keyboard_closed(bool update_name)
 
 void edit_deck::log()
 {
+    // this function is becouse it avoid some problems, the log is showed in real time
     QString message = log_message.first();
     QString function = log_function.first();
     global_fun::log(message, log_file, function);

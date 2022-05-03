@@ -30,6 +30,7 @@ private slots:
 
 private:
      Ui::MainQwidget *ui;
+     QString log_file = "deck";
 };
 
 #endif // DECK_H

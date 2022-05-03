@@ -15,16 +15,17 @@ public:
     explicit mode_chooser(QDialog *parent = nullptr);
     ~mode_chooser();
 
+signals:
+    void set_mode(int mode);
+
 private slots:
-
     void on_ButtonCRandom_clicked();
-
     void on_ButtonConfirm_clicked();
 
 private:
     Ui::mode_chooser *ui;
     int mode = 0;
-    // 0 is noone
+    // 0 is none
     // 1 is Completly Random
 };
 

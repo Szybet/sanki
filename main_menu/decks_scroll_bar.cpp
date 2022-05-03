@@ -64,7 +64,6 @@ void decks_scroll_bar::update_decks()
         if (file_info.baseName() == "") {
             continue;
         }
-        qDebug() << "file_info_dir" << file_info.baseName();
         deck* new_deck = new deck();
         new_deck->deck::set_deck_name(file_info.baseName());
         new_deck->deck_info = file_info;
@@ -85,6 +84,8 @@ void decks_scroll_bar::update_decks()
 
 void decks_scroll_bar::play_deck_slott(QDir dir)
 {
-    qDebug() << "DECKPLAY - SCROLL";
+    QString message = "Received dir: ";
+    message.append(dir.path());
+    global_fun::log(message, log_file, "play_deck_slott");
     emit play_deck_signal(dir);
 }

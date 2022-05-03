@@ -30,14 +30,14 @@ MainWindow::MainWindow(QWidget *parent)
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::battery_warning_timer);
     timer->start(15000);
-    battery_warning_timer();
+    // Dont start it here becouse it will be fullscreen for some reason
 
     // Setup status bar
     status_bar* status_bar_up = new status_bar();
     QIcon file_chooser_icon = QIcon(":/icons/folder.png");
     status_bar_up->option_button_set("Add deck", file_chooser_icon);
-    connect(status_bar_up, SIGNAL(option_button_signal()), this, SLOT(on_FileButton_clicked()));
-    connect(status_bar_up, SIGNAL(close_button_signal()), this, SLOT(exit_app()));
+    connect(status_bar_up, SIGNAL(option_button_signal()), this, SLOT(FileButton()));
+    connect(status_bar_up, SIGNAL(close_button_signal()), this, SLOT(close()));
     ui->gridStatus->addWidget(status_bar_up);
 
 
@@ -61,29 +61,35 @@ void MainWindow::deck_scroll_bar_show()
     // Something is wrong the passing an argument with signal and slots
     central_layout->addWidget(decks);
     emit update_decks();
+    global_fun::log("update_decks emitet", log_file, "deck_scroll_bar_show");
 }
 
 void MainWindow::deck_play_show(QDir dir)
 {
-    qDebug() << "DECKPLAY - MAIN" << dir;
-    //mode_chooser* choose_mode = new mode_chooser;
+    // This here goes to card_view thing, going to play
+
+    QString message = "Dir choosed to play: ";
+    message.append(dir.path());
+    global_fun::log(message, log_file, "deck_play_show");
+
+    // this was propably causing problems
     //int mode = choose_mode->exec();
 
+    mode_chooser* choose_mode = new mode_chooser;
+    connect(choose_mode, SIGNAL(set_mode(int)), this, SLOT(get_mode(int)));
+    choose_mode->exec();
+
     emit clear_mainwidget();
-    auto central_layout = ui->centralwidget->layout();
+    QLayout* central_layout = ui->centralwidget->layout();
     DeckPlay* play_deck = new DeckPlay();
-    play_deck->update(dir, 1);
+    play_deck->update(dir, mode);
     connect(this, SIGNAL(clear_mainwidget()), play_deck, SLOT(deleteLater()));
     central_layout->addWidget(play_deck);
 }
 
-void MainWindow::on_CloseButton_clicked()
+void MainWindow::FileButton()
 {
-    exit_app();
-}
-
-void MainWindow::on_FileButton_clicked()
-{
+    // Dont get confused, this is a slot activated from status bar
     file_chooser* file_chooser_qdialog = new file_chooser;
     file_chooser_qdialog->update_files();
     connect(file_chooser_qdialog, SIGNAL(provide_file(QString)), this, SLOT(get_file(QString)));
@@ -91,8 +97,7 @@ void MainWindow::on_FileButton_clicked()
 
     QFile zip_file{zip_file_path};
     if (zip_file.exists()) {
-        qDebug() << "zip exists";
-
+        global_fun::log("zip to be added exists", log_file, "FileButton");
 
         // libzip try
         /*
@@ -111,37 +116,22 @@ void MainWindow::on_FileButton_clicked()
         QDir new_deck;
         QFileInfo zip_file_info(zip_file_path);
         new_deck.setPath(global_var::directories::deck_storage.path() + "/" + zip_file_info.baseName());
-        qDebug() << "new_deck" << new_deck.path();
+
+        QString message = "new deck path: ";
+        message.append(new_deck.path());
+        global_fun::log(message, log_file, "FileButton");
+
         global_var::directories::deck_storage.mkdir(zip_file_info.baseName());
 
         // Converting to acceptable string
         QByteArray ba = zip_file_path.toLocal8Bit();
         const char *char_converted = ba.data();
-        //
         int arg = 2; // why
         zip_extract(char_converted, new_deck.path().toLocal8Bit().data(), 0, &arg);
-
-
     }
     // Update decks
     emit update_decks();
-
-}
-
-void MainWindow::exit_app()
-{
-    QApplication::closeAllWindows();
-}
-
-
-void MainWindow::get_file(QString file)
-{
-    zip_file_path = file;
-
-    QString message = "Slot activated, received: ";
-    message.append(file);
-    global_fun::log(message, log_file, "get_file");
-
+    global_fun::log("update_decks emitet", log_file, "FileButton");
 }
 
 void MainWindow::battery_warning_timer()
@@ -162,4 +152,20 @@ void MainWindow::battery_warning_timer()
         new_toast->activate();
         new_toast->exec();
     }
+}
+
+void MainWindow::get_file(QString file)
+{
+    zip_file_path = file;
+    QString message = "Slot activated, received: ";
+    message.append(file);
+    global_fun::log(message, log_file, "get_file");
+}
+
+void MainWindow::get_mode(int mode_slot)
+{
+    QString message = "Slot activated, received: ";
+    message.append(mode_slot);
+    global_fun::log(message, log_file, "get_mode");
+    mode = mode_slot;
 }

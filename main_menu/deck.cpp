@@ -30,7 +30,7 @@ void deck::set_deck_name(QString text)
 
 void deck::refresh_decks_slot()
 {
-    global_fun::log("Refresh decks slot received, emitting along", "deck.cpp", "refresh_decks_slot()");
+    global_fun::log("Refresh decks slot received, emitting along", log_file, "refresh_decks_slot");
     emit refresh_decks_signal();
 }
 
@@ -38,7 +38,7 @@ void deck::on_ButtonEditDeck_clicked()
 {
     QString message = "Edit button clicked, editing deck: ";
     message.append(deck_info.baseName());
-    global_fun::log(message, "deck.cpp", "on_ButtonEditDeck_clicked()");
+    global_fun::log(message, log_file, "on_ButtonEditDeck_clicked");
 
     edit_deck* edit_widget = new edit_deck();
     edit_widget->deck_info = deck_info;
@@ -54,7 +54,13 @@ void deck::on_ButtonDeckPlay_clicked()
 {
 
     QDir deck_dir = deck_info.absoluteFilePath();
-    qDebug() << "DECKPLAY - DECK";
+
+    QString message = "Clicked at dir: ";
+    message.append(deck_dir.path());
+
+    global_fun::log(message, log_file, "on_ButtonDeckPlay_clicked");
+
+
     emit play_deck(deck_dir);
 }
 
