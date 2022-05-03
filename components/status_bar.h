@@ -23,6 +23,8 @@ private slots:
 
     void on_ButtonOption_clicked();
 
+    void on_ButtonSettings_clicked();
+
 signals:
     void option_button_signal();
     void close_button_signal();

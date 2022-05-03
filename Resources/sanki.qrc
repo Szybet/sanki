@@ -5,5 +5,8 @@
         <file>settings.png</file>
         <file>backspace.png</file>
         <file>apkg_file.png</file>
+        <file>battery_empty.png</file>
+        <file>battery_half.png</file>
+        <file>battery_full.png</file>
     </qresource>
 </RCC>

@@ -7,6 +7,15 @@
 #include <QGuiApplication>
 #include <QScreen>
 
+#include <stdio.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+// https://stackoverflow.com/questions/61735609/implicit-instantiation-of-undefined-template-std-1basic-istringstreamchar
+#include <sstream>
+// https://stackoverflow.com/questions/1057287/ofstream-error-in-c
+#include <fstream>
+
 namespace global_var {
     inline bool debug_enabled = true;
     namespace directories {
@@ -21,7 +30,7 @@ namespace global_var {
     inline bool running_on_kobo;
     inline int screen_x;
     inline int screen_y;
-
+    inline int batt_level_int;
 
 
 }
@@ -66,6 +75,36 @@ namespace global_fun {
         message.append(" y:");
         message.append(QString::number(global_var::screen_y));
         global_fun::log(message, "globals.h", "screen_geometry()");
+    }
+    inline void check_battery_level()
+    {
+        // Copied from inkbox
+        QFile batt_level_file("/sys/devices/platform/pmic_battery.1/power_supply/mc13892_bat/capacity");
+        QString batt_level;
+        if(batt_level_file.exists()) {
+            batt_level_file.open(QIODevice::ReadOnly);
+            batt_level = batt_level_file.readAll();
+            batt_level = batt_level.trimmed();
+            global_var::batt_level_int = batt_level.toInt();
+            batt_level_file.close();
+        }
+        else {
+            global_var::batt_level_int = 100;
+        }
+    }
+    inline void set_brightness(int value) {
+        std::ofstream fhandler;
+        fhandler.open("/var/run/brightness");
+        fhandler << value;
+        fhandler.close();
+    }
+    inline int get_brightness() {
+        QFile brightness("/var/run/brightness");
+        brightness.open(QIODevice::ReadOnly);
+        QString valuestr = brightness.readAll();
+        int value = valuestr.toInt();
+        brightness.close();
+        return value;
     }
 }
 #endif // GLOBALS_H

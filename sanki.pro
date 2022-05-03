@@ -19,6 +19,7 @@ SOURCES += \
     card_view/card_true_false.cpp \
     components/file.cpp \
     components/file_chooser.cpp \
+    components/settings.cpp \
     main_menu/deck.cpp \
     card_view/deckplay.cpp \
     main_menu/decks_scroll_bar.cpp \
@@ -35,6 +36,7 @@ HEADERS += \
     card_view/card_true_false.h \
     components/file.h \
     components/file_chooser.h \
+    components/settings.h \
     main_menu/deck.h \
     card_view/deckplay.h \
     main_menu/decks_scroll_bar.h \
@@ -51,6 +53,7 @@ FORMS += \
     card_view/card_true_false.ui \
     components/file.ui \
     components/file_chooser.ui \
+    components/settings.ui \
     main_menu/deck.ui \
     card_view/deckplay.ui \
     main_menu/decks_scroll_bar.ui \

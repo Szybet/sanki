@@ -1,5 +1,6 @@
 #include "components/status_bar.h"
 #include "ui_status_bar.h"
+#include "settings.h"
 
 #include <QTimer>
 #include <QTime>
@@ -50,5 +51,12 @@ void status_bar::on_ButtonExit_clicked()
 void status_bar::on_ButtonOption_clicked()
 {
     emit option_button_signal();
+}
+
+
+void status_bar::on_ButtonSettings_clicked()
+{
+    Settings* settings_qdialog = new Settings;
+    settings_qdialog->exec();
 }
 

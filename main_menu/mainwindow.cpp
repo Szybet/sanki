@@ -1,4 +1,5 @@
 #include "main_menu/mainwindow.h"
+#include "components/toast.h"
 #include "main_menu/deck.h"
 #include "main_menu/deck.cpp"
 #include "ui_mainwindow.h"
@@ -24,6 +25,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // Battery checking
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::battery_warning_timer);
+    timer->start(15000);
+    battery_warning_timer();
 
     // Setup status bar
     status_bar* status_bar_up = new status_bar();
@@ -137,3 +144,22 @@ void MainWindow::get_file(QString file)
 
 }
 
+void MainWindow::battery_warning_timer()
+{
+    global_fun::check_battery_level();
+    if(global_var::batt_level_int < 30 and global_var::batt_level_int > 15)
+    {
+        toast* new_toast = new toast;
+        new_toast->label_text = "Battery level is below 30%";
+        new_toast->show_time_ms = 100000;
+        new_toast->activate();
+        new_toast->exec();
+    } else if(global_var::batt_level_int < 15)
+    {
+        toast* new_toast = new toast;
+        new_toast->label_text = "Battery level is below 15%";
+        new_toast->show_time_ms = 100000;
+        new_toast->activate();
+        new_toast->exec();
+    }
+}

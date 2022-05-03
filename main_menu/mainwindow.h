@@ -29,6 +29,7 @@ private slots:
     void exit_app();
     void deck_scroll_bar_show();
     void deck_play_show(QDir);
+    void battery_warning_timer();
 
 private:
     Ui::MainWindow *ui;
