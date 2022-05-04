@@ -5,6 +5,7 @@ small [anki](https://apps.ankiweb.net) rewritten for e-readers, with focus on [i
 - Fully support Anki learning scheme
 - Support for other devices
 - Support all anki in-card text, like images
+- Try to support fully the [database](https://github.com/ankidroid/Anki-Android/wiki/Database-Structure)
 - more flexibility, customization
 - AnkiWeb support (maybe ?) + wifi menu
 - Better README file
