@@ -1,6 +1,7 @@
 #include "card_view/deckplay.h"
 #include "ui_deckplay.h"
 #include "card_view/show_card.h"
+#include "globals.h"
 
 #include <QDebug>
 #include <QSqlDatabase>
@@ -13,11 +14,6 @@ DeckPlay::DeckPlay(QWidget *parent) :
     ui(new Ui::DeckPlay)
 {
     ui->setupUi(this);
-    show_card* show_card_widget = new show_card;
-    connect(show_card_widget, SIGNAL(clicked()), this, SLOT(show_back_next()));
-    connect(this, SIGNAL(show_button_text(QString)), show_card_widget, SLOT(set_text(QString))); // It works, but there is no color
-    ui->gridManageCard->addWidget(show_card_widget);
-
 
 }
 
@@ -28,9 +24,26 @@ DeckPlay::~DeckPlay()
 
 void DeckPlay::update(QDir dir, int mode_new)
 {
+    // This is just provifing values and then updating
     deck_dir = dir;
     mode = mode_new;
-    qDebug() << "DECKPLAY - UPDATE" << dir << "int is:" << mode_new;
+
+    //media_file = QFile{deck_dir.path() + "/media"};
+    media_file.setFileName(deck_dir.path() + "/media");
+
+    QString message = "media file is: ";
+    message.append(media_file.fileName());
+    global_fun::log(message, log_file, "update");
+    if(media_file.exists() == true)
+    {
+        global_fun::log("media file exists", log_file, "update");
+    } else {
+        global_fun::log("media file does not exists", log_file, "update");
+    }
+
+    QStringList string_list = {deck_dir.path()};
+    ui->textBackCard->setSearchPaths(string_list);
+
     start();
 }
 
@@ -41,75 +54,68 @@ void DeckPlay::start()
 
     if (db_path.exists() == true)
     {
-        qDebug() << "SQLITE DATABSE OPEN";
         db = QSqlDatabase::addDatabase("QSQLITE");
         db.setDatabaseName(db_path_str);
         // http://katecpp.github.io/sqlite-with-qt/
 
         if (db.open() == true)
         {
-           // Everything is good, start making the GUI
-           next_card();
-
-           /* example
-           qDebug() << "Database: connection ok";
-           QSqlQuery query("SELECT id FROM notes");
-               while (query.next()) {
-                   QString country = query.value(0).toString();
-                   qDebug() << "Database" << country;
-               }
-           */
-
+           // Everything is good, start making the GUI, check mode
+           if(mode == 1) // Completly random
+           {
+               mode_crandom_setup();
+           }
         }
         else
         {
-           qDebug() << "Database: connection with database failed";
+           global_fun::log("Database: connection with database failed", log_file, "start");
         }
     }
     else
     {
-        qDebug() << "Database: doesn't exist";
+        global_fun::log("Database: doesn't exist", log_file, "start");
     }
 }
 
-void DeckPlay::next_card()
+void DeckPlay::mode_crandom_setup()
+{
+    // Setup show / next card button
+    show_card* show_card_widget = new show_card;
+    connect(show_card_widget, SIGNAL(clicked()), this, SLOT(show_back_next())); // Button slot
+    connect(this, SIGNAL(show_button_text(QString)), show_card_widget, SLOT(set_text(QString)));
+    connect(this, SIGNAL(next_card_call()), this, SLOT(mode_crandom_loop())); // a loop it is 1
+    ui->gridManageCard->addWidget(show_card_widget);
+
+    // a loop it is 2
+    mode_crandom_loop();
+}
+
+void DeckPlay::mode_crandom_loop()
 {
     QSqlQuery query_id = db.exec("SELECT id FROM notes ORDER BY RANDOM() LIMIT 1");
-    // int id = query.value(1).toInt();
     query_id.next();
-    // its too big fir int
-    QString id_str = query_id.value(0).toString();
-    qDebug() << "Database random id_str" << id_str;
-    QString front_std_sql = "SELECT sfld FROM notes WHERE id=" + id_str;
-    QString back_std_sql = "SELECT flds FROM notes WHERE id=" + id_str;
+    // its too big for int
+    QString id_str = query_id.value(0).toString(); // random id
 
-    QSqlQuery front_query = db.exec(front_std_sql);
-    front_query.next();
-    front_card = front_query.value(0).toString();
-    qDebug() << "Database front_card" << front_card;
+    // set variables
+    QString main_std_sql = "SELECT flds FROM notes WHERE id=" + id_str;
 
-    QSqlQuery back_query = db.exec(back_std_sql);
-    back_query.next();
-    back_card = back_query.value(0).toString();
-    qDebug() << "Database back_card" << back_card;
-    // On the back is this:
-    // front_card + this character https://unicode-table.com/en/001F/
-    // and then the important rest
+    QSqlQuery main_query = db.exec(main_std_sql);
+    main_query.next();
+    main_card = main_query.value(0).toString();
+
+    // Parse the text
+    parse_string();
 
     ui->textFrontCard->setText(front_card);
-
 }
 
 void DeckPlay::show_back_next()
 {
-    qDebug() << "play_deck show_back" << back_card;
     if (showed_back == false)
     {
         showed_back = true;
-        int char_to_remove = front_card.count() + 1;
-        QString new_back = back_card.remove(0, char_to_remove);
-        qDebug() << "play_deck better_back" << new_back;
-        ui->textBackCard->setText(new_back);
+        ui->textBackCard->setText(back_card);
         emit show_button_text("Next Card");
     }
     else
@@ -117,8 +123,67 @@ void DeckPlay::show_back_next()
         showed_back = false;
         emit show_button_text("Show");
         ui->textBackCard->setText("");
-        next_card();
 
+        emit next_card_call();
     }
+
+}
+
+void DeckPlay::parse_string()
+{
+    // turn those weird image id's to file names
+    // this is a json file, but a weird one so...
+    if(main_card.contains("<img src="))
+    {
+        media_file.open(QIODevice::ReadOnly);
+        QString media_contend = media_file.readAll();
+        media_file.close();
+
+        media_contend = media_contend.replace("{", "");
+        media_contend = media_contend.replace("}", "");
+        media_contend = media_contend.replace(" ", "");
+
+        QStringList split_dot = media_contend.split(",");
+        for(QString item: split_dot)
+        {
+            media_contend = media_contend.replace("\"", "");
+
+            QString message4 = "item is: ";
+            message4.append(item);
+            global_fun::log(message4, log_file, "media_contend");
+
+            QStringList replace_items = item.split(":");
+            if(main_card.contains(replace_items.last()))
+            {
+                global_fun::log("main_card contains items_last", log_file, "media_contend");
+                main_card = main_card.replace(replace_items.last(), replace_items.first());
+            }
+        }
+    }
+
+
+
+    // main_all is:
+    // front_card + this character https://unicode-table.com/en/001F/ + back_card
+    QStringList cards = main_card.split("\u001F");
+    QString message3 = "cards splitted are: ";
+    for(QString card: cards)
+    {
+        message3.append(card);
+        message3.append(",");
+    }
+    global_fun::log(message3, log_file, "parse_string");
+
+    front_card = cards.first();
+    back_card = cards.last();
+
+
+    QString message2 = "front_card is: ";
+    message2.append(front_card);
+    global_fun::log(message2, log_file, "parse_string");
+
+    QString message = "back_card is: ";
+    message.append(back_card);
+    global_fun::log(message, log_file, "parse_string");
 
 }

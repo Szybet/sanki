@@ -8,5 +8,7 @@
         <file>battery_empty.png</file>
         <file>battery_half.png</file>
         <file>battery_full.png</file>
+        <file>radio_button_checked.png</file>
+        <file>radio_button_unchecked.png</file>
     </qresource>
 </RCC>

@@ -9,6 +9,17 @@ mode_chooser::mode_chooser(QDialog *parent) :
     ui(new Ui::mode_chooser)
 {
     ui->setupUi(this);
+    ui->groupBox->setStyleSheet("border: 4px solid back;");
+
+    //ui->ButtonCRandom->setStyleSheet("QRadioButton::indicator::unchecked{color: #184880; width: 10px; height: 10px; background: white; border-width: 2px; border-style: solid; border-radius: 7px;}; QRadioButton::indicator::checked{color: #184880; width: 10px; height: 10px; background: white; border-width: 2px; border-style: solid; border-radius: 7px;}");
+    //ui->ButtonCRandom->setStyleSheet("QRadioButton::indicator:checked{color: black; background: black; border-width: 2px; border-style: solid; border-radius: 7px; border-color: white;}");
+    //ui->ButtonCRandom->setStyleSheet("QRadioButton::indicator::unchecked {image: url(:/icons/radio_button_unchecked.png)}; QRadioButton::indicator::checked {image: url(:/icons/radio_button_checked.png)}");
+    // Nothing works, so this:
+    ui->ButtonCRandom->setStyleSheet("QRadioButton::indicator{width: 0px; height: 0px;}");
+    ui->ButtonCRandom->setIcon(QIcon(":/icons/radio_button_unchecked.png"));
+    ui->ButtonCRandom->setIconSize(QSize(33, 33));
+
+
 }
 
 mode_chooser::~mode_chooser()
@@ -17,11 +28,18 @@ mode_chooser::~mode_chooser()
 }
 
 
-void mode_chooser::on_ButtonCRandom_clicked()
+void mode_chooser::on_ButtonCRandom_clicked(bool checked)
 {
-    mode = 1;
+    if(checked == true)
+    {
+        mode = 1;
+        ui->ButtonCRandom->setIcon(QIcon(":/icons/radio_button_checked.png"));
+    } else {
+        // Change in the future
+        mode = 0;
+        ui->ButtonCRandom->setIcon(QIcon(":/icons/radio_button_unchecked.png"));
+    }
 }
-
 
 void mode_chooser::on_ButtonConfirm_clicked()
 {
@@ -35,3 +53,5 @@ void mode_chooser::on_ButtonConfirm_clicked()
         this->close();
     }
 }
+
+

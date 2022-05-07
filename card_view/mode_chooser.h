@@ -19,8 +19,8 @@ signals:
     void set_mode(int mode);
 
 private slots:
-    void on_ButtonCRandom_clicked();
     void on_ButtonConfirm_clicked();
+    void on_ButtonCRandom_clicked(bool checked);
 
 private:
     Ui::mode_chooser *ui;
