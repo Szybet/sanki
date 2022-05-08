@@ -422,7 +422,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="Resources/sanki.qrc">
+        <iconset resource="../Resources/sanki.qrc">
          <normaloff>:/icons/backspace.png</normaloff>:/icons/backspace.png</iconset>
        </property>
       </widget>
@@ -510,7 +510,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="Resources/sanki.qrc"/>
+  <include location="../Resources/sanki.qrc"/>
  </resources>
  <connections/>
 </ui>

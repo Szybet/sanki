@@ -29,6 +29,10 @@ private slots:
     void mode_crandom_loop();
 
 
+    void on_textBackCard_textChanged();
+
+    void on_textFrontCard_textChanged();
+
 signals:
     void show_button_text(QString);
 
@@ -44,6 +48,7 @@ private:
     QSqlDatabase db;
     QString db_path_str;
 
+    bool first_launch = true;
     QString front_card;
     QString back_card;
     QString main_card;

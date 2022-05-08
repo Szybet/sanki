@@ -8,13 +8,22 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlTableModel>
+#include <QScrollBar>
 
 DeckPlay::DeckPlay(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::DeckPlay)
 {
     ui->setupUi(this);
+    // Everything is done in update(), this should be  fixed for the future
 
+    // This could be editable in settings
+    ui->scrollArea->verticalScrollBar()->setStyleSheet(
+        "QScrollBar:vertical { width: 50px; }");
+
+    // This could be editable in settings
+    ui->scrollArea->horizontalScrollBar()->setStyleSheet(
+        "QScrollBar:horizontal { width: 50px; }");
 }
 
 DeckPlay::~DeckPlay()
@@ -42,7 +51,12 @@ void DeckPlay::update(QDir dir, int mode_new)
     }
 
     QStringList string_list = {deck_dir.path()};
+
+    // Pretty important
     ui->textBackCard->setSearchPaths(string_list);
+    ui->textFrontCard->setSearchPaths(string_list);
+
+
 
     start();
 }
@@ -108,6 +122,32 @@ void DeckPlay::mode_crandom_loop()
     parse_string();
 
     ui->textFrontCard->setText(front_card);
+
+    // Some magic: at the launch it shows height 0, and with this it is a bit bigger. not an ideal solution
+    if(first_launch == true)
+    {
+        first_launch = false;
+        mode_crandom_loop();
+    }
+
+    // This needs to be done after setText becouse it will Segment fault
+    if(ui->textFrontCard->document()->isEmpty() == false)
+    {
+        ui->textFrontCard->selectAll();
+        ui->textFrontCard->setAlignment(Qt::AlignCenter);
+
+        // This removes selection
+        QTextCursor cursor = ui->textFrontCard->textCursor();
+        cursor.clearSelection();
+        ui->textFrontCard->setTextCursor(cursor);
+    }
+
+    //
+    //if(ui->textFrontCard->horizontalScrollBar()->isVisible() == true)
+    //{
+    //    global_fun::log("textFrontCard horizontalScrollBar is visible", log_file, "mode_crandom_loop");
+    //}
+
 }
 
 void DeckPlay::show_back_next()
@@ -116,6 +156,37 @@ void DeckPlay::show_back_next()
     {
         showed_back = true;
         ui->textBackCard->setText(back_card);
+
+        // This needs to be done after setText becouse it will Segment fault
+        if(ui->textBackCard->document()->isEmpty() == false)
+        {
+            ui->textBackCard->selectAll();
+            ui->textBackCard->setAlignment(Qt::AlignCenter);
+
+            // This removes selection
+            QTextCursor cursor = ui->textBackCard->textCursor();
+            cursor.clearSelection();
+            ui->textBackCard->setTextCursor(cursor);
+        }
+
+        if(ui->textBackCard->horizontalScrollBar()->isVisible() == true)
+        {
+            global_fun::log("textBackCard horizontalScrollBar is visible", log_file, "show_back_next");
+            //ui->textBackCard->horizontalScrollBar()->hide();
+
+            ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+            ui->scrollArea->horizontalScrollBar()->show();
+            ui->scrollArea->horizontalScrollBar()->showNormal();
+
+            // https://forum.qt.io/topic/45543/sethorizontalscrollbar-deletes-the-scrollbar-instead-of-the-former-scrollbar-and-has-no-effect-in-my-qgraphicsview
+            ui->scrollArea->setHorizontalScrollBar(ui->textBackCard->horizontalScrollBar());
+            //ui->textBackCard->setHorizontalScrollBar(ui->scrollArea->horizontalScrollBar());
+        } else {
+            global_fun::log("textBackCard horizontalScrollBar is not visible", log_file, "show_back_next");
+            ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+            ui->scrollArea->horizontalScrollBar()->hide();
+        }
+
         emit show_button_text("Next Card");
     }
     else
@@ -133,6 +204,7 @@ void DeckPlay::parse_string()
 {
     // turn those weird image id's to file names
     // this is a json file, but a weird one so...
+    // TODO: In the future this needs to be done using json parsing.
     if(main_card.contains("<img src="))
     {
         media_file.open(QIODevice::ReadOnly);
@@ -141,7 +213,12 @@ void DeckPlay::parse_string()
 
         media_contend = media_contend.replace("{", "");
         media_contend = media_contend.replace("}", "");
-        media_contend = media_contend.replace(" ", "");
+
+        // This is impossible becouse of:  "7": "rew-zasada lewej 1.png"
+        // media_contend = media_contend.replace(" ", "");
+        // for now this:
+        media_contend = media_contend.replace(": ", ":");
+        media_contend = media_contend.replace(", ", ",");
 
         QStringList split_dot = media_contend.split(",");
         for(QString item: split_dot)
@@ -161,7 +238,11 @@ void DeckPlay::parse_string()
         }
     }
 
+    // Weird: &nbsp; ( hard space in html ) sometimes doesn't get parsed
+    main_card = main_card.replace("&nbsp;", " ");
 
+    // Add a line at the end becouse one line is cutted out...
+    main_card.append("<br>");
 
     // main_all is:
     // front_card + this character https://unicode-table.com/en/001F/ + back_card
@@ -177,7 +258,6 @@ void DeckPlay::parse_string()
     front_card = cards.first();
     back_card = cards.last();
 
-
     QString message2 = "front_card is: ";
     message2.append(front_card);
     global_fun::log(message2, log_file, "parse_string");
@@ -186,4 +266,24 @@ void DeckPlay::parse_string()
     message.append(back_card);
     global_fun::log(message, log_file, "parse_string");
 
+}
+
+void DeckPlay::on_textBackCard_textChanged()
+{
+    QString message = "back card document size is: ";
+    int height = ui->textBackCard->document()->size().height();
+    message.append(QString::number(height));
+    global_fun::log(message, log_file, "on_textBackCard_textChanged");
+
+    ui->textBackCard->setFixedHeight(height);
+}
+
+void DeckPlay::on_textFrontCard_textChanged()
+{
+        QString message = "front card document size is: ";
+        int height = ui->textFrontCard->document()->size().height();
+        message.append(QString::number(height));
+        global_fun::log(message, log_file, "on_textFrontCard_textChanged");
+
+        ui->textFrontCard->setFixedHeight(height);
 }

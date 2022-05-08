@@ -19,16 +19,20 @@ public:
 public slots:
     void get_file(QString file);
     void get_mode(int mode);
+    void return_to_mainwindow();
 
 signals:
     void update_decks();
     void clear_mainwidget();
+    void close_status_bar();
 
 private slots:
     void FileButton();
     void deck_scroll_bar_show();
     void deck_play_show(QDir);
     void battery_warning_timer();
+
+    void status_bar_main_menu();
 
 private:
     Ui::MainWindow *ui;

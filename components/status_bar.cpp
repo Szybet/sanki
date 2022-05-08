@@ -60,3 +60,12 @@ void status_bar::on_ButtonSettings_clicked()
     settings_qdialog->exec();
 }
 
+void status_bar::option_button_enabled(bool show)
+{
+    if(show == false)
+    {
+        ui->ButtonOption->setVisible(false);
+    } else {
+        ui->ButtonOption->setVisible(true);
+    }
+}

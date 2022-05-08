@@ -47,10 +47,13 @@ namespace global_fun {
     inline void check_device()
     {
         // If its running on kobo
-        QFile device_file("/opt/device");
+        QFile device_file("/opt/inkbox_device");
         if(device_file.exists() == true)
         {
+            device_file.open(QIODevice::ReadOnly);
             global_var::kobo_model = device_file.readAll();
+            global_var::kobo_model = global_var::kobo_model.remove("\n"); // Yes
+            device_file.close();
             global_var::running_on_kobo = true;
 
             QString message = "Sanki is running on a kobo " + global_var::kobo_model;

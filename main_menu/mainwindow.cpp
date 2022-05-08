@@ -32,13 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     timer->start(15000);
     // Dont start it here becouse it will be fullscreen for some reason
 
-    // Setup status bar
-    status_bar* status_bar_up = new status_bar();
-    QIcon file_chooser_icon = QIcon(":/icons/folder.png");
-    status_bar_up->option_button_set("Add deck", file_chooser_icon);
-    connect(status_bar_up, SIGNAL(option_button_signal()), this, SLOT(FileButton()));
-    connect(status_bar_up, SIGNAL(close_button_signal()), this, SLOT(close()));
-    ui->gridStatus->addWidget(status_bar_up);
+    // Setup default status bar
+    status_bar_main_menu();
 
 
     // show scroll bar
@@ -58,7 +53,7 @@ void MainWindow::deck_scroll_bar_show()
     connect(this, SIGNAL(update_decks()), decks, SLOT(update_decks()));
     connect(decks, SIGNAL(play_deck_signal(QDir)), this, SLOT(deck_play_show(QDir)));
     connect(this, SIGNAL(clear_mainwidget()), decks, SLOT(deleteLater()));
-    // Something is wrong the passing an argument with signal and slots
+
     central_layout->addWidget(decks);
     emit update_decks();
     global_fun::log("update_decks emitet", log_file, "deck_scroll_bar_show");
@@ -67,7 +62,6 @@ void MainWindow::deck_scroll_bar_show()
 void MainWindow::deck_play_show(QDir dir)
 {
     // This here goes to card_view thing, going to play
-
     QString message = "Dir choosed to play: ";
     message.append(dir.path());
     global_fun::log(message, log_file, "deck_play_show");
@@ -79,11 +73,19 @@ void MainWindow::deck_play_show(QDir dir)
     connect(choose_mode, SIGNAL(set_mode(int)), this, SLOT(get_mode(int)));
     choose_mode->exec();
 
+    // status bar for this
+    emit close_status_bar();
+    status_bar* status_bar_up = new status_bar();
+    status_bar_up->option_button_enabled(false);
+    connect(this, SIGNAL(close_status_bar()), status_bar_up, SLOT(close()));
+    connect(status_bar_up, SIGNAL(close_button_signal()), this, SLOT(return_to_mainwindow()));
+    ui->gridStatus->addWidget(status_bar_up);
+
     emit clear_mainwidget();
     QLayout* central_layout = ui->centralwidget->layout();
     DeckPlay* play_deck = new DeckPlay();
     play_deck->update(dir, mode);
-    connect(this, SIGNAL(clear_mainwidget()), play_deck, SLOT(deleteLater()));
+    connect(this, SIGNAL(clear_mainwidget()), play_deck, SLOT(close()));
     central_layout->addWidget(play_deck);
 }
 
@@ -168,4 +170,24 @@ void MainWindow::get_mode(int mode_slot)
     message.append(mode_slot);
     global_fun::log(message, log_file, "get_mode");
     mode = mode_slot;
+}
+
+void MainWindow::status_bar_main_menu()
+{
+    emit close_status_bar();
+    status_bar* status_bar_up = new status_bar();
+    QIcon file_chooser_icon = QIcon(":/icons/folder.png");
+    status_bar_up->option_button_set("Add deck", file_chooser_icon);
+    connect(this, SIGNAL(close_status_bar()), status_bar_up, SLOT(close()));
+    connect(status_bar_up, SIGNAL(option_button_signal()), this, SLOT(FileButton()));
+    connect(status_bar_up, SIGNAL(close_button_signal()), this, SLOT(close()));
+    ui->gridStatus->addWidget(status_bar_up);
+
+}
+
+void MainWindow::return_to_mainwindow()
+{
+    emit clear_mainwidget();
+    deck_scroll_bar_show();
+    status_bar_main_menu();
 }

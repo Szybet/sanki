@@ -15,6 +15,7 @@ public:
     explicit status_bar(QWidget *parent = nullptr);
     ~status_bar();
     void option_button_set(QString, QIcon);
+    void option_button_enabled(bool);
 
 private slots:
     void showTime();
