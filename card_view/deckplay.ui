@@ -50,7 +50,7 @@
          <enum>Qt::ScrollBarAsNeeded</enum>
         </property>
         <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAsNeeded</enum>
+         <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
         <property name="widgetResizable">
          <bool>true</bool>

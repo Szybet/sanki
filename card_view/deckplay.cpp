@@ -9,6 +9,11 @@
 #include <QSqlRecord>
 #include <QSqlTableModel>
 #include <QScrollBar>
+#include <QTimer>
+
+/*
+ * Note about scroll bars: Qt is so buggy with those, there were needed many workaround and hacks... its a mess
+*/
 
 DeckPlay::DeckPlay(QWidget *parent) :
     QMainWindow(parent),
@@ -22,8 +27,7 @@ DeckPlay::DeckPlay(QWidget *parent) :
         "QScrollBar:vertical { width: 50px; }");
 
     // This could be editable in settings
-    ui->scrollArea->horizontalScrollBar()->setStyleSheet(
-        "QScrollBar:horizontal { width: 50px; }");
+    ui->horizontalScrollBar->setStyleSheet("QScrollBar:horizontal { height: 50px; }");
 }
 
 DeckPlay::~DeckPlay()
@@ -56,7 +60,12 @@ void DeckPlay::update(QDir dir, int mode_new)
     ui->textBackCard->setSearchPaths(string_list);
     ui->textFrontCard->setSearchPaths(string_list);
 
+    //connect(ui->textBackCard->horizontalScrollBar(), SIGNAL(isVisible()), this, SLOT(hor_scroll_back_showed()));
+    //connect(ui->textFrontCard->horizontalScrollBar(), SIGNAL(isVisible()), this, SLOT(hor_scroll_front_showed()));
 
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &DeckPlay::check_if_scrollbars_showe);
+    timer->start(200);
 
     start();
 }
@@ -123,6 +132,14 @@ void DeckPlay::mode_crandom_loop()
 
     ui->textFrontCard->setText(front_card);
 
+
+    scroll_bar_setted_front = 0;
+    // this is done in next card call
+    // scroll_bar_setted_back = 0;
+    ui->horizontalScrollBar->hide();
+    hor_scroll_front_needed = false;
+    ui->textFrontCard->horizontalScrollBar()->show();
+
     // Some magic: at the launch it shows height 0, and with this it is a bit bigger. not an ideal solution
     if(first_launch == true)
     {
@@ -141,13 +158,6 @@ void DeckPlay::mode_crandom_loop()
         cursor.clearSelection();
         ui->textFrontCard->setTextCursor(cursor);
     }
-
-    //
-    //if(ui->textFrontCard->horizontalScrollBar()->isVisible() == true)
-    //{
-    //    global_fun::log("textFrontCard horizontalScrollBar is visible", log_file, "mode_crandom_loop");
-    //}
-
 }
 
 void DeckPlay::show_back_next()
@@ -169,23 +179,9 @@ void DeckPlay::show_back_next()
             ui->textBackCard->setTextCursor(cursor);
         }
 
-        if(ui->textBackCard->horizontalScrollBar()->isVisible() == true)
-        {
-            global_fun::log("textBackCard horizontalScrollBar is visible", log_file, "show_back_next");
-            //ui->textBackCard->horizontalScrollBar()->hide();
-
-            ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-            ui->scrollArea->horizontalScrollBar()->show();
-            ui->scrollArea->horizontalScrollBar()->showNormal();
-
-            // https://forum.qt.io/topic/45543/sethorizontalscrollbar-deletes-the-scrollbar-instead-of-the-former-scrollbar-and-has-no-effect-in-my-qgraphicsview
-            ui->scrollArea->setHorizontalScrollBar(ui->textBackCard->horizontalScrollBar());
-            //ui->textBackCard->setHorizontalScrollBar(ui->scrollArea->horizontalScrollBar());
-        } else {
-            global_fun::log("textBackCard horizontalScrollBar is not visible", log_file, "show_back_next");
-            ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-            ui->scrollArea->horizontalScrollBar()->hide();
-        }
+        scroll_bar_setted_back = 0;
+        hor_scroll_back_needed = false;
+        ui->textBackCard->horizontalScrollBar()->show();
 
         emit show_button_text("Next Card");
     }
@@ -286,4 +282,80 @@ void DeckPlay::on_textFrontCard_textChanged()
         global_fun::log(message, log_file, "on_textFrontCard_textChanged");
 
         ui->textFrontCard->setFixedHeight(height);
+}
+
+void DeckPlay::on_horizontalScrollBar_valueChanged(int value)
+{
+    // value can be on minus range?
+    if(hor_scroll_back_needed == true)
+    {
+        ui->textBackCard->horizontalScrollBar()->setSliderPosition(ui->horizontalScrollBar->sliderPosition() + value);
+    }
+    if(hor_scroll_front_needed == true)
+    {
+        ui->textFrontCard->horizontalScrollBar()->setSliderPosition(ui->horizontalScrollBar->sliderPosition() + value);
+    }
+
+    /*
+    QString message = "slider salue changed: ";
+    message.append(QString::number(value));
+    global_fun::log(message, log_file, "on_horizontalScrollBar_valueChanged");
+    */
+}
+
+// this one didn't worked
+// void DeckPlay::on_horizontalScrollBar_sliderMoved(int position)
+
+void DeckPlay::check_if_scrollbars_showe()
+{
+    if(scroll_bar_setted_front < 10)
+    {
+        scroll_bar_setted_front = scroll_bar_setted_front + 1;
+        if(ui->textFrontCard->horizontalScrollBar()->isVisible() == true)
+        {
+                // its the only place in this code that this is showed too late
+                global_fun::log("textFrontCard horizontalScrollBar is visible", log_file, "mode_crandom_loop");
+                ui->textFrontCard->horizontalScrollBar()->hide();
+                // https://forum.qt.io/topic/45543/sethorizontalscrollbar-deletes-the-scrollbar-instead-of-the-former-scrollbar-and-has-no-effect-in-my-qgraphicsview
+                // yea this didn't worked
+
+                hor_scroll_front_needed = true;
+                ui->horizontalScrollBar->setMinimum(ui->textFrontCard->horizontalScrollBar()->minimum());
+                ui->horizontalScrollBar->setMaximum(ui->textFrontCard->horizontalScrollBar()->maximum());
+                ui->horizontalScrollBar->setSingleStep(ui->textFrontCard->horizontalScrollBar()->singleStep());
+                ui->horizontalScrollBar->setPageStep(ui->textFrontCard->horizontalScrollBar()->pageStep());
+                ui->horizontalScrollBar->setSliderPosition(ui->textFrontCard->horizontalScrollBar()->sliderPosition());
+                ui->horizontalScrollBar->show();
+        } else {
+            global_fun::log("textFrontCard horizontalScrollBar is not visible", log_file, "mode_crandom_loop");
+            //ui->textFrontCard->horizontalScrollBar()->show();
+        }
+    }
+
+
+
+    if(scroll_bar_setted_back < 10)
+    {
+        scroll_bar_setted_back = scroll_bar_setted_back + 1;
+        if(ui->textBackCard->horizontalScrollBar()->isVisible() == true)
+        {
+                // its the only place in this code that this is showed too late
+                global_fun::log("textBackCard horizontalScrollBar is visible", log_file, "show_back_next");
+                ui->textBackCard->horizontalScrollBar()->hide();
+                // https://forum.qt.io/topic/45543/sethorizontalscrollbar-deletes-the-scrollbar-instead-of-the-former-scrollbar-and-has-no-effect-in-my-qgraphicsview
+                // yea this didn't worked
+
+                hor_scroll_back_needed = true;
+                ui->horizontalScrollBar->setMinimum(ui->textBackCard->horizontalScrollBar()->minimum());
+                ui->horizontalScrollBar->setMaximum(ui->textBackCard->horizontalScrollBar()->maximum());
+                ui->horizontalScrollBar->setSingleStep(ui->textBackCard->horizontalScrollBar()->singleStep());
+                ui->horizontalScrollBar->setPageStep(ui->textBackCard->horizontalScrollBar()->pageStep());
+                ui->horizontalScrollBar->setSliderPosition(ui->textBackCard->horizontalScrollBar()->sliderPosition());
+                ui->horizontalScrollBar->show();
+        } else {
+            global_fun::log("textBackCard horizontalScrollBar is not visible", log_file, "show_back_next");
+            //ui->textBackCard->horizontalScrollBar()->show();
+        }
+    }
+
 }

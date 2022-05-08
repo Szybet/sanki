@@ -17,8 +17,11 @@ public:
     explicit DeckPlay(QWidget *parent = nullptr);
     ~DeckPlay();
 
+
+
 public slots:
     void update(QDir, int);
+    void check_if_scrollbars_showe();
 
 private slots:
     void start();
@@ -30,8 +33,8 @@ private slots:
 
 
     void on_textBackCard_textChanged();
-
     void on_textFrontCard_textChanged();
+    void on_horizontalScrollBar_valueChanged(int value);
 
 signals:
     void show_button_text(QString);
@@ -53,6 +56,11 @@ private:
     QString back_card;
     QString main_card;
     bool showed_back = false;
+
+    int scroll_bar_setted_front = 0;
+    int scroll_bar_setted_back = 0;
+    bool hor_scroll_front_needed = false;
+    bool hor_scroll_back_needed = false;
 
 
 };
