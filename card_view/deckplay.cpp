@@ -72,7 +72,14 @@ void DeckPlay::update(QDir dir, int mode_new)
 
 void DeckPlay::start()
 {
-    db_path_str = deck_dir.path() + "/collection.anki2";
+    // Support for this newer anki database... why did they break it
+    if(QFile{deck_dir.path() + "/collection.anki21"}.exists() == true)
+    {
+        db_path_str = deck_dir.path() + "/collection.anki21";
+    } else {
+        db_path_str = deck_dir.path() + "/collection.anki2";
+    }
+
     QFile db_path{db_path_str};
 
     if (db_path.exists() == true)
@@ -182,6 +189,9 @@ void DeckPlay::show_back_next()
         scroll_bar_setted_back = 0;
         hor_scroll_back_needed = false;
         ui->textBackCard->horizontalScrollBar()->show();
+
+        // This fixes the issue with not showing the first line. it simply moved the scrollbar a bit and there were problems. the scrollbar was hided
+        ui->textBackCard->verticalScrollBar()->setValue(0);
 
         emit show_button_text("Next Card");
     }
@@ -314,7 +324,7 @@ void DeckPlay::check_if_scrollbars_showe()
         if(ui->textFrontCard->horizontalScrollBar()->isVisible() == true)
         {
                 // its the only place in this code that this is showed too late
-                global_fun::log("textFrontCard horizontalScrollBar is visible", log_file, "mode_crandom_loop");
+                //global_fun::log("textFrontCard horizontalScrollBar is visible", log_file, "mode_crandom_loop");
                 ui->textFrontCard->horizontalScrollBar()->hide();
                 // https://forum.qt.io/topic/45543/sethorizontalscrollbar-deletes-the-scrollbar-instead-of-the-former-scrollbar-and-has-no-effect-in-my-qgraphicsview
                 // yea this didn't worked
@@ -327,7 +337,7 @@ void DeckPlay::check_if_scrollbars_showe()
                 ui->horizontalScrollBar->setSliderPosition(ui->textFrontCard->horizontalScrollBar()->sliderPosition());
                 ui->horizontalScrollBar->show();
         } else {
-            global_fun::log("textFrontCard horizontalScrollBar is not visible", log_file, "mode_crandom_loop");
+            //global_fun::log("textFrontCard horizontalScrollBar is not visible", log_file, "mode_crandom_loop");
             //ui->textFrontCard->horizontalScrollBar()->show();
         }
     }
@@ -340,7 +350,7 @@ void DeckPlay::check_if_scrollbars_showe()
         if(ui->textBackCard->horizontalScrollBar()->isVisible() == true)
         {
                 // its the only place in this code that this is showed too late
-                global_fun::log("textBackCard horizontalScrollBar is visible", log_file, "show_back_next");
+                //global_fun::log("textBackCard horizontalScrollBar is visible", log_file, "show_back_next");
                 ui->textBackCard->horizontalScrollBar()->hide();
                 // https://forum.qt.io/topic/45543/sethorizontalscrollbar-deletes-the-scrollbar-instead-of-the-former-scrollbar-and-has-no-effect-in-my-qgraphicsview
                 // yea this didn't worked
@@ -353,7 +363,7 @@ void DeckPlay::check_if_scrollbars_showe()
                 ui->horizontalScrollBar->setSliderPosition(ui->textBackCard->horizontalScrollBar()->sliderPosition());
                 ui->horizontalScrollBar->show();
         } else {
-            global_fun::log("textBackCard horizontalScrollBar is not visible", log_file, "show_back_next");
+            //global_fun::log("textBackCard horizontalScrollBar is not visible", log_file, "show_back_next");
             //ui->textBackCard->horizontalScrollBar()->show();
         }
     }
