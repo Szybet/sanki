@@ -15,7 +15,7 @@ small [anki](https://apps.ankiweb.net) rewritten for e-readers, with focus on [i
 #### Done:
 - Support all anki in-card text, like images
 
-### Full device support:
+### Devices supported:
 - Developed on kobo nia
 
 ### Building
