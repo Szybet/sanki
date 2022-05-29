@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.11.0, 2022-05-27T19:20:37. -->
+<!-- Written by QtCreator 4.11.0, 2022-05-29T19:04:25. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -323,8 +323,8 @@
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">RemoteLinux.DirectUploadStep</value>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedFiles">
        <value type="QString">/home/szybet/sanki/sanki</value>
-       <value type="QString">/mnt/HDD/Project/Public/sanki/Build/sanki</value>
        <value type="QString">/mnt/HDD/Project/Public/sanki/sanki</value>
+       <value type="QString">/mnt/HDD/Project/Public/sanki/Build/sanki</value>
        <value type="QString">/mnt/HDD/Project/Public/sanki/sanki</value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedHosts">
@@ -335,8 +335,8 @@
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedRemotePaths">
        <value type="QString">/kobo/tmp</value>
-       <value type="QString">/kobo</value>
        <value type="QString">/kobo/tmp/</value>
+       <value type="QString">/kobo</value>
        <value type="QString">/kobo</value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedSysroots">
@@ -349,14 +349,14 @@
       <value type="bool" key="RemoteLinux.GenericDirectUploadStep.Incremental">true</value>
       <valuelist type="QVariantList" key="RemoteLinux.LastDeployedLocalTimes">
        <value type="QDateTime">2022-04-25T13:00:00.591</value>
-       <value type="QDateTime">2022-04-20T20:26:25.560</value>
        <value type="QDateTime">2022-05-08T23:43:51.517</value>
+       <value type="QDateTime">2022-04-20T20:26:25.560</value>
        <value type="QDateTime">2022-04-20T23:23:53.908</value>
       </valuelist>
       <valuelist type="QVariantList" key="RemoteLinux.LastDeployedRemoteTimes">
        <value type="QDateTime">2022-04-25T13:00:01.000</value>
-       <value type="QDateTime">2022-04-20T20:41:27.000</value>
        <value type="QDateTime">2022-05-08T23:43:51.000</value>
+       <value type="QDateTime">2022-04-20T20:41:27.000</value>
        <value type="QDateTime">2022-04-20T23:23:54.000</value>
       </valuelist>
      </valuemap>

@@ -37,7 +37,7 @@ DeckPlay::~DeckPlay()
 
 void DeckPlay::update(QDir dir, int mode_new)
 {
-    // This is just provifing values and then updating
+    // This is just providing values and then updating
     deck_dir = dir;
     mode = mode_new;
 
@@ -95,6 +95,10 @@ void DeckPlay::start()
            {
                mode_crandom_setup();
            }
+           if(mode == 2) // Random - no repeat
+           {
+               mode_random_norepeat_setup();
+           }
         }
         else
         {
@@ -116,7 +120,6 @@ void DeckPlay::mode_crandom_setup()
     connect(this, SIGNAL(next_card_call()), this, SLOT(mode_crandom_loop())); // a loop it is 1
     ui->gridManageCard->addWidget(show_card_widget);
 
-    // a loop it is 2
     mode_crandom_loop();
 }
 
@@ -154,7 +157,7 @@ void DeckPlay::mode_crandom_loop()
         mode_crandom_loop();
     }
 
-    // This needs to be done after setText becouse it will Segment fault
+    // This isEmpty() needs to be done after setText becouse it will Segment fault
     if(ui->textFrontCard->document()->isEmpty() == false)
     {
         ui->textFrontCard->selectAll();
@@ -165,6 +168,104 @@ void DeckPlay::mode_crandom_loop()
         cursor.clearSelection();
         ui->textFrontCard->setTextCursor(cursor);
     }
+}
+
+void DeckPlay::mode_random_norepeat_setup()
+{
+
+    // Setup show / next card button
+    show_card* show_card_widget = new show_card;
+    connect(show_card_widget, SIGNAL(clicked()), this, SLOT(show_back_next())); // Button slot
+    connect(this, SIGNAL(show_button_text(QString)), show_card_widget, SLOT(set_text(QString)));
+    connect(this, SIGNAL(next_card_call()), this, SLOT(mode_random_norepeat_loop())); // a loop it is 1
+    ui->gridManageCard->addWidget(show_card_widget);
+
+
+    QSqlQuery query_count = db.exec("SELECT COUNT(id) FROM notes as whatthefuck");
+    query_count.next();
+    no_repeat_list = query_count.value(0).toInt();
+
+    QString message = "column in notes: ";
+    message.append(QString::number(no_repeat_list));
+    global_fun::log(message, log_file, "mode_random_norepeat_setup");
+
+    mode_random_norepeat_loop();
+}
+
+void DeckPlay::mode_random_norepeat_loop()
+{
+    if(no_repeat_ids.count() == no_repeat_list)
+    {
+        int remove_first = no_repeat_ids.count() - (no_repeat_ids.count() / 3);
+        if(remove_first == 0)
+        {
+            // shouldnt happen
+            no_repeat_ids.clear();
+        }
+        for(int i = 0; i <= remove_first; ++i)
+        {
+            no_repeat_ids.removeFirst();
+        }
+    }
+
+    bool looping = true;
+    QString id_str;
+    while(looping == true)
+    {
+        QSqlQuery query_id = db.exec("SELECT id FROM notes ORDER BY RANDOM() LIMIT 1");
+        query_id.next();
+        QString id_str_unchecked = query_id.value(0).toString(); // random id
+        if(no_repeat_ids.contains(id_str_unchecked) == false)
+        {
+            id_str = id_str_unchecked;
+            no_repeat_ids.append(id_str_unchecked);
+            looping = false;
+        }
+    }
+
+    // set variables
+    QString main_std_sql = "SELECT flds FROM notes WHERE id=" + id_str;
+
+    QSqlQuery main_query = db.exec(main_std_sql);
+    main_query.next();
+    main_card = main_query.value(0).toString();
+
+    // Parse the text
+    parse_string();
+
+    ui->textFrontCard->setText(front_card);
+    // This fixes the issue with not showing the first line. it simply moved the scrollbar a bit and there were problems. the scrollbar was hided
+    ui->textFrontCard->verticalScrollBar()->setValue(0);
+
+    scroll_bar_setted_front = 0;
+    // this is done in next card call
+    // scroll_bar_setted_back = 0;
+    ui->horizontalScrollBar->hide();
+    hor_scroll_front_needed = false;
+    ui->textFrontCard->horizontalScrollBar()->show();
+
+    // Some magic: at the launch it shows height 0, and with this it is a bit bigger. not an ideal solution
+    if(first_launch == true)
+    {
+        first_launch = false;
+        mode_crandom_loop();
+    }
+
+    // This isEmpty() needs to be done after setText becouse it will Segment fault
+    if(ui->textFrontCard->document()->isEmpty() == false)
+    {
+        ui->textFrontCard->selectAll();
+        ui->textFrontCard->setAlignment(Qt::AlignCenter);
+
+        // This removes selection
+        QTextCursor cursor = ui->textFrontCard->textCursor();
+        cursor.clearSelection();
+        ui->textFrontCard->setTextCursor(cursor);
+    }
+
+    // This fixes the issue with not showing the first line. it simply moved the scrollbar a bit and there were problems. the scrollbar was hided
+    // this needs to be here too...
+    ui->textFrontCard->verticalScrollBar()->setValue(0);
 }
 
 void DeckPlay::show_back_next()

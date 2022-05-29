@@ -31,6 +31,8 @@ private slots:
     void mode_crandom_setup();
     void mode_crandom_loop();
 
+    void mode_random_norepeat_setup();
+    void mode_random_norepeat_loop();
 
     void on_textBackCard_textChanged();
     void on_textFrontCard_textChanged();
@@ -62,7 +64,8 @@ private:
     bool hor_scroll_front_needed = false;
     bool hor_scroll_back_needed = false;
 
-
+    int no_repeat_list;
+    QStringList no_repeat_ids;
 };
 
 #endif // DECKPLAY_H

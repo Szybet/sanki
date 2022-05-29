@@ -20,7 +20,8 @@ signals:
 
 private slots:
     void on_ButtonConfirm_clicked();
-    void on_ButtonCRandom_clicked(bool checked);
+    void on_ButtonCRandom_clicked(bool checked);    
+    void on_ButtonRandomNR_clicked(bool checked);
 
 private:
     Ui::mode_chooser *ui;

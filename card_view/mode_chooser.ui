@@ -50,6 +50,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QRadioButton" name="ButtonRandomNR">
+          <property name="text">
+           <string>Randomised - No repeating</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>

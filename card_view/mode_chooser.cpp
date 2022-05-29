@@ -20,6 +20,9 @@ mode_chooser::mode_chooser(QDialog *parent) :
     ui->ButtonCRandom->setIconSize(QSize(33, 33));
 
 
+    ui->ButtonRandomNR->setStyleSheet("QRadioButton::indicator{width: 0px; height: 0px;}");
+    ui->ButtonRandomNR->setIcon(QIcon(":/icons/radio_button_unchecked.png"));
+    ui->ButtonRandomNR->setIconSize(QSize(33, 33));
 }
 
 mode_chooser::~mode_chooser()
@@ -34,8 +37,11 @@ void mode_chooser::on_ButtonCRandom_clicked(bool checked)
     {
         mode = 1;
         ui->ButtonCRandom->setIcon(QIcon(":/icons/radio_button_checked.png"));
+
+        // this needs to be done better
+        ui->ButtonRandomNR->setIcon(QIcon(":/icons/radio_button_unchecked.png"));
+
     } else {
-        // Change in the future
         mode = 0;
         ui->ButtonCRandom->setIcon(QIcon(":/icons/radio_button_unchecked.png"));
     }
@@ -54,4 +60,18 @@ void mode_chooser::on_ButtonConfirm_clicked()
     }
 }
 
+void mode_chooser::on_ButtonRandomNR_clicked(bool checked)
+{
+    if(checked == true)
+    {
+        mode = 2;
+        ui->ButtonRandomNR->setIcon(QIcon(":/icons/radio_button_checked.png"));
+        // this needs to be done better
+        ui->ButtonCRandom->setIcon(QIcon(":/icons/radio_button_unchecked.png"));
 
+
+    } else {
+        mode = 0;
+        ui->ButtonRandomNR->setIcon(QIcon(":/icons/radio_button_unchecked.png"));
+    }
+}
