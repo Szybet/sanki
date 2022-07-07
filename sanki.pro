@@ -84,10 +84,14 @@ message(Target arch is: $$TARGET_ARCH)
 # https://stackoverflow.com/questions/39338987/how-to-detect-target-ios-architecture-in-qmake
 # https://stackoverflow.com/questions/60898385/if-else-if-equivalent-for-qmake-pro-qt-file
 
-contains(TARGET_ARCH, Kobo) {
-    LIBS += -L$$PWD/libraries/zip_libraries/lib-build/KOBO -lzip
-    message(Library for kobo)
-} else {
-    LIBS += -L$$PWD/libraries/zip_libraries/lib-build/PC -lzip
-    message(Library for pc)
-}
+# I Planed supporting PC, maybe for the future...
+#contains(TARGET_ARCH, Kobo) {
+#    LIBS += -L$$PWD/libraries/zip_libraries/lib-build/KOBO -lzip
+#    message(Library for kobo)
+#} else {
+#    LIBS += -L$$PWD/libraries/zip_libraries/lib-build/PC -lzip
+#    message(Library for pc)
+#}
+
+LIBS += -L$$PWD/libraries/zip_libraries/lib-build/KOBO -lzip
+message(Library for kobo)

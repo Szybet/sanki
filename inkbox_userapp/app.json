@@ -1,0 +1,13 @@
+{
+  "app": {
+    "Author": "Szybet",
+    "AuthorContact": "https://github.com/Szybet/sanki",
+    "Enabled": true,
+    "ExecPath": "/app-bin/sanki.sh",
+    "IconPath": "/app-misc/sanki.png",
+    "Name": "sanki",
+    "SupportedDevices": [ "all" ],
+    "RequiredFeatures": [ ] ,
+    "Version": "0.1"
+  }
+}
