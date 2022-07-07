@@ -84,3 +84,10 @@ compile_commands.json
 Build
 Makefile
 sanki
+
+# Inkbox user apps
+*.isa
+*.isa.dgst
+
+# just to be sure...
+*.pem
