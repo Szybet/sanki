@@ -46,10 +46,11 @@ void decks_scroll_bar::update_decks()
     QFileInfoList dir_list = global_var::directories::deck_storage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
     QString message = "gathered dir_list: ";
     for (QFileInfo file_info: dir_list) {
-        if (file_info.baseName() == "") {
+        QString fileName = file_info.baseName();
+        if (fileName == "") {
             continue;
         }
-        message.append(file_info.baseName());
+        message.append(fileName);
         message.append(",");
     }
     global_fun::log(message, log_file, "update_decks");
@@ -60,12 +61,13 @@ void decks_scroll_bar::update_decks()
     int row = 0; // horizontal
     int column = 0; // vertical
     for (QFileInfo file_info: dir_list) {
+        QString fileName = file_info.baseName();
         // Becouse of ".." and "."
-        if (file_info.baseName() == "") {
+        if (fileName == "") {
             continue;
         }
         deck* new_deck = new deck();
-        new_deck->deck::set_deck_name(file_info.baseName());
+        new_deck->deck::set_deck_name(fileName);
         new_deck->deck_info = file_info;
         // addWidget(QWidget *widget, int row, int column, Qt::Alignment alignment = Qt::Alignment())
         connect(this, SIGNAL(remove_decks()), new_deck, SLOT(close()));

@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QGuiApplication>
 #include <QScreen>
+#include <QTextCodec>
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -17,22 +18,18 @@
 #include <fstream>
 
 namespace global_var {
-    inline bool debug_enabled = true;
+    inline bool debug_enabled;
     namespace directories {
         // Get current dir + deck storage paths
-        inline QDir work_dir = QDir::current();
-        //qDebug() << "work_dir" << work_dir.path();
-
+        // inkbox user app
+        inline QDir work_dir = QDir("/app-data");
         inline QDir deck_storage = work_dir.path() + "/deck_storage";
-        //qDebug() << "deck_storage" << deck_storage.path();
     }
     inline QString kobo_model;
     inline bool running_on_kobo;
     inline int screen_x;
     inline int screen_y;
     inline int batt_level_int;
-
-
 }
 
 namespace global_fun {
@@ -40,20 +37,17 @@ namespace global_fun {
     {
         if (global_var::debug_enabled == true)
         {
-            qDebug() << "LOG:" << Message << "| file" << file << "In function:" << function;
+            qDebug() << "LOG:" << Message << "| file" << file << "| function:" << function;
         }
     }
 
     inline void check_device()
     {
         // If its running on kobo
-        QFile device_file("/opt/inkbox_device");
-        if(device_file.exists() == true)
+        if(qgetenv("QT_QPA_PLATFORM") == "kobo")
         {
-            device_file.open(QIODevice::ReadOnly);
-            global_var::kobo_model = device_file.readAll();
-            global_var::kobo_model = global_var::kobo_model.remove("\n"); // Yes
-            device_file.close();
+            global_var::kobo_model = qgetenv("DEVICE_CODENAME");
+            global_var::kobo_model = global_var::kobo_model.remove("\n"); // Yes, just to be sure
             global_var::running_on_kobo = true;
 
             QString message = "Sanki is running on a kobo " + global_var::kobo_model;
@@ -88,6 +82,11 @@ namespace global_fun {
             batt_level_file.open(QIODevice::ReadOnly);
             batt_level = batt_level_file.readAll();
             batt_level = batt_level.trimmed();
+
+            //QString message = "Battery level is: ";
+            //message.append(batt_level);
+            //global_fun::log(message, "globals.h", "check_battery_level");
+
             global_var::batt_level_int = batt_level.toInt();
             batt_level_file.close();
         }
@@ -96,18 +95,26 @@ namespace global_fun {
         }
     }
     inline void set_brightness(int value) {
+        // doesnt work
+        /*
         std::ofstream fhandler;
         fhandler.open("/var/run/brightness");
         fhandler << value;
         fhandler.close();
+        */
     }
+
     inline int get_brightness() {
+        // doesnt work
+        /*
         QFile brightness("/var/run/brightness");
         brightness.open(QIODevice::ReadOnly);
         QString valuestr = brightness.readAll();
         int value = valuestr.toInt();
         brightness.close();
         return value;
+        */
+        return 0;
     }
 }
 #endif // GLOBALS_H

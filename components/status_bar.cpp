@@ -20,7 +20,6 @@ status_bar::status_bar(QWidget *parent) :
 
     ui->ButtonExit->setStyleSheet("border: none;");
     ui->ButtonSettings->setStyleSheet("border: none;");
-
 }
 
 status_bar::~status_bar()

@@ -112,7 +112,13 @@ void file_chooser::on_ButtonConfirm_clicked()
 {
     if(choosed_file.contains(file_extension) == true)
     {
-        emit provide_file(start_path + choosed_file);
+        // becouse if start_path is "/" it will be "//"
+        if(start_path.end() != QString("/"))
+        {
+            emit provide_file(start_path + choosed_file);
+        } else {
+            emit provide_file(start_path + "/" + choosed_file);
+        }
         this->close();
     } else {
         QString error_message = "ERROR\n Choose a file with " + file_extension + " extension";

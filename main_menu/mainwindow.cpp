@@ -93,6 +93,7 @@ void MainWindow::FileButton()
 {
     // Dont get confused, this is a slot activated from status bar
     file_chooser* file_chooser_qdialog = new file_chooser;
+    file_chooser_qdialog->start_path = global_var::directories::work_dir.path();
     file_chooser_qdialog->update_files();
     connect(file_chooser_qdialog, SIGNAL(provide_file(QString)), this, SLOT(get_file(QString)));
     file_chooser_qdialog->exec();

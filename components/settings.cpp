@@ -45,6 +45,8 @@ void Settings::on_ButtonRight_clicked()
 void Settings::request_device_page()
 {
     ui->labelPageName->setText("Device");
+
+    global_fun::check_battery_level();
     QString bat_level = "Battery level: ";
     bat_level.append(QString::number(global_var::batt_level_int));
     bat_level.append("%");
