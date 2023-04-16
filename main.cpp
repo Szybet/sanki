@@ -4,27 +4,73 @@
 #include <QApplication>
 #include <QDebug>
 #include <QTextCodec>
+#include <QLoggingCategory>
+
+bool enableDebug = false;
+
+void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    if(enableDebug == true) {
+        QByteArray localMsg = msg.toLocal8Bit();
+        const char *file = context.file ? context.file : "";
+        const char *function = context.function ? context.function : "";
+        switch (type) {
+        case QtDebugMsg:
+            if(context.line != 0) {
+                fprintf(stderr, "Debug: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            } else {
+                fprintf(stderr, "Debug: \"%s\"\n", localMsg.constData());
+            }
+            break;
+        case QtInfoMsg:
+            fprintf(stderr, "Info: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        case QtWarningMsg:
+            fprintf(stderr, "Warning: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        case QtCriticalMsg:
+            fprintf(stderr, "Critical: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        case QtFatalMsg:
+            fprintf(stderr, "Fatal: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        }
+    }
+}
 
 int main(int argc, char *argv[])
 {
     if(qgetenv("DEBUG") == "true")
     {
-        global_var::debug_enabled = true;
         qDebug() << "Debug logs are enabled";
+        enableDebug = true;
     } else {
-        global_var::debug_enabled = false;
-        qDebug() << "Debug logs are disabled, goodbye";
+        QLoggingCategory::setFilterRules("qt.*=false");
     }
-    global_fun::log("Sanki started", "main.cpp", "main()");
+
+    if(qgetenv("SELF_MANAGE_DEBUG") != "true" && enableDebug == true) {
+        QLoggingCategory::setFilterRules("qt.qpa.*=false\n"
+                                         "qt.widgets.*=false\n"
+                                         "qt.accessibility.*=false\n"
+                                         "qt.text.*=false\n"
+                                         "qt.gui.*=false\n"
+                                         "qt.xkb.*=false");
+    }
+
+    if(qgetenv("CUSTOM_DEBUG_FORMAT") != "false") {
+        qInstallMessageHandler(myMessageOutput);
+    }
+
+    debugLog("Sanki started", "main.cpp", "main()");
 
     QApplication a(argc, argv);
     // Very fuc... important. Do it after creating QAPPLICATION:
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
 
     // Check and apply stylesheet if available
-    global_fun::screen_geometry();
-    global_fun::check_device();
-    if(global_var::running_on_kobo == true)
+    screen_geometry();
+    check_device();
+    if(running_on_kobo == true)
     {
         // inkbox user app
         //QFile style_file("/mnt/onboard/.adds/inkbox/eink.qss");
@@ -32,7 +78,7 @@ int main(int argc, char *argv[])
 
         if(style_file.exists() == false)
         {
-            global_fun::log("stylesheet file doesn't exist", "main.cpp", "main()");
+            debugLog("stylesheet file doesn't exist", "main.cpp", "main()");
         }
 
         style_file.open(QFile::ReadOnly);

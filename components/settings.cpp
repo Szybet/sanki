@@ -8,8 +8,8 @@ Settings::Settings(QWidget *parent) :
 {
     ui->setupUi(this);
     this->move(0, 0);
-    this->setMinimumSize(global_var::screen_x, global_var::screen_y);
-    this->setMaximumSize(global_var::screen_x, global_var::screen_y);
+    this->setMinimumSize(screen_x, screen_y);
+    this->setMaximumSize(screen_x, screen_y);
     this->adjustSize();
 
     // This is becouse the QDialog has borders
@@ -46,13 +46,13 @@ void Settings::request_device_page()
 {
     ui->labelPageName->setText("Device");
 
-    global_fun::check_battery_level();
+    check_battery_level();
     QString bat_level = "Battery level: ";
-    bat_level.append(QString::number(global_var::batt_level_int));
+    bat_level.append(QString::number(batt_level_int));
     bat_level.append("%");
     ui->labelBattery->setText(bat_level);
 
-    int brightness = global_fun::get_brightness();
+    int brightness = get_brightness();
     ui->ScrollBarBrightness->setSliderPosition(brightness);
 
     QString brightness_string = "Brightness: ";
@@ -63,7 +63,7 @@ void Settings::request_device_page()
 
 void Settings::on_ScrollBarBrightness_valueChanged(int value)
 {
-    global_fun::set_brightness(value);
+    set_brightness(value);
 
     QString brightness_string = "Brightness: ";
     QString number = QString::number(value);

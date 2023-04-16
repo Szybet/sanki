@@ -18,11 +18,6 @@ public:
     ~edit_deck();
     QFileInfo deck_info;
 
-    // https://stackoverflow.com/questions/24642370/qmetaobjectinvokemethod-no-such-method-when-using-inheritance
-    // + no variables
-    Q_INVOKABLE void log();
-
-
 public slots:
     void update_widget(QString string, int cursor);
     void update_deck();

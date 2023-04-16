@@ -41,8 +41,7 @@ object_script.*.Debug
 *_plugin_import.cpp
 /.qmake.cache
 /.qmake.stash
-# *.pro.user
-# I want this, running settings are complicated
+*.pro.user
 
 *.pro.user.*
 *.qbs.user
@@ -84,10 +83,14 @@ compile_commands.json
 Build
 Makefile
 # sanki
+build
+build/*
+.qtc_clangd
 
 # Inkbox user apps
 *.isa
 *.isa.dgst
+inkbox_userapp/sanki/app-bin/*.bin
 
 # just to be sure...
 *.pem

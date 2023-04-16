@@ -56,7 +56,7 @@ void MainWindow::deck_scroll_bar_show()
 
     central_layout->addWidget(decks);
     emit update_decks();
-    global_fun::log("update_decks emitet", log_file, "deck_scroll_bar_show");
+    qDebug() << "update_decks emitet";
 }
 
 void MainWindow::deck_play_show(QDir dir)
@@ -64,7 +64,7 @@ void MainWindow::deck_play_show(QDir dir)
     // This here goes to card_view thing, going to play
     QString message = "Dir choosed to play: ";
     message.append(dir.path());
-    global_fun::log(message, log_file, "deck_play_show");
+    debugLog(message, log_file, "deck_play_show");
 
     // this was propably causing problems
     //int mode = choose_mode->exec();
@@ -93,14 +93,14 @@ void MainWindow::FileButton()
 {
     // Dont get confused, this is a slot activated from status bar
     file_chooser* file_chooser_qdialog = new file_chooser;
-    file_chooser_qdialog->start_path = global_var::directories::work_dir.path();
+    file_chooser_qdialog->start_path = directories::work_dir.path();
     file_chooser_qdialog->update_files();
     connect(file_chooser_qdialog, SIGNAL(provide_file(QString)), this, SLOT(get_file(QString)));
     file_chooser_qdialog->exec();
 
     QFile zip_file{zip_file_path};
     if (zip_file.exists()) {
-        global_fun::log("zip to be added exists", log_file, "FileButton");
+        debugLog("zip to be added exists", log_file, "FileButton");
 
         // libzip try
         /*
@@ -118,13 +118,13 @@ void MainWindow::FileButton()
 
         QDir new_deck;
         QFileInfo zip_file_info(zip_file_path);
-        new_deck.setPath(global_var::directories::deck_storage.path() + "/" + zip_file_info.baseName());
+        new_deck.setPath(directories::deck_storage.path() + "/" + zip_file_info.baseName());
 
         QString message = "new deck path: ";
         message.append(new_deck.path());
-        global_fun::log(message, log_file, "FileButton");
+        debugLog(message, log_file, "FileButton");
 
-        global_var::directories::deck_storage.mkdir(zip_file_info.baseName());
+        directories::deck_storage.mkdir(zip_file_info.baseName());
 
         // Converting to acceptable string
         QByteArray ba = zip_file_path.toLocal8Bit();
@@ -134,20 +134,20 @@ void MainWindow::FileButton()
     }
     // Update decks
     emit update_decks();
-    global_fun::log("update_decks emitet", log_file, "FileButton");
+    debugLog("update_decks emitet", log_file, "FileButton");
 }
 
 void MainWindow::battery_warning_timer()
 {
-    global_fun::check_battery_level();
-    if(global_var::batt_level_int < 30 and global_var::batt_level_int > 15)
+    check_battery_level();
+    if(batt_level_int < 30 and batt_level_int > 15)
     {
         toast* new_toast = new toast;
         new_toast->label_text = "Battery level is below 30%";
         new_toast->show_time_ms = 100000;
         new_toast->activate();
         new_toast->exec();
-    } else if(global_var::batt_level_int < 15)
+    } else if(batt_level_int < 15)
     {
         toast* new_toast = new toast;
         new_toast->label_text = "Battery level is below 15%";
@@ -162,14 +162,14 @@ void MainWindow::get_file(QString file)
     zip_file_path = file;
     QString message = "Slot activated, received: ";
     message.append(file);
-    global_fun::log(message, log_file, "get_file");
+    debugLog(message, log_file, "get_file");
 }
 
 void MainWindow::get_mode(int mode_slot)
 {
     QString message = "Slot activated, received: ";
     message.append(mode_slot);
-    global_fun::log(message, log_file, "get_mode");
+    debugLog(message, log_file, "get_mode");
     mode = mode_slot;
 }
 

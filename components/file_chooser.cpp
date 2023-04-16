@@ -13,8 +13,8 @@ file_chooser::file_chooser(QDialog *parent) :
 {
     ui->setupUi(this);
     this->move(0, 0);
-    this->setMinimumSize(global_var::screen_x, global_var::screen_y);
-    this->setMaximumSize(global_var::screen_x, global_var::screen_y);
+    this->setMinimumSize(screen_x, screen_y);
+    this->setMaximumSize(screen_x, screen_y);
     this->adjustSize();
 
     // ("border: 0px solid black; border-radius: 0px;");
@@ -58,7 +58,7 @@ void file_chooser::update_files()
     message.append("in: ");
     message.append(start_path);
 
-    global_fun::log(message, log_file, "update_files");
+    debugLog(message, log_file, "update_files");
 
     QVBoxLayout* file_layout = ui->layoutFiles;
 
@@ -93,7 +93,7 @@ void file_chooser::update_files()
         connect(file_button, SIGNAL(enter_dir()), this, SLOT(enter_dir()));
 
         QString message = "added widget: " + file_info.fileName();
-        global_fun::log(message, log_file, "update_files");
+        debugLog(message, log_file, "update_files");
 
         file_layout->addWidget(file_button);
     }
@@ -152,7 +152,7 @@ void file_chooser::on_ButtonUpPath_clicked()
 
     QString message = "Go up path: ";
     message.append(start_path);
-    global_fun::log(message, log_file, "on_ButtonUpPath_clicked");
+    debugLog(message, log_file, "on_ButtonUpPath_clicked");
 
     update_files();
 }

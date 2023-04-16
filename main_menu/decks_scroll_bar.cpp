@@ -23,8 +23,8 @@ decks_scroll_bar::decks_scroll_bar(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    if (global_var::directories::deck_storage.exists() == false) {
-        global_var::directories::work_dir.mkdir("deck_storage");
+    if (directories::deck_storage.exists() == false) {
+        directories::work_dir.mkdir("deck_storage");
          qDebug() << "created deck_storage";
     }
 
@@ -40,10 +40,10 @@ decks_scroll_bar::~decks_scroll_bar()
 
 void decks_scroll_bar::update_decks()
 {
-    global_fun::log("update_decks slot called", log_file, "update_decks");
+    debugLog("update_decks slot called", log_file, "update_decks");
     emit remove_decks();
 
-    QFileInfoList dir_list = global_var::directories::deck_storage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
+    QFileInfoList dir_list = directories::deck_storage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
     QString message = "gathered dir_list: ";
     for (QFileInfo file_info: dir_list) {
         QString fileName = file_info.baseName();
@@ -53,7 +53,7 @@ void decks_scroll_bar::update_decks()
         message.append(fileName);
         message.append(",");
     }
-    global_fun::log(message, log_file, "update_decks");
+    debugLog(message, log_file, "update_decks");
 
 
     QGridLayout* scrollbar_layout = ui->DeckGrid;
@@ -88,6 +88,6 @@ void decks_scroll_bar::play_deck_slott(QDir dir)
 {
     QString message = "Received dir: ";
     message.append(dir.path());
-    global_fun::log(message, log_file, "play_deck_slott");
+    debugLog(message, log_file, "play_deck_slott");
     emit play_deck_signal(dir);
 }

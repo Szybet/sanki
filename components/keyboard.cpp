@@ -8,9 +8,9 @@ keyboard::keyboard(QDialog *parent) :
 {
     ui->setupUi(this);
 
-    int y = (global_var::screen_y / 2);
+    int y = (screen_y / 2);
     this->move(0, y);
-    this->setMinimumSize(global_var::screen_x, y);
+    this->setMinimumSize(screen_x, y);
     this->adjustSize();
 
     ui->lineEdit->setVisible(false);
@@ -39,7 +39,7 @@ void keyboard::update_string(QString new_string)
         cursor_main = cursor_main + 1;
     }
 
-    global_fun::log(message, "keyboard.cpp", "update_string()");
+    debugLog(message, "keyboard.cpp", "update_string()");
     emit update_data(edited_string, cursor_main);
 }
 

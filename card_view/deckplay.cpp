@@ -46,12 +46,12 @@ void DeckPlay::update(QDir dir, int mode_new)
 
     QString message = "media file is: ";
     message.append(media_file.fileName());
-    global_fun::log(message, log_file, "update");
+    debugLog(message, log_file, "update");
     if(media_file.exists() == true)
     {
-        global_fun::log("media file exists", log_file, "update");
+        debugLog("media file exists", log_file, "update");
     } else {
-        global_fun::log("media file does not exists", log_file, "update");
+        debugLog("media file does not exists", log_file, "update");
     }
 
     QStringList string_list = {deck_dir.path()};
@@ -102,12 +102,12 @@ void DeckPlay::start()
         }
         else
         {
-           global_fun::log("Database: connection with database failed", log_file, "start");
+           debugLog("Database: connection with database failed", log_file, "start");
         }
     }
     else
     {
-        global_fun::log("Database: doesn't exist", log_file, "start");
+        debugLog("Database: doesn't exist", log_file, "start");
     }
 }
 
@@ -187,7 +187,7 @@ void DeckPlay::mode_random_norepeat_setup()
 
     QString message = "column in notes: ";
     message.append(QString::number(no_repeat_list));
-    global_fun::log(message, log_file, "mode_random_norepeat_setup");
+    debugLog(message, log_file, "mode_random_norepeat_setup");
 
     mode_random_norepeat_loop();
 }
@@ -334,12 +334,12 @@ void DeckPlay::parse_string()
 
             QString message4 = "item is: ";
             message4.append(item);
-            global_fun::log(message4, log_file, "media_contend");
+            debugLog(message4, log_file, "media_contend");
 
             QStringList replace_items = item.split(":");
             if(main_card.contains(replace_items.last()))
             {
-                global_fun::log("main_card contains items_last", log_file, "media_contend");
+                debugLog("main_card contains items_last", log_file, "media_contend");
                 main_card = main_card.replace(replace_items.last(), replace_items.first());
             }
         }
@@ -360,18 +360,18 @@ void DeckPlay::parse_string()
         message3.append(card);
         message3.append(",");
     }
-    global_fun::log(message3, log_file, "parse_string");
+    debugLog(message3, log_file, "parse_string");
 
     front_card = cards.first();
     back_card = cards.last();
 
     QString message2 = "front_card is: ";
     message2.append(front_card);
-    global_fun::log(message2, log_file, "parse_string");
+    debugLog(message2, log_file, "parse_string");
 
     QString message = "back_card is: ";
     message.append(back_card);
-    global_fun::log(message, log_file, "parse_string");
+    debugLog(message, log_file, "parse_string");
 
 }
 
@@ -380,7 +380,7 @@ void DeckPlay::on_textBackCard_textChanged()
     QString message = "back card document size is: ";
     int height = ui->textBackCard->document()->size().height();
     message.append(QString::number(height));
-    global_fun::log(message, log_file, "on_textBackCard_textChanged");
+    debugLog(message, log_file, "on_textBackCard_textChanged");
 
     ui->textBackCard->setFixedHeight(height);
 }
@@ -390,7 +390,7 @@ void DeckPlay::on_textFrontCard_textChanged()
         QString message = "front card document size is: ";
         int height = ui->textFrontCard->document()->size().height();
         message.append(QString::number(height));
-        global_fun::log(message, log_file, "on_textFrontCard_textChanged");
+        debugLog(message, log_file, "on_textFrontCard_textChanged");
 
         ui->textFrontCard->setFixedHeight(height);
 }
@@ -410,7 +410,7 @@ void DeckPlay::on_horizontalScrollBar_valueChanged(int value)
     /*
     QString message = "slider salue changed: ";
     message.append(QString::number(value));
-    global_fun::log(message, log_file, "on_horizontalScrollBar_valueChanged");
+    debugLog(message, log_file, "on_horizontalScrollBar_valueChanged");
     */
 }
 
@@ -425,7 +425,7 @@ void DeckPlay::check_if_scrollbars_showe()
         if(ui->textFrontCard->horizontalScrollBar()->isVisible() == true)
         {
                 // its the only place in this code that this is showed too late
-                //global_fun::log("textFrontCard horizontalScrollBar is visible", log_file, "mode_crandom_loop");
+                //debugLog("textFrontCard horizontalScrollBar is visible", log_file, "mode_crandom_loop");
                 ui->textFrontCard->horizontalScrollBar()->hide();
                 // https://forum.qt.io/topic/45543/sethorizontalscrollbar-deletes-the-scrollbar-instead-of-the-former-scrollbar-and-has-no-effect-in-my-qgraphicsview
                 // yea this didn't worked
@@ -438,7 +438,7 @@ void DeckPlay::check_if_scrollbars_showe()
                 ui->horizontalScrollBar->setSliderPosition(ui->textFrontCard->horizontalScrollBar()->sliderPosition());
                 ui->horizontalScrollBar->show();
         } else {
-            //global_fun::log("textFrontCard horizontalScrollBar is not visible", log_file, "mode_crandom_loop");
+            //debugLog("textFrontCard horizontalScrollBar is not visible", log_file, "mode_crandom_loop");
             //ui->textFrontCard->horizontalScrollBar()->show();
         }
     }
@@ -451,7 +451,7 @@ void DeckPlay::check_if_scrollbars_showe()
         if(ui->textBackCard->horizontalScrollBar()->isVisible() == true)
         {
                 // its the only place in this code that this is showed too late
-                //global_fun::log("textBackCard horizontalScrollBar is visible", log_file, "show_back_next");
+                //debugLog("textBackCard horizontalScrollBar is visible", log_file, "show_back_next");
                 ui->textBackCard->horizontalScrollBar()->hide();
                 // https://forum.qt.io/topic/45543/sethorizontalscrollbar-deletes-the-scrollbar-instead-of-the-former-scrollbar-and-has-no-effect-in-my-qgraphicsview
                 // yea this didn't worked
@@ -464,7 +464,7 @@ void DeckPlay::check_if_scrollbars_showe()
                 ui->horizontalScrollBar->setSliderPosition(ui->textBackCard->horizontalScrollBar()->sliderPosition());
                 ui->horizontalScrollBar->show();
         } else {
-            //global_fun::log("textBackCard horizontalScrollBar is not visible", log_file, "show_back_next");
+            //debugLog("textBackCard horizontalScrollBar is not visible", log_file, "show_back_next");
             //ui->textBackCard->horizontalScrollBar()->show();
         }
     }

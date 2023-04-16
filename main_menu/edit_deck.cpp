@@ -1,6 +1,5 @@
 #include "main_menu/edit_deck.h"
 #include "ui_edit_deck.h"
-#include "main_menu/mainwindow.h"
 #include "globals.h"
 #include "components/keyboard.h"
 #include "components/toast.h"
@@ -23,8 +22,8 @@ edit_deck::edit_deck(QDialog *parent) :
 
 
     this->adjustSize();
-    int x = (global_var::screen_x / 2) - ( this->width() / 2);
-    int y = (global_var::screen_y / 3) - ( this->height() / 2);
+    int x = (screen_x / 2) - ( this->width() / 2);
+    int y = (screen_y / 3) - ( this->height() / 2);
     this->move(x, y);
     ui->lineEditDeckName->setCursorPosition(10);
 
@@ -46,7 +45,7 @@ void edit_deck::update_widget(QString string, int cursor)
          message.append(string);
          message.append(" int: ");
          message.append(QString::number(cursor));
-         global_fun::log(message, "edit_deck.cpp", "update_widget");
+         debugLog(message, "edit_deck.cpp", "update_widget");
 
          // Adding cursor, this is so stupid
          QString string_with_cursor = string;
@@ -112,7 +111,7 @@ void edit_deck::on_ButtonSaveExit_clicked()
         message.append(deck_info.baseName());
         message.append(" to: ");
         message.append(ui->lineEditDeckName->text());
-        global_fun::log(message, log_file, log_function);
+        debugLog(message, log_file, log_function);
     }
 
     if (remove_deck == true)
@@ -122,7 +121,7 @@ void edit_deck::on_ButtonSaveExit_clicked()
 
         QString message = "removing dir: ";
         message.append(remove_dir.path());
-        global_fun::log(message, log_file, log_function);
+        debugLog(message, log_file, log_function);
 
         remove_dir.removeRecursively();
     }
@@ -134,7 +133,7 @@ void edit_deck::on_ButtonSaveExit_clicked()
     if(updated_name == true or remove_deck == true or reset_deck == true)
     {
         emit refresh_decks_edit_signal();
-        global_fun::log("emiting refresh_decks_edit_signal", log_file, log_function);
+        debugLog("emiting refresh_decks_edit_signal", log_file, log_function);
     }
     edit_deck::close();
 }
@@ -146,7 +145,7 @@ void edit_deck::on_lineEditDeckName_cursorPositionChanged(int oldpos, int newpos
     log_message.append(message);
     log_function.append("on_lineEditDeckName_cursorPositionChanged");
     // This here cannot provide variables
-    QTimer::singleShot(0, this, SLOT(log()));
+    QTimer::singleShot(0, this, SLOT(debugLog()));
     if(first_open == false)
     {
         if(keyboard_opened == false)
@@ -156,7 +155,7 @@ void edit_deck::on_lineEditDeckName_cursorPositionChanged(int oldpos, int newpos
 
                 log_message.append("keyboard open");
                 log_function.append("on_lineEditDeckName_cursorPositionChanged");
-                QTimer::singleShot(0, this, SLOT(log()));
+                QTimer::singleShot(0, this, SLOT(debugLog()));
                 keyboard* keyboard_nameedit = new keyboard;
                 keyboard_nameedit->cursor_main = newpos;
                 keyboard_nameedit->main_string = ui->lineEditDeckName->text();
@@ -171,7 +170,7 @@ void edit_deck::on_lineEditDeckName_cursorPositionChanged(int oldpos, int newpos
     } else {
         log_function.append("on_lineEditDeckName_cursorPositionChanged");
         log_message.append("First open, skipping cursor change");
-        QTimer::singleShot(0, this, SLOT(log()));
+        QTimer::singleShot(0, this, SLOT(debugLog()));
         ui->lineEditDeckName->setCursorPosition(0);
         first_open = false;
     }
@@ -186,16 +185,6 @@ void edit_deck::keyboard_closed(bool update_name)
     ui->lineEditDeckName->setText(ui->lineEditDeckName->text().remove("|"));
     ui->lineEditDeckName->setCursorPosition(0);
     keyboard_opened = false;
-}
-
-void edit_deck::log()
-{
-    // this function is becouse it avoid some problems, the log is showed in real time
-    QString message = log_message.first();
-    QString function = log_function.first();
-    global_fun::log(message, log_file, function);
-    log_message.removeFirst();
-    log_function.removeFirst();
 }
 
 void edit_deck::on_lineEditDeckName_selectionChanged()
