@@ -30,15 +30,13 @@ void deck::set_deck_name(QString text)
 
 void deck::refresh_decks_slot()
 {
-    debugLog("Refresh decks slot received, emitting along", log_file, "refresh_decks_slot");
+    qDebug() << "Refresh decks slot received, emitting along";
     emit refresh_decks_signal();
 }
 
 void deck::on_ButtonEditDeck_clicked()
 {
-    QString message = "Edit button clicked, editing deck: ";
-    message.append(deck_info.baseName());
-    debugLog(message, log_file, "on_ButtonEditDeck_clicked");
+    qDebug() << "Edit button clicked, editing deck: " << deck_info.baseName();
 
     edit_deck* edit_widget = new edit_deck();
     edit_widget->deck_info = deck_info;
@@ -46,22 +44,14 @@ void deck::on_ButtonEditDeck_clicked()
 
     connect(edit_widget, SIGNAL(refresh_decks_edit_signal()), this, SLOT(refresh_decks_slot()));
     edit_widget->exec();
-
 }
 
 
 void deck::on_ButtonDeckPlay_clicked()
 {
-
-    QDir deck_dir = deck_info.absoluteFilePath();
-
-    QString message = "Clicked at dir: ";
-    message.append(deck_dir.path());
-
-    debugLog(message, log_file, "on_ButtonDeckPlay_clicked");
-
-
-    emit play_deck(deck_dir);
+    QDir deckDir = deck_info.absoluteFilePath();
+    qDebug() << "Clicked at dir: " << deckDir.path();
+    emit playDeck(deckDir);
 }
 
 void deck::on_deck_selectionChanged()
@@ -71,3 +61,11 @@ void deck::on_deck_selectionChanged()
     QToolTip::showText( ui->deck->mapToGlobal( QPoint( 0, 0 ) ), deck_info.fileName() );
 }
 
+// Hides everything, only used to make the grid the right size
+void deck::makeEmptySpace() {
+    ui->ButtonDeckPlay->hide();
+    ui->ButtonEditDeck->hide();
+    ui->deck->hide();
+    ui->LabelStats->hide();
+    ui->line->hide();
+}

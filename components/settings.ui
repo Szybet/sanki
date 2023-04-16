@@ -108,9 +108,9 @@
       <number>0</number>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
-     <widget class="QWidget" name="Page1Device">
+     <widget class="QWidget" name="Page0Ereader">
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QLabel" name="labelBattery">
@@ -228,21 +228,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Page2">
-      <widget class="QProgressBar" name="progressBar">
-       <property name="geometry">
-        <rect>
-         <x>117</x>
-         <y>72</y>
-         <width>161</width>
-         <height>151</height>
-        </rect>
-       </property>
-       <property name="value">
-        <number>42</number>
-       </property>
-      </widget>
-     </widget>
+     <widget class="QWidget" name="Page1Menu"/>
     </widget>
    </item>
    <item>

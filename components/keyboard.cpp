@@ -8,9 +8,9 @@ keyboard::keyboard(QDialog *parent) :
 {
     ui->setupUi(this);
 
-    int y = (screen_y / 2);
+    int y = (ereaderVars::screen_y / 2);
     this->move(0, y);
-    this->setMinimumSize(screen_x, y);
+    this->setMinimumSize(ereaderVars::screen_x, y);
     this->adjustSize();
 
     ui->lineEdit->setVisible(false);
@@ -24,22 +24,13 @@ keyboard::~keyboard()
     delete ui;
 }
 
+// TODO remove this
 void keyboard::update_string(QString new_string)
 {
     edited_string.remove("|");
 
     edited_string.insert(cursor_main, new_string);
-    QString message = "Emiting update_data, edited_string: ";
-    message.append(edited_string);
-    message.append(" cursor position: ");
-    message.append(QString::number(cursor_main));
 
-    if(new_string != "")
-    {
-        cursor_main = cursor_main + 1;
-    }
-
-    debugLog(message, "keyboard.cpp", "update_string()");
     emit update_data(edited_string, cursor_main);
 }
 

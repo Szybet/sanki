@@ -6,6 +6,7 @@
 #include <QGuiApplication>
 #include <QScreen>
 #include <QTextCodec>
+#include <QStandardPaths>
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -16,37 +17,32 @@
 // https://stackoverflow.com/questions/1057287/ofstream-error-in-c
 #include <fstream>
 
-bool debug_enabled = false;
-QDir directories::work_dir = QDir::homePath();
-QDir directories::deck_storage = QDir::homePath() + "/decks";
-QString kobo_model = "";
-bool running_on_kobo = false;
-int screen_x = 1920;
-int screen_y = 1080;
-int batt_level_int = 100;
+// Default values
+bool debugEnabled = false;
 
-void debugLog(QString Message, QString file, QString function)
-{
-    if (debug_enabled == true)
-    {
-        qDebug() << "LOG:" << Message << "| file" << file << "| function:" << function;
-    }
-}
+bool pc = false;
+bool ereader = false;
+
+QDir directories::config = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QDir::separator() + "sanki";
+QDir directories::deckStorage = directories::config.path() + QDir::separator() + "decks";
+QDir directories::deckSelect = QDir::homePath();
+
+QString ereaderVars::model = "";
+int ereaderVars::screen_x = 1920;
+int ereaderVars::screen_y = 1080;
+int ereaderVars::batt_level_int = 100;
 
 void check_device()
 {
     // If its running on kobo
     if(qgetenv("QT_QPA_PLATFORM") == "kobo")
     {
-        kobo_model = qgetenv("DEVICE_CODENAME");
-        kobo_model = kobo_model.remove("\n"); // Yes, just to be sure
-        running_on_kobo = true;
+        ereaderVars::model = qgetenv("DEVICE_CODENAME");
+        ereaderVars::model = ereaderVars::model.remove("\n"); // Yes, just to be sure
 
-        QString message = "Sanki is running on a kobo " + kobo_model;
-        debugLog(message, "globals.h", "check_device()");
+        qDebug() << "Sanki is running on a kobo " << ereaderVars::model;
     } else {
-        running_on_kobo = false;
-        debugLog("Sanki is not running on a kobo", "globals.h", "check_device()");
+        qDebug() << "Sanki is not running on a kobo";
     }
 }
 
@@ -56,14 +52,9 @@ void screen_geometry()
 {
     // Window geometry
     QRect screenGeometry = QGuiApplication::screens()[0]->geometry();
-    screen_x = screenGeometry.width();
-    screen_y = screenGeometry.height();
-    QString message;
-    message.append("Screen size is x:");
-    message.append(QString::number(screen_x));
-    message.append(" y:");
-    message.append(QString::number(screen_y));
-    debugLog(message, "globals.h", "screen_geometry()");
+    ereaderVars::screen_x = screenGeometry.width();
+    ereaderVars::screen_y = screenGeometry.height();
+    qDebug() << "Screen size is x:" << ereaderVars::screen_x << "y:" << ereaderVars::screen_y;
 }
 void check_battery_level()
 {
@@ -79,11 +70,11 @@ void check_battery_level()
         //message.append(batt_level);
         //debugLog(message, "globals.h", "check_battery_level");
 
-        batt_level_int = batt_level.toInt();
+        ereaderVars::batt_level_int = batt_level.toInt();
         batt_level_file.close();
     }
     else {
-        batt_level_int = 100;
+        ereaderVars::batt_level_int = 100;
     }
 }
 void set_brightness(int value) {

@@ -1,6 +1,7 @@
 #ifndef MODE_CHOOSER_H
 #define MODE_CHOOSER_H
 
+#include "globals.h"
 #include <QDialog>
 
 namespace Ui {
@@ -16,18 +17,17 @@ public:
     ~mode_chooser();
 
 signals:
-    void set_mode(int mode);
+    void setMode(DeckModes mode);
 
 private slots:
     void on_ButtonConfirm_clicked();
-    void on_ButtonCRandom_clicked(bool checked);    
-    void on_ButtonRandomNR_clicked(bool checked);
+    void on_ButtonRandomNR_clicked();
+    void on_ButtonCRandom_clicked();
 
 private:
     Ui::mode_chooser *ui;
-    int mode = 0;
-    // 0 is none
-    // 1 is Completly Random
+    DeckModes mode = None;
+    void modeManager(DeckModes newMode);
 };
 
 #endif // MODE_CHOOSER_H

@@ -90,6 +90,7 @@ if(contains(TARGET_DEVICE, KOBO)) {
     RCC_DIR = build/kobo/.rcc
     UI_DIR = build/kobo/.ui
     message("Choosed libraries for KOBO")
+    DEFINES += KOBO=true
 }
 
 if(contains(TARGET_DEVICE, PC)) {
@@ -100,6 +101,7 @@ if(contains(TARGET_DEVICE, PC)) {
     RCC_DIR = build/pc/.rcc
     UI_DIR = build/pc/.ui
     message("Choosed libraries for PC")
+    DEFINES += PC=true
 }
 
 if(isEmpty(TARGET_DEVICE)) {

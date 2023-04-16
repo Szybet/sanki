@@ -54,7 +54,7 @@ private:
     QString choosed_file;
 
     // Keyboard:
-    bool updated_name;
+    bool updatedName;
     bool first_open = true; // this is changed to false after launching in on_lineEditDeckName_cursorPositionChanged
     bool keyboard_opened = false;
 };

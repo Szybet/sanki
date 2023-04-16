@@ -45,7 +45,12 @@ int main(int argc, char *argv[])
         qDebug() << "Debug logs are enabled";
         enableDebug = true;
     } else {
+#ifdef QT_DEBUG
+        enableDebug = true;
+        qDebug() << "Debug logs are disabled, but running a debug build, overwriting it";
+#else
         QLoggingCategory::setFilterRules("qt.*=false");
+#endif
     }
 
     if(qgetenv("SELF_MANAGE_DEBUG") != "true" && enableDebug == true) {
@@ -61,32 +66,60 @@ int main(int argc, char *argv[])
         qInstallMessageHandler(myMessageOutput);
     }
 
-    debugLog("Sanki started", "main.cpp", "main()");
+    qDebug() << "Sanki started";
+
+    // Detect platform
+#ifdef PC
+    pc = true;
+    qDebug() << "Detected platform PC";
+#endif
+
+#ifdef ereader
+    ereader = true;
+    qDebug() << "Detected platform ereader";
+#endif
 
     QApplication a(argc, argv);
-    // Very fuc... important. Do it after creating QAPPLICATION:
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
+    MainWindow w;
 
-    // Check and apply stylesheet if available
-    screen_geometry();
-    check_device();
-    if(running_on_kobo == true)
-    {
-        // inkbox user app
-        //QFile style_file("/mnt/onboard/.adds/inkbox/eink.qss");
-        QFile style_file("/etc/eink.qss");
-
-        if(style_file.exists() == false)
-        {
-            debugLog("stylesheet file doesn't exist", "main.cpp", "main()");
-        }
-
-        style_file.open(QFile::ReadOnly);
-        QString styleSheet = QLatin1String(style_file.readAll());
-        a.setStyleSheet(styleSheet);
+    // TODO: deckSelect for ereader app-data and save the selected path to config, on pc too
+    qDebug() << "deck storage path is" << directories::deckStorage;
+    if(directories::deckStorage.exists() == false) {
+        QDir newDir; // Why variable is needed
+        newDir.mkpath(directories::deckStorage.path());
     }
 
-    MainWindow w;
-    w.showFullScreen();
+    if(ereader) {
+        // https://github.com/Szybet/niAudio/blob/main/apps-on-kobo/fix-special-characters-qt.md
+        QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
+
+        // TODO
+        // Check and apply stylesheet if available
+        /*
+        screen_geometry();
+        check_device();
+
+        if(running_on_kobo == true)
+        {
+            // inkbox user app
+            //QFile style_file("/mnt/onboard/.adds/inkbox/eink.qss");
+            // TODO
+            QFile style_file("/etc/eink.qss");
+
+            if(style_file.exists() == false)
+            {
+                //debugLog("stylesheet file doesn't exist", "main.cpp", "main()");
+            }
+
+            style_file.open(QFile::ReadOnly);
+            QString styleSheet = QLatin1String(style_file.readAll());
+            a.setStyleSheet(styleSheet);
+        }
+        */
+        w.showFullScreen();
+    } else if(pc) {
+        w.show();
+    }
+
     return a.exec();
 }

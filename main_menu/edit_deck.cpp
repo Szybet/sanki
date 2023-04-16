@@ -18,14 +18,17 @@ edit_deck::edit_deck(QDialog *parent) :
     ui->ButtonRemoveDeck->setStyleSheet("font-size: 8pt");
     ui->ButtonReset->setStyleSheet("font-size: 8pt");
     ui->ButtonSaveExit->setStyleSheet("font-size: 8pt");
-    ui->frame->setStyleSheet(".QFrame{background-color: white; border: 4px solid black; border-radius: 10px;}");
-
+    if(ereader) {
+        ui->frame->setStyleSheet(".QFrame{background-color: white; border: 4px solid black; border-radius: 10px;}");
+    }
 
     this->adjustSize();
-    int x = (screen_x / 2) - ( this->width() / 2);
-    int y = (screen_y / 3) - ( this->height() / 2);
-    this->move(x, y);
-    ui->lineEditDeckName->setCursorPosition(10);
+    if(ereader) {
+        int x = (ereaderVars::screen_x / 2) - ( this->width() / 2);
+        int y = (ereaderVars::screen_y / 3) - ( this->height() / 2);
+        this->move(x, y);
+        ui->lineEditDeckName->setCursorPosition(10);
+    }
 
     /* doesn't work at all
     QPixmap pixmap = QPixmap(":cursor");
@@ -41,27 +44,23 @@ edit_deck::~edit_deck()
 
 void edit_deck::update_widget(QString string, int cursor)
 {
-         QString message = "Activated slot, QString: ";
-         message.append(string);
-         message.append(" int: ");
-         message.append(QString::number(cursor));
-         debugLog(message, "edit_deck.cpp", "update_widget");
+    qDebug() << "Activated slot, QString: " << string << " int: " << cursor;
 
-         // Adding cursor, this is so stupid
-         QString string_with_cursor = string;
-         if(cursor == 0)
-         {
-             if(string == "")
-             {
-                 ui->lineEditDeckName->setText(" ");
-             }
-             string_with_cursor.insert(cursor, "|");
-         } else {
-             string_with_cursor.insert(cursor, "|");
-         }
+    // Adding cursor, this is so stupid
+    QString string_with_cursor = string;
+    if(cursor == 0)
+    {
+        if(string == "")
+        {
+            ui->lineEditDeckName->setText(" ");
+        }
+        string_with_cursor.insert(cursor, "|");
+    } else {
+        string_with_cursor.insert(cursor, "|");
+    }
 
-         ui->lineEditDeckName->setText(string_with_cursor);
-         ui->lineEditDeckName->setCursorPosition(cursor);
+    ui->lineEditDeckName->setText(string_with_cursor);
+    ui->lineEditDeckName->setCursorPosition(cursor);
 }
 
 void edit_deck::update_deck()
@@ -89,9 +88,7 @@ void edit_deck::on_ButtonCancelEdit_clicked()
 
 void edit_deck::on_ButtonSaveExit_clicked()
 {
-    QString log_function = "on_ButtonSaveExit_clicked()";
-
-    if(remove_deck == true and updated_name == true)
+    if(remove_deck == true and updatedName == true)
     {
         // show toast that this is weird, not removing
         toast* new_toast = new toast;
@@ -102,16 +99,11 @@ void edit_deck::on_ButtonSaveExit_clicked()
         edit_deck::close();
     }
 
-    if (updated_name == true)
+    if (updatedName == true)
     {
         QDir dir = deck_info.absoluteDir();
         dir.QDir::rename(deck_info.baseName(), ui->lineEditDeckName->text());
-
-        QString message = "renamed directory from ";
-        message.append(deck_info.baseName());
-        message.append(" to: ");
-        message.append(ui->lineEditDeckName->text());
-        debugLog(message, log_file, log_function);
+        qDebug() << "Renamed directory from " << deck_info.baseName() << " to: " << ui->lineEditDeckName->text();
     }
 
     if (remove_deck == true)
@@ -119,9 +111,7 @@ void edit_deck::on_ButtonSaveExit_clicked()
         // why this works, why
         QDir remove_dir = deck_info.path() + "/" + deck_info.baseName();
 
-        QString message = "removing dir: ";
-        message.append(remove_dir.path());
-        debugLog(message, log_file, log_function);
+        qDebug() << "removing dir: " << remove_dir.path();
 
         remove_dir.removeRecursively();
     }
@@ -130,49 +120,43 @@ void edit_deck::on_ButtonSaveExit_clicked()
         // Reset the sql database in the future
     }
 
-    if(updated_name == true or remove_deck == true or reset_deck == true)
+    if(updatedName == true or remove_deck == true or reset_deck == true)
     {
         emit refresh_decks_edit_signal();
-        debugLog("emiting refresh_decks_edit_signal", log_file, log_function);
+        qDebug() << "Emitting refresh_decks_edit_signal";
     }
     edit_deck::close();
 }
 
 void edit_deck::on_lineEditDeckName_cursorPositionChanged(int oldpos, int newpos)
 {
-    QString message = "cursor position changed to: ";
-    message.append(QString::number(newpos));
-    log_message.append(message);
-    log_function.append("on_lineEditDeckName_cursorPositionChanged");
-    // This here cannot provide variables
-    QTimer::singleShot(0, this, SLOT(debugLog()));
-    if(first_open == false)
-    {
-        if(keyboard_opened == false)
+    if(ereader) {
+        qDebug() << "cursor position changed to: " << newpos << "from:" << oldpos;
+        if(first_open == false)
         {
-            if(newpos != 0)
+            if(keyboard_opened == false)
             {
-
-                log_message.append("keyboard open");
-                log_function.append("on_lineEditDeckName_cursorPositionChanged");
-                QTimer::singleShot(0, this, SLOT(debugLog()));
-                keyboard* keyboard_nameedit = new keyboard;
-                keyboard_nameedit->cursor_main = newpos;
-                keyboard_nameedit->main_string = ui->lineEditDeckName->text();
-                keyboard_nameedit->edited_string = ui->lineEditDeckName->text();
-                connect(keyboard_nameedit, SIGNAL(update_data(QString, int)), this, SLOT(update_widget(QString, int)));
-                connect(keyboard_nameedit, SIGNAL(keyboard_closed(bool)), this, SLOT(keyboard_closed(bool)));
-                keyboard_opened = true;
-                update_widget(ui->lineEditDeckName->text(), ui->lineEditDeckName->cursorPosition()); // to create the cursor
-                keyboard_nameedit->exec();
+                if(newpos != 0)
+                {
+                    qDebug() << "Keyboard open";
+                    QTimer::singleShot(0, this, SLOT(debugLog()));
+                    keyboard* keyboard_nameedit = new keyboard;
+                    keyboard_nameedit->cursor_main = newpos;
+                    keyboard_nameedit->main_string = ui->lineEditDeckName->text();
+                    keyboard_nameedit->edited_string = ui->lineEditDeckName->text();
+                    connect(keyboard_nameedit, SIGNAL(update_data(QString, int)), this, SLOT(update_widget(QString, int)));
+                    connect(keyboard_nameedit, SIGNAL(keyboard_closed(bool)), this, SLOT(keyboard_closed(bool)));
+                    keyboard_opened = true;
+                    update_widget(ui->lineEditDeckName->text(), ui->lineEditDeckName->cursorPosition()); // to create the cursor
+                    keyboard_nameedit->exec();
+                }
             }
+        } else {
+            qDebug() << "First open, skipping cursor change";
+
+            ui->lineEditDeckName->setCursorPosition(0);
+            first_open = false;
         }
-    } else {
-        log_function.append("on_lineEditDeckName_cursorPositionChanged");
-        log_message.append("First open, skipping cursor change");
-        QTimer::singleShot(0, this, SLOT(debugLog()));
-        ui->lineEditDeckName->setCursorPosition(0);
-        first_open = false;
     }
 }
 
@@ -180,7 +164,7 @@ void edit_deck::keyboard_closed(bool update_name)
 {
     if(update_name == true)
     {
-        updated_name = true;
+        updatedName = true;
     }
     ui->lineEditDeckName->setText(ui->lineEditDeckName->text().remove("|"));
     ui->lineEditDeckName->setCursorPosition(0);
@@ -189,6 +173,14 @@ void edit_deck::keyboard_closed(bool update_name)
 
 void edit_deck::on_lineEditDeckName_selectionChanged()
 {
-    ui->lineEditDeckName->setSelection(0, 0);
+    if(ereader) {
+        ui->lineEditDeckName->setSelection(0, 0);
+    }
+}
+
+
+void edit_deck::on_lineEditDeckName_textChanged(const QString &arg1)
+{
+    updatedName = true;
 }
 

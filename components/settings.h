@@ -18,13 +18,19 @@ public:
 private slots:
     void on_ButtonLeft_clicked();
     void on_ButtonRight_clicked();
-    void request_device_page();
     void on_ScrollBarBrightness_valueChanged(int value);
-
     void on_ButtonOk_clicked();
 
+    void requestEreaderPage();
+    void requestMenuPage();
 private:
     Ui::Settings *ui;
+    int maxPageNumber = 1;
+    enum Direction{
+        Right,
+        Left,
+    };
+    void managePage(int newIndex, Direction fromWhere);
 };
 
 #endif // SETTINGS_H

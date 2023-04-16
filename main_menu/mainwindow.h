@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "globals.h"
 #include <QMainWindow>
 #include <QDir>
 
@@ -18,7 +19,7 @@ public:
 
 public slots:
     void get_file(QString file);
-    void get_mode(int mode);
+    void getMode(DeckModes mode);
     void return_to_mainwindow();
 
 signals:
@@ -31,14 +32,12 @@ private slots:
     void deck_scroll_bar_show();
     void deck_play_show(QDir);
     void battery_warning_timer();
-
     void status_bar_main_menu();
 
 private:
     Ui::MainWindow *ui;
     QString log_file = "MainWindow";
-    QString zip_file_path;
-    int mode = 0;
-
+    QString zipFilePath;
+    DeckModes mode = None;
 };
 #endif // MAINWINDOW_H

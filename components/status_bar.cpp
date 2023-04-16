@@ -1,6 +1,7 @@
 #include "components/status_bar.h"
 #include "ui_status_bar.h"
 #include "settings.h"
+#include "globals.h"
 
 #include <QTimer>
 #include <QTime>
@@ -13,10 +14,24 @@ status_bar::status_bar(QWidget *parent) :
     ui->setupUi(this);
 
     // Set up timer for time showing
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &status_bar::showTime);
-    timer->start(1000);
-    showTime();
+    if(ereader) {
+        QTimer *timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, &status_bar::showTime);
+        timer->start(1000);
+        showTime();
+    }
+
+    if(pc) {
+        ui->ButtonExit->hide();
+        ui->lineExit->hide();
+        ui->LineTime->hide();
+        ui->labelTime->hide();
+
+        ui->horizontalSpacerTime_5->changeSize(0,0);
+        ui->horizontalSpacerTime_6->changeSize(0,0);
+        ui->horizontalSpacerExit_3->changeSize(0,0);
+        ui->horizontalSpacerExit_4->changeSize(0,0);
+    }
 
     ui->ButtonExit->setStyleSheet("border: none;");
     ui->ButtonSettings->setStyleSheet("border: none;");

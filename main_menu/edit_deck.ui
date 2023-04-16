@@ -32,13 +32,13 @@
    <item row="1" column="0">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
-      <enum>QFrame::Box</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
      </property>
      <property name="lineWidth">
-      <number>4</number>
+      <number>0</number>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="spacing">

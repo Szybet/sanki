@@ -35,14 +35,13 @@ private slots:
     void keyboard_closed(bool update_name);
     void on_lineEditDeckName_selectionChanged();
 
+    void on_lineEditDeckName_textChanged(const QString &arg1);
+
 private:
     Ui::edit_deck *ui;
-    bool updated_name;
+    bool updatedName = false;;
     bool reset_deck = false;
     bool remove_deck = false;
-    QString log_file = "edit_deck.cpp";
-    QVector<QString> log_message;
-    QVector<QString> log_function;
     bool first_open = true; // this is changed to false after launching in on_lineEditDeckName_cursorPositionChanged
     bool keyboard_opened = false;
 };

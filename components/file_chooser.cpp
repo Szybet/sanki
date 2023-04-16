@@ -1,4 +1,5 @@
 #include "file_chooser.h"
+#include "qdebug.h"
 #include "ui_file_chooser.h"
 #include "globals.h"
 #include "file.h"
@@ -13,8 +14,8 @@ file_chooser::file_chooser(QDialog *parent) :
 {
     ui->setupUi(this);
     this->move(0, 0);
-    this->setMinimumSize(screen_x, screen_y);
-    this->setMaximumSize(screen_x, screen_y);
+    this->setMinimumSize(ereaderVars::screen_x, ereaderVars::screen_y);
+    this->setMaximumSize(ereaderVars::screen_x, ereaderVars::screen_y);
     this->adjustSize();
 
     // ("border: 0px solid black; border-radius: 0px;");
@@ -47,18 +48,8 @@ void file_chooser::update_files()
     emit remove_buttons();
     QDir dir = start_path;
     QFileInfoList dir_list = dir.QDir::entryInfoList(QDir::Filters(QDir::AllDirs | QDir::Files), QDir::SortFlag(QDir::Type));
-    QString message = "gathered dir_list: ";
-    for (QFileInfo file_info: dir_list) {
-        if (file_info.baseName() == "") {
-            continue;
-        }
-        message.append(file_info.fileName());
-        message.append(",");
-    }
-    message.append("in: ");
-    message.append(start_path);
 
-    debugLog(message, log_file, "update_files");
+    qDebug() << "Gathered dir_list:" << dir_list;
 
     QVBoxLayout* file_layout = ui->layoutFiles;
 
@@ -92,8 +83,7 @@ void file_chooser::update_files()
         connect(this, SIGNAL(remove_bold()), file_button, SLOT(remove_bold()));
         connect(file_button, SIGNAL(enter_dir()), this, SLOT(enter_dir()));
 
-        QString message = "added widget: " + file_info.fileName();
-        debugLog(message, log_file, "update_files");
+        qDebug() << "added widget:" << file_info.fileName();
 
         file_layout->addWidget(file_button);
     }
@@ -150,9 +140,7 @@ void file_chooser::on_ButtonUpPath_clicked()
     new_path.cdUp();
     start_path = new_path.path();
 
-    QString message = "Go up path: ";
-    message.append(start_path);
-    debugLog(message, log_file, "on_ButtonUpPath_clicked");
+    qDebug() << "Go up path:" << start_path;
 
     update_files();
 }
@@ -168,7 +156,7 @@ void file_chooser::keyboard_closed(bool update_name)
 {
     if(update_name == true)
     {
-        updated_name = true;
+        updatedName = true;
     }
     ui->lineEditPath->setText(ui->lineEditPath->text().remove("|"));
     keyboard_opened = false;

@@ -15,10 +15,11 @@ public:
 public slots:
     void set_deck_name(QString);
     void refresh_decks_slot();
+    void makeEmptySpace();
 
 signals:
     void refresh_decks_signal();
-    void play_deck(QDir);
+    void playDeck(QDir);
 
 private slots:
 

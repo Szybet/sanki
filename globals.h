@@ -4,19 +4,33 @@
 #include <QDir>
 #include <QString>
 
-extern bool debug_enabled;
+extern bool debugEnabled;
+
+// Those variables check if it's running on this device
+extern bool pc;
+extern bool ereader;
+
 namespace directories {
-    extern QDir work_dir;
-    extern QDir deck_storage;
+    extern QDir config;
+    extern QDir deckStorage;
+    extern QDir deckSelect; // File chooser will open here
 }
-extern QString kobo_model;
-extern bool running_on_kobo;
-extern int screen_x;
-extern int screen_y;
-extern int batt_level_int;
+
+namespace ereaderVars {
+    extern QString model;
+    extern bool running_on_kobo;
+    extern int screen_x;
+    extern int screen_y;
+    extern int batt_level_int;
+}
+
+enum DeckModes {
+    None,
+    CompletlyRandomised,
+    RandomisedNoRepeating,
+};
 
 void check_device();
-void debugLog(QString Message, QString file, QString function);
 void screen_geometry();
 void check_battery_level();
 void set_brightness(int value);

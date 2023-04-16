@@ -16,8 +16,8 @@ class decks_scroll_bar : public QWidget
 public:
     explicit decks_scroll_bar(QWidget *parent = nullptr);
     ~decks_scroll_bar();
-
-
+    
+    
 public slots:
     void update_decks();
     void play_deck_slott(QDir);

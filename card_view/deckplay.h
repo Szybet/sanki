@@ -1,6 +1,7 @@
 #ifndef DECKPLAY_H
 #define DECKPLAY_H
 
+#include "globals.h"
 #include <QMainWindow>
 #include <QDir>
 #include <QSqlDatabase>
@@ -17,21 +18,19 @@ public:
     explicit DeckPlay(QWidget *parent = nullptr);
     ~DeckPlay();
 
-
-
 public slots:
-    void update(QDir, int);
-    void check_if_scrollbars_showe();
+    void update(QDir, DeckModes modeNew);
+    void checkIfScrollbarsToShow();
 
 private slots:
     void start();
     void show_back_next();
     void parse_string();
 
-    void mode_crandom_setup();
+    void modeCRandomSetup();
     void mode_crandom_loop();
 
-    void mode_random_norepeat_setup();
+    void modeRandomNoRepeatSetup();
     void mode_random_norepeat_loop();
 
     void on_textBackCard_textChanged();
@@ -46,8 +45,8 @@ signals:
 private:
     Ui::DeckPlay *ui;
     QString log_file = "deckplay";
-    QDir deck_dir;
-    int mode;
+    QDir deckDir;
+    DeckModes mode;
     QFile media_file;
 
     QSqlDatabase db;
@@ -59,10 +58,10 @@ private:
     QString main_card;
     bool showed_back = false;
 
-    int scroll_bar_setted_front = 0;
-    int scroll_bar_setted_back = 0;
-    bool hor_scroll_front_needed = false;
-    bool hor_scroll_back_needed = false;
+    int scrollBarSettedFront = 0;
+    int scrollBarSettedBack = 0;
+    bool HorizontalScrollOnFrontNeeded = false;
+    bool HorizontalScrollOnBackNeeded = false;
 
     int no_repeat_list;
     QStringList no_repeat_ids;
