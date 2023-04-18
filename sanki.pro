@@ -14,53 +14,55 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs depr
 
 # Cleaning
 SOURCES += \
-    card_view/card_true_false.cpp \
+    cardView/cardTrueFalse.cpp \
+    cardView/deckPlay.cpp \
+    cardView/modeChooser.cpp \
+    cardView/modes/completlyRandom.cpp \
     components/file.cpp \
     components/file_chooser.cpp \
     components/settings.cpp \
     globals.cpp \
     main_menu/deck.cpp \
-    card_view/deckplay.cpp \
     main_menu/decks_scroll_bar.cpp \
     main_menu/edit_deck.cpp \
     components/keyboard.cpp \
     main.cpp \
     main_menu/mainwindow.cpp \
-    card_view/mode_chooser.cpp \
-    card_view/show_card.cpp \
+    cardView/showCard.cpp \
     components/status_bar.cpp \
     components/toast.cpp
 
 HEADERS += \
-    card_view/card_true_false.h \
+    cardView/cardTrueFalse.h \
+    cardView/deckPlay.h \
+    cardView/modeChooser.h \
+    cardView/modes/completlyRandom.h \
     components/file.h \
     components/file_chooser.h \
     components/settings.h \
     main_menu/deck.h \
-    card_view/deckplay.h \
     main_menu/decks_scroll_bar.h \
     main_menu/edit_deck.h \
     globals.h \
     components/keyboard.h \
     main_menu/mainwindow.h \
-    card_view/mode_chooser.h \
-    card_view/show_card.h \
+    cardView/showCard.h \
     components/status_bar.h \
     components/toast.h
 
 FORMS += \
-    card_view/card_true_false.ui \
+    cardView/cardTrueFalse.ui \
+    cardView/deckPlay.ui \
+    cardView/modeChooser.ui \
     components/file.ui \
     components/file_chooser.ui \
     components/settings.ui \
     main_menu/deck.ui \
-    card_view/deckplay.ui \
     main_menu/decks_scroll_bar.ui \
     main_menu/edit_deck.ui \
     components/keyboard.ui \
     main_menu/mainwindow.ui \
-    card_view/mode_chooser.ui \
-    card_view/show_card.ui \
+    cardView/showCard.ui \
     components/status_bar.ui \
     components/toast.ui
 

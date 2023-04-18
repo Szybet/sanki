@@ -1,12 +1,12 @@
-#include "card_view/mode_chooser.h"
-#include "ui_mode_chooser.h"
+#include "cardView/modeChooser.h"
+#include "ui_modeChooser.h"
 #include "globals.h"
 
 #include <QDebug>
 
-mode_chooser::mode_chooser(QDialog *parent) :
+modeChooser::modeChooser(QDialog *parent) :
     QDialog(parent),
-    ui(new Ui::mode_chooser)
+    ui(new Ui::modeChooser)
 {
     ui->setupUi(this);
 
@@ -17,12 +17,12 @@ mode_chooser::mode_chooser(QDialog *parent) :
     this->setResult(QDialog::Rejected);
 }
 
-mode_chooser::~mode_chooser()
+modeChooser::~modeChooser()
 {
     delete ui;
 }
 
-void mode_chooser::on_ButtonConfirm_clicked()
+void modeChooser::on_ButtonConfirm_clicked()
 {
     emit setMode(mode);
     this->setResult(QDialog::Accepted);
@@ -31,7 +31,7 @@ void mode_chooser::on_ButtonConfirm_clicked()
     this->done(QDialog::Accepted);
 }
 
-void mode_chooser::modeManager(DeckModes newMode) {
+void modeChooser::modeManager(DeckModes newMode) {
     ui->ButtonConfirm->setEnabled(true);
 
     ui->ButtonCRandom->setChecked(false);
@@ -46,12 +46,12 @@ void mode_chooser::modeManager(DeckModes newMode) {
     mode = newMode;
 }
 
-void mode_chooser::on_ButtonRandomNR_clicked()
+void modeChooser::on_ButtonRandomNR_clicked()
 {
     modeManager(RandomisedNoRepeating);
 }
 
-void mode_chooser::on_ButtonCRandom_clicked()
+void modeChooser::on_ButtonCRandom_clicked()
 {
     modeManager(CompletlyRandomised);
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>show_card</class>
- <widget class="QWidget" name="show_card">
+ <class>showCard</class>
+ <widget class="QWidget" name="showCard">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -43,8 +43,13 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>15</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>Show card</string>
+      <string>Show</string>
      </property>
     </widget>
    </item>

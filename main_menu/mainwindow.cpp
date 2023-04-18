@@ -7,7 +7,7 @@
 #include "components/status_bar.h"
 #include "main_menu/decks_scroll_bar.h"
 #include "globals.h"
-#include "card_view/mode_chooser.h"
+#include "cardView/modeChooser.h"
 #include "zip.h"
 #include "components/file_chooser.h"
 
@@ -50,7 +50,7 @@ void MainWindow::deck_scroll_bar_show()
     decks_scroll_bar* decks = new decks_scroll_bar;
     auto central_layout = ui->centralwidget->layout();
     connect(this, SIGNAL(update_decks()), decks, SLOT(update_decks()));
-    connect(decks, SIGNAL(play_deck_signal(QDir)), this, SLOT(deck_play_show(QDir)));
+    connect(decks, SIGNAL(play_deck_signal(QDir)), this, SLOT(deckPlay_show(QDir)));
     connect(this, SIGNAL(clear_mainwidget()), decks, SLOT(deleteLater()));
 
     central_layout->addWidget(decks);
@@ -58,15 +58,15 @@ void MainWindow::deck_scroll_bar_show()
     qDebug() << "update_decks emitet";
 }
 
-void MainWindow::deck_play_show(QDir dir)
+void MainWindow::deckPlay_show(QDir dir)
 {
-    // This here goes to card_view thing, going to play
+    // This here goes to cardView thing, going to play
     qDebug() << "Dir choosed to play:" << dir.path();
 
     // this was propably causing problems
     //int mode = chooseMode->exec();
 
-    mode_chooser* chooseMode = new mode_chooser;
+    modeChooser* chooseMode = new modeChooser;
     connect(chooseMode, SIGNAL(setMode(DeckModes)), this, SLOT(getMode(DeckModes)));
     int code = chooseMode->exec();
     qDebug() << "chooseMode dialog return value is:" << code;

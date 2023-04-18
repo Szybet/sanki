@@ -1,20 +1,20 @@
-#ifndef MODE_CHOOSER_H
-#define MODE_CHOOSER_H
+#ifndef modeChooser_H
+#define modeChooser_H
 
 #include "globals.h"
 #include <QDialog>
 
 namespace Ui {
-class mode_chooser;
+class modeChooser;
 }
 
-class mode_chooser : public QDialog
+class modeChooser : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit mode_chooser(QDialog *parent = nullptr);
-    ~mode_chooser();
+    explicit modeChooser(QDialog *parent = nullptr);
+    ~modeChooser();
 
 signals:
     void setMode(DeckModes mode);
@@ -25,9 +25,9 @@ private slots:
     void on_ButtonCRandom_clicked();
 
 private:
-    Ui::mode_chooser *ui;
+    Ui::modeChooser *ui;
     DeckModes mode = None;
     void modeManager(DeckModes newMode);
 };
 
-#endif // MODE_CHOOSER_H
+#endif // modeChooser_H

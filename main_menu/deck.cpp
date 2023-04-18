@@ -2,7 +2,7 @@
 #include "ui_deck.h"
 #include "main_menu/edit_deck.h"
 #include "main_menu/mainwindow.h"
-#include "card_view/deckplay.h"
+#include "cardView/deckPlay.h"
 #include "globals.h"
 
 #include <QMainWindow>

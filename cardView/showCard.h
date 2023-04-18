@@ -4,19 +4,19 @@
 #include <QWidget>
 
 namespace Ui {
-class show_card;
+class showCard;
 }
 
-class show_card : public QWidget
+class showCard : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit show_card(QWidget *parent = nullptr);
-    ~show_card();
+    explicit showCard(QWidget *parent = nullptr);
+    ~showCard();
 
 public slots:
-    void set_text(QString);
+    void setText(QString);
 
 signals:
     void clicked();
@@ -25,7 +25,7 @@ private slots:
     void on_pushButton_clicked();
 
 private:
-    Ui::show_card *ui;
+    Ui::showCard *ui;
 };
 
 #endif // SHOW_CARD_H

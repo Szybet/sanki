@@ -30,7 +30,7 @@ signals:
 private slots:
     void FileButton();
     void deck_scroll_bar_show();
-    void deck_play_show(QDir);
+    void deckPlay_show(QDir);
     void battery_warning_timer();
     void status_bar_main_menu();
 

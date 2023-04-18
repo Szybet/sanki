@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>card_true_false</class>
- <widget class="QWidget" name="card_true_false">
+ <class>cardTrueFalse</class>
+ <widget class="QWidget" name="cardTrueFalse">
   <property name="geometry">
    <rect>
     <x>0</x>
