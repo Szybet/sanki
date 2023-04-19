@@ -30,6 +30,8 @@ DeckPlay::DeckPlay(QWidget *parent) :
         // This could be editable in settings
         ui->horizontalScrollBar->setStyleSheet("QScrollBar:horizontal { height: 50px; }");
     }
+
+    ui->horizontalScrollBar->setHidden(true);
 }
 
 DeckPlay::~DeckPlay()
@@ -265,4 +267,108 @@ void DeckPlay::centerText(QTextBrowser* text) {
         cursor.clearSelection();
         text->setTextCursor(cursor);
     }
+}
+
+void DeckPlay::on_textFrontCard_textChanged()
+{
+    cardSizeManage(ui->textFrontCard);
+}
+
+
+void DeckPlay::on_textBackCard_textChanged()
+{
+    cardSizeManage(ui->textBackCard);
+}
+
+void DeckPlay::cardSizeManage(QTextBrowser *text) {
+    int height = text->document()->size().height();
+    QString objectName = text->objectName();
+    QScrollBar* scrollbar = ui->horizontalScrollBar;
+    qDebug() << "Document height:" << height << "and sizeHint:" << ui->textFrontCard->sizeHint().height() << "for" << objectName;
+    if(height != 0 && text->isHidden() == false) {
+        qDebug() << "Setting" << text->objectName() << "height";
+        text->setFixedHeight(height);
+
+        int documentWidth = text->document()->size().width();
+        int textWidth = text->size().width();
+        qDebug() << "documentWidth:" << documentWidth << "textWidth:" << textWidth;
+        if (documentWidth > textWidth) {
+            qDebug() << "So a scroll bar could be needed";
+            if(objectName == "textBackCard") {
+               qDebug() << "Enabled manageBackScrollBar";
+               manageBackScrollBar = true;
+            } else if(objectName == "textFrontCard" ) {
+               qDebug() << "Enabled manageFrontScrollBar";
+               manageFrontScrollBar = true;
+            }
+
+            QApplication::processEvents();
+            // WHY does it need to be like that, otherwise pagestep is too small at start...
+            QTimer::singleShot(200, this, [this, scrollbar, text]() {
+                scrollBarClone(scrollbar, text);
+            });
+        }
+
+        if((manageBackScrollBar == true || manageFrontScrollBar == true) && scrollbar->isHidden() == true) {
+            scrollbar->setHidden(false);
+        } else if(manageBackScrollBar == false && manageFrontScrollBar == false && scrollbar->isHidden() == false) {
+            scrollbar->setHidden(true);
+        }
+    }
+}
+
+// Should be called after next card is called, but before the front is set
+void DeckPlay::resetScrollState() {
+    manageBackScrollBar = false;
+    manageFrontScrollBar = false;
+}
+
+
+void DeckPlay::on_horizontalScrollBar_valueChanged(int value)
+{
+    // qDebug() << "Main horizontal scroll bar value:" << value;
+    if(manageFrontScrollBar == true) {
+        ui->textFrontCard->horizontalScrollBar()->setValue(value);
+    }
+    if(manageBackScrollBar == true) {
+        ui->textBackCard->horizontalScrollBar()->setValue(value);
+    }
+}
+
+void DeckPlay::dumpScrollBarInfo(QScrollBar* scroll) {
+    if (scroll) {
+        qDebug() << "ScrollBar - Object Name: " << scroll->objectName()
+                 << ", Minimum value: " << scroll->minimum()
+                 << ", Maximum value: " << scroll->maximum()
+                 << ", Page step: " << scroll->pageStep()
+                 << ", Single step: " << scroll->singleStep()
+                 << ", Value: " << scroll->value()
+                 << ", Slider position: " << scroll->sliderPosition();
+    } else {
+        qDebug() << "ScrollBar - Object Name: NULL";
+    }
+}
+
+void DeckPlay::scrollBarClone(QScrollBar* scrollbar, QTextBrowser* text) {
+    int maximumMainScrollBar = scrollbar->maximum();
+    int maximumCardScrollBar = text->horizontalScrollBar()->maximum();
+    dumpScrollBarInfo(scrollbar);
+    dumpScrollBarInfo(text->horizontalScrollBar());
+    // Checks if both are enabled - if not, it sets the maximum to the same value - if yes, it checks if the maximum is already above the value - if it's not it sets this value, if it is it ignores
+    if(manageBackScrollBar == true && manageFrontScrollBar == true) {
+        if(maximumMainScrollBar < maximumCardScrollBar) {
+            scrollbar->setMaximum(maximumCardScrollBar);
+        }
+    } else {
+        scrollbar->setMaximum(maximumCardScrollBar);
+    }
+    // Set other thing
+    QApplication::processEvents();
+    int pageStep = text->horizontalScrollBar()->pageStep();
+    scrollbar->setPageStep(pageStep);
+    int singleStep =  text->horizontalScrollBar()->singleStep();
+    scrollbar->setSingleStep(singleStep);
+
+    dumpScrollBarInfo(scrollbar);
+    dumpScrollBarInfo(text->horizontalScrollBar());
 }

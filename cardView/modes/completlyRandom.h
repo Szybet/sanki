@@ -14,6 +14,7 @@ class CompletlyRandom: public QObject
 public:
     explicit CompletlyRandom(QObject *parent = nullptr);
     bool showedBack = false;
+    void loop();
     QString frontCard;
     QString backCard;
     QString mainCard;
@@ -22,7 +23,6 @@ signals:
     void setText(QString text);
 
 public slots:
-    void loop();
     void setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg, QSqlDatabase* dbArg);
     void buttonClicked();
 

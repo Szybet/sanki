@@ -49,13 +49,19 @@ void CompletlyRandom::loop()
 
     // Parse the text
     parent->correctString(&mainCard);
-
     parent->splitMainCard(mainCard, &frontCard, &backCard);
 
-    //backText->hide();
+    parent->resetScrollState();
+
+    backText->hide();
     frontText->setText(frontCard);
-    frontText->verticalScrollBar()->setValue(0);
+
+    // Very important
+    frontText->document()->adjustSize();
+
+    // This fixes the issue that after adding text it is cutted in half
     // Doesn't work ui->textFrontCard->verticalScrollBar()->setSliderPosition(0);
+    frontText->verticalScrollBar()->setValue(0);
 
     parent->centerText(frontText);
 }
@@ -67,8 +73,10 @@ void CompletlyRandom::buttonClicked()
     {
         qDebug() << "showedBack = false";
         showedBack = true;
-        //backText->show();
+        backText->show();
         backText->setText(backCard);
+        backText->document()->adjustSize();
+
         backText->verticalScrollBar()->setValue(0);
         parent->centerText(backText);
 

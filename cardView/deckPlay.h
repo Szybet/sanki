@@ -22,12 +22,25 @@ public:
     void correctString(QString* mainCard);
     void splitMainCard(QString mainCard, QString* frontCard, QString* backCard);
     void centerText(QTextBrowser* text);
+    void resetScrollState();
+
+    bool manageFrontScrollBar = false;
+    bool manageBackScrollBar = false;
+
+    void dumpScrollBarInfo(QScrollBar* scroll);
+    void scrollBarClone(QScrollBar* scrollbar, QTextBrowser* text);
 
 private slots:
     void start();
 
     void modeRandomNoRepeatSetup();
     void modeRandomNoRepeatLoop();
+
+    void on_textFrontCard_textChanged();
+
+    void on_textBackCard_textChanged();
+
+    void on_horizontalScrollBar_valueChanged(int value);
 
 private:
     Ui::DeckPlay *ui;
@@ -40,9 +53,10 @@ private:
 
     bool firstLaunch = true;
 
-
     int no_repeat_list;
     QStringList no_repeat_ids;
+
+    void cardSizeManage(QTextBrowser* text);
 };
 
 #endif // DECKPLAY_H

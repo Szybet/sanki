@@ -18,6 +18,7 @@ SOURCES += \
     cardView/deckPlay.cpp \
     cardView/modeChooser.cpp \
     cardView/modes/completlyRandom.cpp \
+    cardView/modes/randomNoRepeat.cpp \
     components/file.cpp \
     components/file_chooser.cpp \
     components/settings.cpp \
@@ -37,6 +38,7 @@ HEADERS += \
     cardView/deckPlay.h \
     cardView/modeChooser.h \
     cardView/modes/completlyRandom.h \
+    cardView/modes/randomNoRepeat.h \
     components/file.h \
     components/file_chooser.h \
     components/settings.h \

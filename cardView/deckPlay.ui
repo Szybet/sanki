@@ -47,10 +47,13 @@
          <number>0</number>
         </property>
         <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAsNeeded</enum>
+         <enum>Qt::ScrollBarAlwaysOn</enum>
         </property>
         <property name="horizontalScrollBarPolicy">
          <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustToContents</enum>
         </property>
         <property name="widgetResizable">
          <bool>true</bool>
@@ -60,7 +63,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>710</width>
+           <width>696</width>
            <height>529</height>
           </rect>
          </property>
@@ -110,7 +113,7 @@
              <enum>Qt::ScrollBarAlwaysOff</enum>
             </property>
             <property name="sizeAdjustPolicy">
-             <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+             <enum>QAbstractScrollArea::AdjustIgnored</enum>
             </property>
             <property name="cursorWidth">
              <number>0</number>
@@ -175,7 +178,7 @@
              <enum>Qt::ScrollBarAlwaysOff</enum>
             </property>
             <property name="sizeAdjustPolicy">
-             <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+             <enum>QAbstractScrollArea::AdjustIgnored</enum>
             </property>
             <property name="cursorWidth">
              <number>0</number>
@@ -215,6 +218,15 @@
     </item>
     <item>
      <widget class="QScrollBar" name="horizontalScrollBar">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="singleStep">
+       <number>5</number>
+      </property>
+      <property name="pageStep">
+       <number>10</number>
+      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
