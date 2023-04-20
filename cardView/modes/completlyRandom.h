@@ -5,6 +5,7 @@
 #include "cardView/showCard.h"
 #include "cardView/deckPlay.h"
 #include "ui_deckPlay.h"
+
 #include <QObject>
 #include <QSqlDatabase>
 

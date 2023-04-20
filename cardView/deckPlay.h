@@ -29,33 +29,20 @@ public:
 
     void dumpScrollBarInfo(QScrollBar* scroll);
     void scrollBarClone(QScrollBar* scrollbar, QTextBrowser* text);
+    void setText(QTextBrowser* area, QString text);
+    bool firstLaunch = true;
 
 private slots:
     void start();
-
-    void modeRandomNoRepeatSetup();
-    void modeRandomNoRepeatLoop();
-
-    void on_textFrontCard_textChanged();
-
-    void on_textBackCard_textChanged();
 
     void on_horizontalScrollBar_valueChanged(int value);
 
 private:
     Ui::DeckPlay *ui;
-    QString log_file = "deckplay";
     QDir deckDir;
     DeckModes mode;
     QFile mediaFile;
-
     QSqlDatabase db;
-
-    bool firstLaunch = true;
-
-    int no_repeat_list;
-    QStringList no_repeat_ids;
-
     void cardSizeManage(QTextBrowser* text);
 };
 

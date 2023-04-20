@@ -1,8 +1,8 @@
 #include "cardView/deckPlay.h"
 #include "ui_deckPlay.h"
-#include "cardView/showCard.h"
 #include "globals.h"
 #include "cardView/modes/completlyRandom.h"
+#include "cardView/modes/randomNoRepeat.h"
 
 #include <QDebug>
 #include <QSqlDatabase>
@@ -11,10 +11,6 @@
 #include <QSqlTableModel>
 #include <QScrollBar>
 #include <QTimer>
-
-/*
- * Note about scroll bars: Qt is so buggy with those, there were needed many workaround and hacks... its a mess
-*/
 
 DeckPlay::DeckPlay(QWidget *parent) :
     QMainWindow(parent),
@@ -95,108 +91,19 @@ void DeckPlay::start()
                mode->setup(this, ui, &db);
            }else if(mode == RandomisedNoRepeating) // Random - no repeat
            {
-               modeRandomNoRepeatSetup();
+               randomNoRepeat* mode = new randomNoRepeat(this);
+               mode->setup(this, ui, &db);
            }
         }
         else
         {
-           qDebug() << "Database: connection with database failed";
+           qFatal("Database: connection with database failed");
         }
     }
     else
     {
-        qDebug() << "Database: doesn't exist";
+        qFatal("Database: doesn't exist");
     }
-}
-
-void DeckPlay::modeRandomNoRepeatSetup()
-{
-
-    // Setup show / next card button
-    showCard* showCardWidget = new showCard;
-    connect(showCardWidget, SIGNAL(clicked()), this, SLOT(showBackCard())); // Button slot
-    connect(this, SIGNAL(setButtonText(QString)), showCardWidget, SLOT(setText(QString)));
-    connect(this, SIGNAL(nextCardCall()), this, SLOT(modeRandomNoRepeatLoop())); // a loop it is 1
-    ui->gridManageCard->addWidget(showCardWidget);
-
-    QSqlQuery query_count = db.exec("SELECT COUNT(id) FROM notes as whatthefuck");
-    query_count.next();
-    no_repeat_list = query_count.value(0).toInt();
-
-    qDebug() << "column in notes: " << no_repeat_list;
-
-    modeRandomNoRepeatLoop();
-}
-
-void DeckPlay::modeRandomNoRepeatLoop()
-{
-    /*
-    if(no_repeat_ids.count() == no_repeat_list)
-    {
-        int remove_first = no_repeat_ids.count() - (no_repeat_ids.count() / 3);
-        if(remove_first == 0)
-        {
-            // shouldnt happen
-            no_repeat_ids.clear();
-        }
-        for(int i = 0; i <= remove_first; ++i)
-        {
-            no_repeat_ids.removeFirst();
-        }
-    }
-
-    bool looping = true;
-    QString id_str;
-    while(looping == true)
-    {
-        QSqlQuery query_id = db.exec("SELECT id FROM notes ORDER BY RANDOM() LIMIT 1");
-        query_id.next();
-        QString id_str_unchecked = query_id.value(0).toString(); // random id
-        if(no_repeat_ids.contains(id_str_unchecked) == false)
-        {
-            id_str = id_str_unchecked;
-            no_repeat_ids.append(id_str_unchecked);
-            looping = false;
-        }
-    }
-
-    // set variables
-    QString mainCardSql = "SELECT flds FROM notes WHERE id=" + id_str;
-
-    QSqlQuery MainCardQuery = db.exec(mainCardSql);
-    MainCardQuery.next();
-    mainCard = MainCardQuery.value(0).toString();
-
-    // Parse the text
-    correctString();
-
-    ui->textFrontCard->setText(frontCard);
-    // This fixes the issue with not showing the first line. it simply moved the scrollbar a bit and there were problems. the scrollbar was hided
-    ui->textFrontCard->verticalScrollBar()->setValue(0);
-
-    // Some magic: at the launch it shows height 0, and with this it is a bit bigger. not an ideal solution
-    if(firstLaunch == true)
-    {
-        firstLaunch = false;
-        //mode_crandom_loop();
-    }
-
-    // This isEmpty() needs to be done after setText becouse it will Segment fault
-    if(ui->textFrontCard->document()->isEmpty() == false)
-    {
-        ui->textFrontCard->selectAll();
-        ui->textFrontCard->setAlignment(Qt::AlignCenter);
-
-        // This removes selection
-        QTextCursor cursor = ui->textFrontCard->textCursor();
-        cursor.clearSelection();
-        ui->textFrontCard->setTextCursor(cursor);
-    }
-
-    // This fixes the issue with not showing the first line. it simply moved the scrollbar a bit and there were problems. the scrollbar was hided
-    // this needs to be here too...
-    ui->textFrontCard->verticalScrollBar()->setValue(0);
-*/
 }
 
 void DeckPlay::correctString(QString* mainCard)
@@ -239,7 +146,9 @@ void DeckPlay::correctString(QString* mainCard)
     mainCard = &mainCard->replace("&nbsp;", " ");
 
     // Add a line at the end becouse one line is cutted out...
-    mainCard->append("<br>");
+    // mainCard->append("<br>");
+    // On reader fixed cutted off line
+    // Causes problem with scroll appearing
 }
 
 void DeckPlay::splitMainCard(QString mainCard, QString* frontCard, QString* backCard) {
@@ -269,17 +178,6 @@ void DeckPlay::centerText(QTextBrowser* text) {
     }
 }
 
-void DeckPlay::on_textFrontCard_textChanged()
-{
-    cardSizeManage(ui->textFrontCard);
-}
-
-
-void DeckPlay::on_textBackCard_textChanged()
-{
-    cardSizeManage(ui->textBackCard);
-}
-
 void DeckPlay::cardSizeManage(QTextBrowser *text) {
     int height = text->document()->size().height();
     QString objectName = text->objectName();
@@ -304,9 +202,18 @@ void DeckPlay::cardSizeManage(QTextBrowser *text) {
 
             QApplication::processEvents();
             // WHY does it need to be like that, otherwise pagestep is too small at start...
-            QTimer::singleShot(200, this, [this, scrollbar, text]() {
+            QTimer::singleShot(0, this, [this, scrollbar, text]() {
                 scrollBarClone(scrollbar, text);
             });
+        } else {
+            // Disable if not needed
+            if(objectName == "textBackCard") {
+               qDebug() << "Enabled manageBackScrollBar";
+               manageBackScrollBar = false;
+            } else if(objectName == "textFrontCard" ) {
+               qDebug() << "Enabled manageFrontScrollBar";
+               manageFrontScrollBar = false;
+            }
         }
 
         if((manageBackScrollBar == true || manageFrontScrollBar == true) && scrollbar->isHidden() == true) {
@@ -337,6 +244,7 @@ void DeckPlay::on_horizontalScrollBar_valueChanged(int value)
 
 void DeckPlay::dumpScrollBarInfo(QScrollBar* scroll) {
     if (scroll) {
+        /*
         qDebug() << "ScrollBar - Object Name: " << scroll->objectName()
                  << ", Minimum value: " << scroll->minimum()
                  << ", Maximum value: " << scroll->maximum()
@@ -344,6 +252,7 @@ void DeckPlay::dumpScrollBarInfo(QScrollBar* scroll) {
                  << ", Single step: " << scroll->singleStep()
                  << ", Value: " << scroll->value()
                  << ", Slider position: " << scroll->sliderPosition();
+        */
     } else {
         qDebug() << "ScrollBar - Object Name: NULL";
     }
@@ -369,6 +278,29 @@ void DeckPlay::scrollBarClone(QScrollBar* scrollbar, QTextBrowser* text) {
     int singleStep =  text->horizontalScrollBar()->singleStep();
     scrollbar->setSingleStep(singleStep);
 
+    // Move it back
+    scrollbar->setValue(0);
+    text->horizontalScrollBar()->setValue(0);
+
     dumpScrollBarInfo(scrollbar);
     dumpScrollBarInfo(text->horizontalScrollBar());
+}
+
+void DeckPlay::setText(QTextBrowser* area, QString text) {
+    area->setHtml(text);
+
+    // Very important
+    area->document()->adjustSize();
+
+    centerText(area);
+
+    cardSizeManage(area);
+
+    if(firstLaunch == true) {
+        // TODO: at launch frontcard is too big
+    }
+
+    // This fixes the issue that after adding text it is cutted in half
+    // Doesn't work ui->textFrontCard->verticalScrollBar()->setSliderPosition(0);
+    area->verticalScrollBar()->setValue(0);
 }
