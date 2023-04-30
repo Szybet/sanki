@@ -1,5 +1,8 @@
 #include "randomNoRepeat.h"
 
+#include <QDebug>
+#include <QSqlQuery>
+
 randomNoRepeat::randomNoRepeat(QObject *parent)
 {
 
@@ -20,6 +23,14 @@ void randomNoRepeat::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg, QSqlD
 
     frontText = parentUi->textFrontCard;
     backText = parentUi->textBackCard;
+
+    QSqlQuery getIdQuery = db->exec("SELECT id FROM notes ORDER BY RANDOM()");
+
+    while(getIdQuery.next()) {
+        wholeList.push_back(getIdQuery.value(0).toULongLong());
+    }
+
+    qDebug() << "wholeList" << wholeList;
 
     loop();
 }

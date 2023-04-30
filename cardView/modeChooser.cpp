@@ -1,6 +1,6 @@
 #include "cardView/modeChooser.h"
 #include "ui_modeChooser.h"
-#include "globals.h"
+#include "global.h"
 
 #include <QDebug>
 

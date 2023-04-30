@@ -18,7 +18,6 @@ public:
     void loop();
     QString frontCard;
     QString backCard;
-    QString mainCard;
 
 signals:
     void setText(QString text);

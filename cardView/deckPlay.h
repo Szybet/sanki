@@ -1,7 +1,7 @@
 #ifndef DECKPLAY_H
 #define DECKPLAY_H
 
-#include "globals.h"
+#include "global.h"
 #include "qtextbrowser.h"
 #include <QMainWindow>
 #include <QDir>

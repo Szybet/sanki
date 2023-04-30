@@ -1,6 +1,6 @@
-#include "components/keyboard.h"
+#include "components/other/keyboard.h"
 #include "ui_keyboard.h"
-#include "globals.h"
+#include "global.h"
 
 keyboard::keyboard(QDialog *parent) :
     QDialog(parent),

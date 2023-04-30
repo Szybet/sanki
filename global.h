@@ -13,6 +13,7 @@ extern bool ereader;
 namespace directories {
     extern QDir config;
     extern QDir deckStorage;
+    extern QDir sessionSaves;
     extern QDir deckSelect; // File chooser will open here
 }
 

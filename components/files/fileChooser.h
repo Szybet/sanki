@@ -1,23 +1,23 @@
-#ifndef FILE_CHOOSER_H
-#define FILE_CHOOSER_H
+#ifndef fileChooserCustom_H
+#define fileChooserCustom_H
 
 #include <QDialog>
 #include <QFileInfo>
 
 namespace Ui {
-class file_chooser;
+class fileChooserCustom;
 }
 
-class file_chooser : public QDialog
+class fileChooserCustom : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit file_chooser(QDialog *parent = nullptr);
-    ~file_chooser();
+    explicit fileChooserCustom(QDialog *parent = nullptr);
+    ~fileChooserCustom();
 
     QString start_path = "/";
-    QFileInfo deck_info;
+    QFileInfo deckInfo;
     QString file_extension = ".apkg";
 
 public slots:
@@ -32,7 +32,7 @@ public slots:
 signals:
     void remove_buttons();
     void remove_bold();
-    void provide_file(QString file);
+    void provideFile(QString file);
 
 private slots:
     void on_ButtonConfirm_clicked();
@@ -49,14 +49,14 @@ private slots:
 
 
 private:
-    Ui::file_chooser *ui;
-    QString log_file = "file_chooser";
+    Ui::fileChooserCustom *ui;
+    QString log_file = "fileChooserCustom";
     QString choosed_file;
 
     // Keyboard:
     bool updatedName;
-    bool first_open = true; // this is changed to false after launching in on_lineEditDeckName_cursorPositionChanged
+    bool first_open = true; // this is changed to false after launching in on_lineeditGridObjectName_cursorPositionChanged
     bool keyboard_opened = false;
 };
 
-#endif // FILE_CHOOSER_H
+#endif // fileChooserCustom_H

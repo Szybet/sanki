@@ -1,8 +1,8 @@
-#include "components/toast.h"
+#include "components/other/toast.h"
 #include "ui_toast.h"
 
 #include "QTimer"
-#include "globals.h"
+#include "global.h"
 
 toast::toast(QDialog *parent) :
     QDialog(parent),

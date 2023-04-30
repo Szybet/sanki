@@ -1,16 +1,16 @@
-#include "file_chooser.h"
+#include "fileChooser.h"
 #include "qdebug.h"
-#include "ui_file_chooser.h"
-#include "globals.h"
+#include "ui_fileChooser.h"
+#include "global.h"
 #include "file.h"
-#include "keyboard.h"
-#include "toast.h"
+#include "components/other/keyboard.h"
+#include "components/other/toast.h"
 
 #include <QScrollBar>
 
-file_chooser::file_chooser(QDialog *parent) :
+fileChooserCustom::fileChooserCustom(QDialog *parent) :
     QDialog(parent),
-    ui(new Ui::file_chooser)
+    ui(new Ui::fileChooserCustom)
 {
     ui->setupUi(this);
     this->move(0, 0);
@@ -33,12 +33,12 @@ file_chooser::file_chooser(QDialog *parent) :
     ui->lineEditPath->setCursorPosition(20);
 }
 
-file_chooser::~file_chooser()
+fileChooserCustom::~fileChooserCustom()
 {
     delete ui;
 }
 
-void file_chooser::update_files()
+void fileChooserCustom::update_files()
 {
     keyboard_opened = true;
     ui->lineEditPath->setText(start_path);
@@ -92,22 +92,22 @@ void file_chooser::update_files()
 
 }
 
-void file_chooser::file_clicked(QString file)
+void fileChooserCustom::file_clicked(QString file)
 {
     choosed_file = file;
     emit remove_bold();
 }
 
-void file_chooser::on_ButtonConfirm_clicked()
+void fileChooserCustom::on_ButtonConfirm_clicked()
 {
     if(choosed_file.contains(file_extension) == true)
     {
         // becouse if start_path is "/" it will be "//"
         if(start_path.end() != QString("/"))
         {
-            emit provide_file(start_path + choosed_file);
+            emit provideFile(start_path + choosed_file);
         } else {
-            emit provide_file(start_path + "/" + choosed_file);
+            emit provideFile(start_path + "/" + choosed_file);
         }
         this->close();
     } else {
@@ -121,19 +121,19 @@ void file_chooser::on_ButtonConfirm_clicked()
     }
 }
 
-void file_chooser::on_ButtonCancel_clicked()
+void fileChooserCustom::on_ButtonCancel_clicked()
 {
-    emit provide_file("");
+    emit provideFile("");
     this->close();
 }
 
-void file_chooser::enter_dir()
+void fileChooserCustom::enter_dir()
 {
     start_path = start_path + choosed_file;
     update_files();
 }
 
-void file_chooser::on_ButtonUpPath_clicked()
+void fileChooserCustom::on_ButtonUpPath_clicked()
 {
     emit remove_buttons();
     QDir new_path = start_path;
@@ -147,12 +147,12 @@ void file_chooser::on_ButtonUpPath_clicked()
 
 // Everything for keyboard:
 
-void file_chooser::on_lineEditPath_selectionChanged()
+void fileChooserCustom::on_lineEditPath_selectionChanged()
 {
     ui->lineEditPath->setSelection(0, 0);
 }
 
-void file_chooser::keyboard_closed(bool update_name)
+void fileChooserCustom::keyboard_closed(bool update_name)
 {
     if(update_name == true)
     {
@@ -165,7 +165,7 @@ void file_chooser::keyboard_closed(bool update_name)
     update_files();
 }
 
-void file_chooser::on_lineEditPath_cursorPositionChanged(int oldpos, int newpos)
+void fileChooserCustom::on_lineEditPath_cursorPositionChanged(int oldpos, int newpos)
 {
     if(first_open == false)
     {
@@ -191,13 +191,13 @@ void file_chooser::on_lineEditPath_cursorPositionChanged(int oldpos, int newpos)
     }
 }
 
-void file_chooser::update_deck()
+void fileChooserCustom::update_deck()
 {
-    QString deck_name = deck_info.baseName();
+    QString deck_name = deckInfo.baseName();
     ui->lineEditPath->setText(deck_name);
 }
 
-void file_chooser::update_widget(QString string, int cursor)
+void fileChooserCustom::update_widget(QString string, int cursor)
 {
          // Adding cursor, this is so stupid
          QString string_with_cursor = string;

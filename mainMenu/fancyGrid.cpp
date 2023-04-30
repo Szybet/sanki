@@ -1,35 +1,82 @@
-#include "main_menu/decks_scroll_bar.h"
-#include "ui_decks_scroll_bar.h"
-#include "main_menu/deck.h"
-#include "globals.h"
+#include "mainMenu/fancyGrid.h"
+#include "ui_fancyGrid.h"
+#include "components/other/griditemspacer.h"
 
-#include <QTime>
-#include <QTimer>
-#include <QApplication>
-#include <QFileDialog>
-#include <QDebug>
-#include <QFileInfo>
-#include <QDir>
 #include <QScrollBar>
-#include <QSpacerItem>
 
-decks_scroll_bar::decks_scroll_bar(QWidget *parent) :
+fancyGrid::fancyGrid(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::decks_scroll_bar)
+    ui(new Ui::fancyGrid)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
 
     // This could be editable in settings
     ui->DeckScrollArea->verticalScrollBar()->setStyleSheet(
         "QScrollBar:vertical { width: 50px; }");
 }
 
-decks_scroll_bar::~decks_scroll_bar()
+fancyGrid::~fancyGrid()
 {
     delete ui;
 }
 
-void decks_scroll_bar::update_decks()
+void fancyGrid::reset() {
+    // First kill items, then call this;
+    column = 0;
+    row = 0;
+    widgets.clear();
+    emit clearItems();
+}
+
+void fancyGrid::addWidget(QWidget* widget) {
+    widgets.append(widget);
+}
+
+void fancyGrid::show() {
+    QGridLayout* layout = ui->DeckGrid;
+
+    foreach(QWidget* widget, widgets) {
+        connect(this, &fancyGrid::clearItems, widget, &QWidget::close);
+        layout->addWidget(widget, row, column);
+        manageCells();
+    }
+
+    gridItemSpacer* plus = new gridItemSpacer(this);
+
+    connect(plus, &gridItemSpacer::addItem, this, &fancyGrid::addItem);
+    connect(this, &fancyGrid::clearItems, plus, &gridItemSpacer::close);
+
+    plus->selectPage(gridItemSpacer::Page::Add);
+    layout->addWidget(plus, row, column);
+    manageCells();
+
+    while(row < 2) {
+        gridItemSpacer* empty = new gridItemSpacer(this);
+
+        connect(this, &fancyGrid::clearItems, empty, &gridItemSpacer::close);
+
+        empty->selectPage(gridItemSpacer::Page::Empty);
+        layout->addWidget(empty, row, column);
+        manageCells();
+    }
+}
+
+void fancyGrid::manageCells() {
+    column = column + 1;
+    if (column == 2)
+    {
+        column = 0;
+        row = row + 1;
+    }
+}
+
+void fancyGrid::addItemSlot() {
+    emit addItem();
+}
+
+/*
+void fancyGrid::update_decks()
 {
     qDebug() << "update_decks slot called";
     emit remove_decks();
@@ -55,7 +102,7 @@ void decks_scroll_bar::update_decks()
         }
         deck* newDeck = new deck(this);
         newDeck->set_deck_name(fileName);
-        newDeck->deck_info = file_info;
+        newDeck->deckInfo = file_info;
         // addWidget(QWidget *widget, int row, int column, Qt::Alignment alignment = Qt::Alignment())
         connect(this, SIGNAL(remove_decks()), newDeck, SLOT(close()));
         connect(newDeck, SIGNAL(refresh_decks_signal()), this, SLOT(update_decks()));
@@ -84,8 +131,9 @@ void decks_scroll_bar::update_decks()
     qDebug() << "All spacers added. row:" << row << "column" << column;
 }
 
-void decks_scroll_bar::play_deck_slott(QDir dir)
+void fancyGrid::play_deck_slott(QDir dir)
 {
     qDebug() << "Received dir: " << dir.path();
     emit play_deck_signal(dir);
 }
+*/

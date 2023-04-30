@@ -1,7 +1,7 @@
 #ifndef modeChooser_H
 #define modeChooser_H
 
-#include "globals.h"
+#include "global.h"
 #include <QDialog>
 
 namespace Ui {

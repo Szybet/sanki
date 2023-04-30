@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>edit_deck</class>
- <widget class="QDialog" name="edit_deck">
+ <class>editGridObject</class>
+ <widget class="QDialog" name="editGridObject">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -103,7 +103,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEditDeckName">
+       <widget class="QLineEdit" name="lineeditGridObjectName">
         <property name="tabletTracking">
          <bool>false</bool>
         </property>

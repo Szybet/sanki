@@ -43,6 +43,9 @@ private:
     QString lastFirstCardId;
     bool shuffleEverythingNext = false;
 
+    // https://doc.qt.io/qt-5/qtglobal.html#qulonglong-typedef
+    QVector<qulonglong> wholeList;
+
     // At start the whole number of cards is divided by 3 and set to maxNumberInList ( Note: manage odd numbers )
     // then all ID's are put into firstCards ( first order by random ), every showed "card" is put into lastCards
     // if lastCards is full, it is shuffled and moved into middleCards, and middleCards are "inserted" ( without overwriting ) into firstCards

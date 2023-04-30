@@ -1,5 +1,5 @@
-#include "main_menu/mainwindow.h"
-#include "globals.h"
+#include "mainMenu/mainWindow.h"
+#include "global.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -71,22 +71,29 @@ int main(int argc, char *argv[])
     // Detect platform
 #ifdef PC
     pc = true;
-    qDebug() << "Detected platform PC";
+    qDebug() << "Running platform: PC";
 #endif
 
 #ifdef ereader
     ereader = true;
-    qDebug() << "Detected platform ereader";
+    qDebug() << "Running platform: ereader";
 #endif
 
     QApplication a(argc, argv);
     MainWindow w;
 
     // TODO: deckSelect for ereader app-data and save the selected path to config, on pc too
-    qDebug() << "deck storage path is" << directories::deckStorage;
+    qDebug() << "Deck storage path is" << directories::deckStorage;
     if(directories::deckStorage.exists() == false) {
         QDir newDir; // Why variable is needed
         newDir.mkpath(directories::deckStorage.path());
+    }
+
+    // TODO: deckSelect for ereader app-data and save the selected path to config, on pc too
+    qDebug() << "Session saves path is" << directories::sessionSaves;
+    if(directories::sessionSaves.exists() == false) {
+        QDir newDir; // Why variable is needed
+        newDir.mkpath(directories::sessionSaves.path());
     }
 
     if(ereader) {

@@ -19,19 +19,22 @@ SOURCES += \
     cardView/modeChooser.cpp \
     cardView/modes/completlyRandom.cpp \
     cardView/modes/randomNoRepeat.cpp \
-    components/file.cpp \
-    components/file_chooser.cpp \
+    components/files/file.cpp \
+    components/files/fileChooser.cpp \
+    components/other/askForText.cpp \
+    components/other/griditemspacer.cpp \
     components/settings.cpp \
-    globals.cpp \
-    main_menu/deck.cpp \
-    main_menu/decks_scroll_bar.cpp \
-    main_menu/edit_deck.cpp \
-    components/keyboard.cpp \
+    components/statusBarC.cpp \
+    global.cpp \
+    mainMenu/decks/deck.cpp \
+    components/other/keyboard.cpp \
     main.cpp \
-    main_menu/mainwindow.cpp \
     cardView/showCard.cpp \
-    components/status_bar.cpp \
-    components/toast.cpp
+    components/other/toast.cpp \
+    mainMenu/editGridObject.cpp \
+    mainMenu/fancyGrid.cpp \
+    mainMenu/mainWindow.cpp \
+    mainMenu/sessions/session.cpp
 
 HEADERS += \
     cardView/cardTrueFalse.h \
@@ -39,34 +42,40 @@ HEADERS += \
     cardView/modeChooser.h \
     cardView/modes/completlyRandom.h \
     cardView/modes/randomNoRepeat.h \
-    components/file.h \
-    components/file_chooser.h \
+    components/files/file.h \
+    components/files/fileChooser.h \
+    components/other/askForText.h \
+    components/other/griditemspacer.h \
     components/settings.h \
-    main_menu/deck.h \
-    main_menu/decks_scroll_bar.h \
-    main_menu/edit_deck.h \
-    globals.h \
-    components/keyboard.h \
-    main_menu/mainwindow.h \
+    components/statusBarC.h \
+    global.h \
+    mainMenu/decks/deck.h \
+    components/other/keyboard.h \
     cardView/showCard.h \
-    components/status_bar.h \
-    components/toast.h
+    components/other/toast.h \
+    mainMenu/editGridObject.h \
+    mainMenu/fancyGrid.h \
+    mainMenu/mainWindow.h \
+    mainMenu/sessions/session.h
 
 FORMS += \
     cardView/cardTrueFalse.ui \
     cardView/deckPlay.ui \
     cardView/modeChooser.ui \
-    components/file.ui \
-    components/file_chooser.ui \
+    components/files/file.ui \
+    components/files/fileChooser.ui \
+    components/other/askForText.ui \
+    components/other/griditemspacer.ui \
     components/settings.ui \
-    main_menu/deck.ui \
-    main_menu/decks_scroll_bar.ui \
-    main_menu/edit_deck.ui \
-    components/keyboard.ui \
-    main_menu/mainwindow.ui \
+    components/statusBarC.ui \
+    mainMenu/decks/deck.ui \
+    components/other/keyboard.ui \
     cardView/showCard.ui \
-    components/status_bar.ui \
-    components/toast.ui
+    components/other/toast.ui \
+    mainMenu/editGridObject.ui \
+    mainMenu/fancyGrid.ui \
+    mainMenu/mainWindow.ui \
+    mainMenu/sessions/session.ui
 
 # Default rules for deployment.
 unix:!android: target.path = /opt/$${TARGET}/bin

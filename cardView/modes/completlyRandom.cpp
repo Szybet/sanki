@@ -34,18 +34,11 @@ void CompletlyRandom::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg, QSql
 // nextCardCall
 void CompletlyRandom::loop()
 {
-    QSqlQuery queryId = db->exec("SELECT id FROM notes ORDER BY RANDOM() LIMIT 1");
-    queryId.next();
-
-    // its too big for int + no need for a number
-    QString idStr = queryId.value(0).toString(); // random id
-
-    // set variables
-    QString mainCardSql = "SELECT flds FROM notes WHERE id=" + idStr;
+    QString mainCardSql = "SELECT flds FROM notes ORDER BY RANDOM() LIMIT 1";
 
     QSqlQuery MainCardQuery = db->exec(mainCardSql);
     MainCardQuery.next();
-    mainCard = MainCardQuery.value(0).toString();
+    QString mainCard = MainCardQuery.value(0).toString();
 
     // Parse the text
     parent->correctString(&mainCard);

@@ -1,6 +1,6 @@
 #include "cardView/deckPlay.h"
 #include "ui_deckPlay.h"
-#include "globals.h"
+#include "global.h"
 #include "cardView/modes/completlyRandom.h"
 #include "cardView/modes/randomNoRepeat.h"
 
