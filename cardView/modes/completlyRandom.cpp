@@ -7,6 +7,24 @@
 #include <qobject.h>
 #include <QSqlQuery>
 
+// manage this
+/*
+    mediaFile.setFileName(deckDir.path() + QDir::separator() + "media");
+
+    qDebug() << "media file is: " << mediaFile.fileName();
+    if (mediaFile.exists()) {
+        qDebug() << "media file exists";
+    } else {
+        qDebug() << "media file does not exist";
+    }
+
+    QStringList StringListSearchPaths = {deckDir.path()};
+
+    // Important
+    ui->textBackCard->setSearchPaths(StringListSearchPaths);
+    ui->textFrontCard->setSearchPaths(StringListSearchPaths);
+*/
+
 CompletlyRandom::CompletlyRandom(QObject *parent)
 {
     qDebug() << parent->objectName();

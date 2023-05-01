@@ -34,7 +34,8 @@ SOURCES += \
     mainMenu/editGridObject.cpp \
     mainMenu/fancyGrid.cpp \
     mainMenu/mainWindow.cpp \
-    mainMenu/sessions/session.cpp
+    mainMenu/sessions/session.cpp \
+    mainMenu/sessions/sessionStruct.cpp
 
 HEADERS += \
     cardView/cardTrueFalse.h \
@@ -56,7 +57,8 @@ HEADERS += \
     mainMenu/editGridObject.h \
     mainMenu/fancyGrid.h \
     mainMenu/mainWindow.h \
-    mainMenu/sessions/session.h
+    mainMenu/sessions/session.h \
+    mainMenu/sessions/sessionStruct.h
 
 FORMS += \
     cardView/cardTrueFalse.ui \

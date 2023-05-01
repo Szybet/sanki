@@ -1,9 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "cardView/deckPlay.h"
 #include "components/statusBarC.h"
 #include "global.h"
 #include "mainMenu/fancyGrid.h"
+#include "mainMenu/sessions/sessionStruct.h"
+
 #include <QMainWindow>
 #include <QDir>
 
@@ -28,15 +31,14 @@ public slots:
     void getDeck(QString file);
     void doneSelectingDecks();
 
-signals:
-    void killItems();
+    void playSession(sessionStr sessionPlay);
 
 private slots:
     void extractDeck();
-    void deckPlayStart(QDir);
 
     void statusBarSessionAdd();
     void statusBarDeckAdd();
+    void statusBarPlayAdd();
 
     void showSessions();
     void showDecks();
@@ -52,6 +54,7 @@ private:
     DeckModes mode = None;
     fancyGrid* grid;
     statusBarC* statusBarCWidget;
+    DeckPlay* playDeck;
     QList<QString> deckPathList;
 };
 #endif // MAINWINDOW_H

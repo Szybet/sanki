@@ -35,32 +35,11 @@ DeckPlay::~DeckPlay()
     delete ui;
 }
 
-void DeckPlay::update(QDir dir, DeckModes modeNew)
+void DeckPlay::start(sessionStr newSession)
 {
-    // This is just providing values and then updating
-    deckDir = dir;
-    mode = modeNew;
+    currectSession = newSession;
 
-    mediaFile.setFileName(deckDir.path() + QDir::separator() + "media");
-
-    qDebug() << "media file is: " << mediaFile.fileName();
-    if (mediaFile.exists()) {
-        qDebug() << "media file exists";
-    } else {
-        qDebug() << "media file does not exist";
-    }
-
-    QStringList StringListSearchPaths = {deckDir.path()};
-
-    // Important
-    ui->textBackCard->setSearchPaths(StringListSearchPaths);
-    ui->textFrontCard->setSearchPaths(StringListSearchPaths);
-
-    start();
-}
-
-void DeckPlay::start()
-{
+    /*
     // Support for this newer anki database... why did they break it
     QFile collection21 = deckDir.path() + QDir::separator() + "collection.anki21";
     QFile collection2 = deckDir.path() + QDir::separator() + "collection.anki2";
@@ -73,7 +52,7 @@ void DeckPlay::start()
         dbPath = &collection2;
         qCritical() << "Only old version of the database was found, propably this will cause problems";
     } else {
-        qFatal("No supported collection file found in this deck. It's propably too new, and hasn't been tested");
+        qFatal("No supported collection file was found in this deck. It is probably too new and has not been tested.");
     }
 
     if (dbPath->exists() == true)
@@ -84,29 +63,30 @@ void DeckPlay::start()
 
         if (db.open() == true)
         {
-           // Everything is good, start making the GUI, check mode
-           if(mode == CompletlyRandomised) // Completly random
-           {
-               CompletlyRandom* mode = new CompletlyRandom(this);
-               mode->setup(this, ui, &db);
-           }else if(mode == RandomisedNoRepeating) // Random - no repeat
-           {
-               randomNoRepeat* mode = new randomNoRepeat(this);
-               mode->setup(this, ui, &db);
-           }
+            // Everything is good, start making the GUI, check mode
+            if(mode == CompletlyRandomised) // Completly random
+            {
+                CompletlyRandom* mode = new CompletlyRandom(this);
+                mode->setup(this, ui, &db);
+            }else if(mode == RandomisedNoRepeating) // Random - no repeat
+            {
+                randomNoRepeat* mode = new randomNoRepeat(this);
+                mode->setup(this, ui, &db);
+            }
         }
         else
         {
-           qFatal("Database: connection with database failed");
+            qFatal("Database: connection with database failed");
         }
     }
     else
     {
         qFatal("Database: doesn't exist");
     }
+    */
 }
 
-void DeckPlay::correctString(QString* mainCard)
+void DeckPlay::correctMainCard(QString* mainCard, QFile mediaFile)
 {
     // turn those weird image id's to file names
     // this is a json file, but a weird one so...
@@ -114,22 +94,22 @@ void DeckPlay::correctString(QString* mainCard)
     if(mainCard->contains("<img src="))
     {
         mediaFile.open(QIODevice::ReadOnly);
-        QString media_contend = mediaFile.readAll();
+        QString mediaContent = mediaFile.readAll();
         mediaFile.close();
 
-        media_contend = media_contend.replace("{", "");
-        media_contend = media_contend.replace("}", "");
+        mediaContent = mediaContent.replace("{", "");
+        mediaContent = mediaContent.replace("}", "");
 
         // This is impossible becouse of:  "7": "rew-zasada lewej 1.png"
         // media_contend = media_contend.replace(" ", "");
         // for now this:
-        media_contend = media_contend.replace(": ", ":");
-        media_contend = media_contend.replace(", ", ",");
+        mediaContent = mediaContent.replace(": ", ":");
+        mediaContent = mediaContent.replace(", ", ",");
 
-        QStringList split_dot = media_contend.split(",");
+        QStringList split_dot = mediaContent.split(",");
         for(const QString &item: split_dot)
         {
-            media_contend = media_contend.replace("\"", "");
+            mediaContent = mediaContent.replace("\"", "");
 
             qDebug() << "item is: " << item;
 

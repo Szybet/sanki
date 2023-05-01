@@ -2,7 +2,9 @@
 #define DECKPLAY_H
 
 #include "global.h"
-#include "qtextbrowser.h"
+#include "mainMenu/sessions/sessionStruct.h"
+
+#include <QTextBrowser>
 #include <QMainWindow>
 #include <QDir>
 #include <QSqlDatabase>
@@ -18,8 +20,8 @@ class DeckPlay : public QMainWindow
 public:
     explicit DeckPlay(QWidget *parent = nullptr);
     ~DeckPlay();
-    void update(QDir, DeckModes modeNew);
-    void correctString(QString* mainCard);
+    void start(sessionStr newSession);
+    void correctMainCard(QString* mainCard, QFile mediaFile);
     void splitMainCard(QString mainCard, QString* frontCard, QString* backCard);
     void centerText(QTextBrowser* text);
     void resetScrollState();
@@ -32,17 +34,13 @@ public:
     void setText(QTextBrowser* area, QString text);
     bool firstLaunch = true;
 
-private slots:
-    void start();
+    sessionStr currectSession;
 
+private slots:
     void on_horizontalScrollBar_valueChanged(int value);
 
 private:
     Ui::DeckPlay *ui;
-    QDir deckDir;
-    DeckModes mode;
-    QFile mediaFile;
-    QSqlDatabase db;
     void cardSizeManage(QTextBrowser* text);
 };
 

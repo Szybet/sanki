@@ -2,6 +2,7 @@
 #define SESSION_H
 
 #include <QWidget>
+#include "mainMenu/sessions/sessionStruct.h"
 
 namespace Ui {
 class session;
@@ -15,6 +16,7 @@ public:
     explicit session(QWidget *parent = nullptr);
     ~session();
     void start(QString path);
+    sessionStr sessionSaved;
 
 private:
     Ui::session *ui;

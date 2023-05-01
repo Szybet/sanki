@@ -38,7 +38,7 @@ fileChooserCustom::~fileChooserCustom()
     delete ui;
 }
 
-void fileChooserCustom::update_files()
+void fileChooserCustom::updateFiles()
 {
     keyboard_opened = true;
     ui->lineEditPath->setText(start_path);
@@ -130,7 +130,7 @@ void fileChooserCustom::on_ButtonCancel_clicked()
 void fileChooserCustom::enter_dir()
 {
     start_path = start_path + choosed_file;
-    update_files();
+    updateFiles();
 }
 
 void fileChooserCustom::on_ButtonUpPath_clicked()
@@ -142,7 +142,7 @@ void fileChooserCustom::on_ButtonUpPath_clicked()
 
     qDebug() << "Go up path:" << start_path;
 
-    update_files();
+    updateFiles();
 }
 
 // Everything for keyboard:
@@ -162,7 +162,7 @@ void fileChooserCustom::keyboard_closed(bool update_name)
     keyboard_opened = false;
 
     start_path = ui->lineEditPath->text();
-    update_files();
+    updateFiles();
 }
 
 void fileChooserCustom::on_lineEditPath_cursorPositionChanged(int oldpos, int newpos)

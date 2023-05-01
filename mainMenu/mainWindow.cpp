@@ -1,6 +1,7 @@
 #include "mainMenu/mainWindow.h"
 #include "cardView/deckPlay.h"
 #include "mainMenu/decks/deck.cpp"
+#include "mainMenu/sessions/session.h"
 #include "ui_mainWindow.h"
 #include "components/statusBarC.h"
 #include "mainMenu/fancyGrid.h"
@@ -8,6 +9,7 @@
 #include "cardView/modeChooser.h"
 #include "zip.h"
 #include "components/files/fileChooser.h"
+#include "sessions/sessionStruct.h"
 
 #include <QTime>
 #include <QTimer>
@@ -17,6 +19,8 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QInputDialog>
+#include <QSettings>
+#include <QDataStream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -39,6 +43,10 @@ MainWindow::MainWindow(QWidget *parent)
     grid = new fancyGrid(this);
     ui->gridMain->addWidget(grid);
 
+    playDeck = new DeckPlay(this);
+    ui->gridMain->addWidget(grid);
+    playDeck->hide();
+
     showSessions();
 }
 
@@ -48,45 +56,12 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::resetGrid() {
-    emit killItems();
-    grid->disconnect();
     grid->reset();
+    grid->disconnect();
 }
 
 void MainWindow::resetStatusBar() {
     statusBarCWidget->disconnect();
-}
-
-void MainWindow::deckPlayStart(QDir dir)
-{
-    /*
-    // This here goes to cardView thing, going to play
-    qDebug() << "Dir choosed to play:" << dir.path();
-
-    // this was propably causing problems
-    //int mode = chooseMode->exec();
-
-    modeChooser* chooseMode = new modeChooser;
-    connect(chooseMode, SIGNAL(setMode(DeckModes)), this, SLOT(getMode(DeckModes)));
-    int code = chooseMode->exec();
-    qDebug() << "chooseMode dialog return value is:" << code;
-    if(code == QDialog::Accepted) {
-        // status bar for this
-        emit close_statusBarC();
-        statusBarC* statusBarC_up = new statusBarC();
-        statusBarC_up->optionButtonSet(false); // WARNING NDUASNDJK
-        connect(this, SIGNAL(close_statusBarC()), statusBarC_up, SLOT(close()));
-        connect(statusBarC_up, SIGNAL(closeButtonSignal()), this, SLOT(returnToStart()));
-        ui->gridStatus->addWidget(statusBarC_up);
-
-        emit clear_mainwidget();
-        QLayout* central_layout = ui->centralwidget->layout();
-        DeckPlay* playDeck = new DeckPlay();
-        playDeck->update(dir, mode);
-        connect(this, SIGNAL(clear_mainwidget()), playDeck, SLOT(close()));
-        central_layout->addWidget(playDeck);
-    }
-    */
 }
 
 void MainWindow::showSessions() {
@@ -98,6 +73,11 @@ void MainWindow::showSessions() {
 
     foreach(QString file , directories::sessionSaves.entryList(QDir::NoDotAndDotDot | QDir::Files)) {
         qDebug() << "Session file:" << file;
+
+        session* newSession = new session(grid);
+        newSession->start(file);
+
+        grid->addWidget(newSession);
     }
 
     grid->show();
@@ -115,9 +95,8 @@ void MainWindow::showDecks() {
 
     foreach(QString file , directories::deckStorage.entryList(QDir::NoDotAndDotDot | QDir::Dirs)) {
         qDebug() << "Deck dir:" << file;
-        deck* newDeck = new deck(this);
+        deck* newDeck = new deck(grid);
 
-        connect(this, &MainWindow::killItems, newDeck, &deck::close);
         connect(newDeck, &deck::selectedDeck, this, &MainWindow::getDeck);
         newDeck->start(file);
 
@@ -144,7 +123,7 @@ void MainWindow::extractDeck()
         // TODO: select file type
         fileChooserCustom* fileChooserCustomDialog = new fileChooserCustom;
         fileChooserCustomDialog->start_path = directories::deckSelect.path();
-        fileChooserCustomDialog->update_files();
+        fileChooserCustomDialog->updateFiles();
         connect(fileChooserCustomDialog, &fileChooserCustom::provideFile, this, &MainWindow::getFile);
         fileChooserCustomDialog->exec();
     } else if(pc) {
@@ -191,7 +170,7 @@ void MainWindow::statusBarSessionAdd()
 
     statusBarCWidget->OptionButtonSet("Add session", QIcon(":/icons/sessionAdd.svg"), true);
     statusBarCWidget->OptionButtonSet2(nullptr, QIcon(""), false);
-    connect(statusBarCWidget, &statusBarC::optionButtonSignal, this, &MainWindow::extractDeck);
+    connect(statusBarCWidget, &statusBarC::optionButtonSignal, this, &MainWindow::addSlotSession);
     connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::close);
 }
 
@@ -207,9 +186,10 @@ void MainWindow::statusBarDeckAdd() {
 
 void MainWindow::returnToStart()
 {
-    qDebug() << "help";
+    qDebug() << "Resetting";
+    playDeck->hide();
+    grid->show();
     showSessions();
-    statusBarSessionAdd(); // todo
 }
 
 void MainWindow::addSlotSession() {
@@ -229,6 +209,11 @@ void MainWindow::addSlotSession() {
 
 void MainWindow::doneSelectingDecks() {
     qDebug() << "doneSelectingDecks called";
+    if(deckPathList.isEmpty() == true) {
+        qCritical() << "No decks selected";
+        returnToStart();
+        return void();
+    }
     createSession();
 }
 
@@ -247,8 +232,57 @@ void MainWindow::createSession() {
     }
 
     if (continueCreating == false || text.isEmpty() == true) {
+        qCritical() << "No session text provided";
+        returnToStart();
         return void();
     }
 
     qDebug() << "Selected session name:" << text;
+
+    if(QFile(directories::sessionSaves.filePath(text)).exists() == true) {
+        qCritical() << "Session of such name already exists";
+        returnToStart();
+        return void();
+    }
+
+    QSettings settings(directories::sessionSaves.filePath(text), QSettings::IniFormat);
+
+    sessionStr newSession = sessionStr();
+    newSession.core.deckPathList = deckPathList;
+    newSession.core.mode = mode;
+    newSession.core.name = text;
+
+    qDebug() << "New Session:" << newSession;
+
+    // Saving whole struct
+    settings.setValue("session", QVariant::fromValue(newSession));
+
+    settings.sync();
+
+    qDebug() << "Saved settings at:" << settings.fileName();
+
+    showSessions();
+}
+
+void MainWindow::statusBarPlayAdd() {
+    resetStatusBar();
+
+    statusBarCWidget->OptionButtonSet("Statistics", QIcon(":/icons/deckAdd.svg"), true);
+    statusBarCWidget->OptionButtonSet2(nullptr, QIcon(), false);
+    connect(statusBarCWidget, &statusBarC::optionButtonSignal, this, &MainWindow::extractDeck);
+    connect(statusBarCWidget, &statusBarC::option2ButtonSignal, this, &MainWindow::doneSelectingDecks);
+    connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::close);
+}
+
+void MainWindow::playSession(sessionStr sessionPlay) {
+    qDebug() << "Playing session";
+
+    // Status bar
+    statusBarPlayAdd();
+
+    grid->reset();
+    grid->hide();
+
+    playDeck->start(sessionPlay);
+    playDeck->show();
 }

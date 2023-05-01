@@ -21,7 +21,7 @@ public:
     QString file_extension = ".apkg";
 
 public slots:
-    void update_files();
+    void updateFiles();
     void file_clicked(QString);
     void enter_dir();
 

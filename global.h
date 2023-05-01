@@ -30,6 +30,7 @@ enum DeckModes {
     CompletlyRandomised,
     RandomisedNoRepeating,
 };
+Q_DECLARE_METATYPE(DeckModes);
 
 void check_device();
 void screen_geometry();

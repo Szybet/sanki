@@ -1,4 +1,5 @@
 #include "mainMenu/fancyGrid.h"
+#include "qdebug.h"
 #include "ui_fancyGrid.h"
 #include "components/other/griditemspacer.h"
 
@@ -22,11 +23,18 @@ fancyGrid::~fancyGrid()
 }
 
 void fancyGrid::reset() {
-    // First kill items, then call this;
+    qDebug() << "Reset grid called";
+
+    emit clearItems();
+    QApplication::processEvents();
+    widgets.clear();
+
+    ui->DeckGrid->invalidate();
+
     column = 0;
     row = 0;
-    widgets.clear();
-    emit clearItems();
+
+    this->disconnect();
 }
 
 void fancyGrid::addWidget(QWidget* widget) {
@@ -38,28 +46,34 @@ void fancyGrid::show() {
 
     foreach(QWidget* widget, widgets) {
         connect(this, &fancyGrid::clearItems, widget, &QWidget::close);
-        layout->addWidget(widget, row, column);
+        qDebug() << "current row:" << row << "column:" << column;
+        layout->addWidget(widget, row, column, 1, 1);
         manageCells();
     }
 
-    gridItemSpacer* plus = new gridItemSpacer(this);
-
-    connect(plus, &gridItemSpacer::addItem, this, &fancyGrid::addItem);
-    connect(this, &fancyGrid::clearItems, plus, &gridItemSpacer::close);
-
-    plus->selectPage(gridItemSpacer::Page::Add);
-    layout->addWidget(plus, row, column);
-    manageCells();
+    // Don't show if it's needed to create a seperate row
+    if(widgets.isEmpty() == true || column != 0) {
+        gridItemSpacer* plus = new gridItemSpacer(this);
+        connect(plus, &gridItemSpacer::addItem, this, &fancyGrid::addItem);
+        connect(this, &fancyGrid::clearItems, plus, &QWidget::close);
+        plus->selectPage(gridItemSpacer::Page::Add);
+        // So for no reason at all if 2 diffrent widgets are in a grid layout, sizes go duck themselves and it lookg awfull. This makes this widget minimum size, so it doesn't try to move decks
+        layout->addWidget(plus, row, column, 1, 1, Qt::AlignJustify);
+        qDebug() << "current row:" << row << "column:" << column;
+        manageCells();
+    }
 
     while(row < 2) {
         gridItemSpacer* empty = new gridItemSpacer(this);
-
-        connect(this, &fancyGrid::clearItems, empty, &gridItemSpacer::close);
+        connect(this, &fancyGrid::clearItems, empty, &QWidget::close);
 
         empty->selectPage(gridItemSpacer::Page::Empty);
-        layout->addWidget(empty, row, column);
+        layout->addWidget(empty, row, column, 1, 1, Qt::AlignJustify);
+        qDebug() << "current row:" << row << "column:" << column;
         manageCells();
     }
+
+    qDebug() << layout->columnCount() << layout->rowCount();
 }
 
 void fancyGrid::manageCells() {
@@ -68,6 +82,8 @@ void fancyGrid::manageCells() {
     {
         column = 0;
         row = row + 1;
+    } else if(column > 2) {
+        qCritical() << "Column is above limit";
     }
 }
 

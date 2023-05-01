@@ -1,10 +1,12 @@
 #include "mainMenu/mainWindow.h"
 #include "global.h"
+#include "mainMenu/sessions/sessionStruct.h"
 
 #include <QApplication>
 #include <QDebug>
 #include <QTextCodec>
 #include <QLoggingCategory>
+#include <QMessageBox>
 
 bool enableDebug = false;
 
@@ -13,6 +15,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
     QByteArray localMsg = msg.toLocal8Bit();
     const char *file = context.file ? context.file : "";
     const char *function = context.function ? context.function : "";
+
     switch (type) {
     case QtDebugMsg:
         if(enableDebug == true) {
@@ -26,15 +29,38 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
     case QtInfoMsg:
         fprintf(stderr, "Info: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
         break;
-    case QtWarningMsg:
+    case QtWarningMsg: {
+
         fprintf(stderr, "Warning: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText(localMsg.constData());
+        msgBox.exec();
+
         break;
-    case QtCriticalMsg:
+    }
+    case QtCriticalMsg: {
         fprintf(stderr, "Critical: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.setText(localMsg.constData());
+        msgBox.exec();
+
         break;
-    case QtFatalMsg:
+    }
+    case QtFatalMsg: {
+
         fprintf(stderr, "Fatal: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.setText(localMsg.constData());
+        msgBox.exec();
+
         break;
+    }
     }
 }
 
@@ -127,6 +153,16 @@ int main(int argc, char *argv[])
     } else if(pc) {
         w.show();
     }
+
+    // For QSettings
+    QCoreApplication::setApplicationName("Sanki");
+    qRegisterMetaTypeStreamOperators<QList<QString>>("QList<QString>");
+    qRegisterMetaTypeStreamOperators<DeckModes>("DeckModes");
+
+    qRegisterMetaTypeStreamOperators<core>("core");
+    qRegisterMetaTypeStreamOperators<times>("times");
+    qRegisterMetaTypeStreamOperators<cards>("cards");
+    qRegisterMetaTypeStreamOperators<sessionStr>("sessionStr");
 
     return a.exec();
 }
