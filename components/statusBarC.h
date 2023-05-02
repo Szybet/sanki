@@ -16,6 +16,7 @@ public:
     ~statusBarC();
     void OptionButtonSet(QString text, QIcon icon, bool enabled);
     void OptionButtonSet2(QString text, QIcon icon, bool enabled);
+    void OptionButtonExit(QIcon icon, bool enabled);
 
 private slots:
     void showTime();

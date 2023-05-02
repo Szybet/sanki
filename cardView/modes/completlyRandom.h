@@ -6,8 +6,8 @@
 #include "cardView/deckPlay.h"
 #include "ui_deckPlay.h"
 
+#include <QRandomGenerator>
 #include <QObject>
-#include <QSqlDatabase>
 
 class CompletlyRandom: public QObject
 {
@@ -23,16 +23,16 @@ signals:
     void setText(QString text);
 
 public slots:
-    void setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg, QSqlDatabase* dbArg);
+    void setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg);
     void buttonClicked();
 
 private:
     showCard* buttonWidget;
     DeckPlay* parent;
     Ui::DeckPlay* parentUi;
-    QSqlDatabase* db;
     QTextBrowser* frontText;
     QTextBrowser* backText;
+    int max;
 };
 
 #endif // COMPLETLYRANDOM_H

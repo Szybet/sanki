@@ -106,6 +106,28 @@ int main(int argc, char *argv[])
 #endif
 
     QApplication a(argc, argv);
+
+    // For QSettings
+    // Very important: After QApplication and before MainWindow
+    // https://forum.qt.io/topic/142878/qvariant-unknown-user-type/6
+    QCoreApplication::setApplicationName("Sanki");
+    qRegisterMetaTypeStreamOperators<QList<QString>>("QList<QString>");
+    qRegisterMetaTypeStreamOperators<DeckModes>("DeckModes");
+
+    qRegisterMetaTypeStreamOperators<core>("core");
+    qRegisterMetaTypeStreamOperators<times>("times");
+    qRegisterMetaTypeStreamOperators<deckOptions>("deckOptions");
+    qRegisterMetaTypeStreamOperators<card>("card");
+    qRegisterMetaTypeStreamOperators<sessionStr>("sessionStr");
+
+    qRegisterMetaType<QList<QString>>("QList<QString>");
+    qRegisterMetaType<DeckModes>("DeckModes");
+    qRegisterMetaType<core>("core");
+    qRegisterMetaType<times>("times");
+    qRegisterMetaType<deckOptions>("deckOptions");
+    qRegisterMetaType<card>("card");
+    qRegisterMetaType<sessionStr>("sessionStr");
+
     MainWindow w;
 
     // TODO: deckSelect for ereader app-data and save the selected path to config, on pc too
@@ -153,16 +175,6 @@ int main(int argc, char *argv[])
     } else if(pc) {
         w.show();
     }
-
-    // For QSettings
-    QCoreApplication::setApplicationName("Sanki");
-    qRegisterMetaTypeStreamOperators<QList<QString>>("QList<QString>");
-    qRegisterMetaTypeStreamOperators<DeckModes>("DeckModes");
-
-    qRegisterMetaTypeStreamOperators<core>("core");
-    qRegisterMetaTypeStreamOperators<times>("times");
-    qRegisterMetaTypeStreamOperators<cards>("cards");
-    qRegisterMetaTypeStreamOperators<sessionStr>("sessionStr");
 
     return a.exec();
 }

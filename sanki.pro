@@ -16,6 +16,7 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs depr
 SOURCES += \
     cardView/cardTrueFalse.cpp \
     cardView/deckPlay.cpp \
+    cardView/functions/helperFunctions.cpp \
     cardView/modeChooser.cpp \
     cardView/modes/completlyRandom.cpp \
     cardView/modes/randomNoRepeat.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
 HEADERS += \
     cardView/cardTrueFalse.h \
     cardView/deckPlay.h \
+    cardView/functions/helperFunctions.h \
     cardView/modeChooser.h \
     cardView/modes/completlyRandom.h \
     cardView/modes/randomNoRepeat.h \

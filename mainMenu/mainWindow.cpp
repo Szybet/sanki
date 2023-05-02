@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->gridMain->addWidget(grid);
 
     playDeck = new DeckPlay(this);
-    ui->gridMain->addWidget(grid);
+    ui->gridMain->addWidget(playDeck);
     playDeck->hide();
 
     showSessions();
@@ -76,11 +76,12 @@ void MainWindow::showSessions() {
 
         session* newSession = new session(grid);
         newSession->start(file);
+        connect(newSession, &session::playSession, this, &MainWindow::playSession);
 
         grid->addWidget(newSession);
     }
 
-    grid->show();
+    grid->showWidgets();
 }
 
 void MainWindow::showDecks() {
@@ -102,7 +103,7 @@ void MainWindow::showDecks() {
 
         grid->addWidget(newDeck);
     }
-    grid->show();
+    grid->showWidgets();
 }
 
 void MainWindow::getDeck(QString path) {
@@ -171,7 +172,13 @@ void MainWindow::statusBarSessionAdd()
     statusBarCWidget->OptionButtonSet("Add session", QIcon(":/icons/sessionAdd.svg"), true);
     statusBarCWidget->OptionButtonSet2(nullptr, QIcon(""), false);
     connect(statusBarCWidget, &statusBarC::optionButtonSignal, this, &MainWindow::addSlotSession);
-    connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::close);
+
+    if(ereader) {
+        statusBarCWidget->OptionButtonExit(QIcon(":/icons/close.png"), true);
+        connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::close);
+    } else {
+        statusBarCWidget->OptionButtonExit(QIcon(), false);
+    }
 }
 
 void MainWindow::statusBarDeckAdd() {
@@ -181,7 +188,13 @@ void MainWindow::statusBarDeckAdd() {
     statusBarCWidget->OptionButtonSet2("Confirm", QIcon(":/icons/confirm.svg"), true);
     connect(statusBarCWidget, &statusBarC::optionButtonSignal, this, &MainWindow::extractDeck);
     connect(statusBarCWidget, &statusBarC::option2ButtonSignal, this, &MainWindow::doneSelectingDecks);
-    connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::close);
+
+    if(ereader) {
+        statusBarCWidget->OptionButtonExit(QIcon(":/icons/close.png"), true);
+        connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::close);
+    } else {
+        statusBarCWidget->OptionButtonExit(QIcon(), false);
+    }
 }
 
 void MainWindow::returnToStart()
@@ -255,9 +268,14 @@ void MainWindow::createSession() {
     qDebug() << "New Session:" << newSession;
 
     // Saving whole struct
-    settings.setValue("session", QVariant::fromValue(newSession));
+    QVariant toSave = QVariant::fromValue(newSession);
+    qDebug() << "toSave valid:" << toSave.isValid();
+
+    settings.setValue("session", toSave);
 
     settings.sync();
+
+    qDebug() << "Settings status:" << settings.status();
 
     qDebug() << "Saved settings at:" << settings.fileName();
 
@@ -267,11 +285,12 @@ void MainWindow::createSession() {
 void MainWindow::statusBarPlayAdd() {
     resetStatusBar();
 
-    statusBarCWidget->OptionButtonSet("Statistics", QIcon(":/icons/deckAdd.svg"), true);
-    statusBarCWidget->OptionButtonSet2(nullptr, QIcon(), false);
-    connect(statusBarCWidget, &statusBarC::optionButtonSignal, this, &MainWindow::extractDeck);
-    connect(statusBarCWidget, &statusBarC::option2ButtonSignal, this, &MainWindow::doneSelectingDecks);
-    connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::close);
+    statusBarCWidget->OptionButtonSet("Statistics", QIcon(":/icons/statistics.svg"), true);
+    statusBarCWidget->OptionButtonSet2("", QIcon(), false);
+    connect(statusBarCWidget, &statusBarC::optionButtonSignal, playDeck, &DeckPlay::showStats);
+
+    statusBarCWidget->OptionButtonExit(QIcon(":/icons/back.svg"), true);
+    connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::hardResetDeckPlay);
 }
 
 void MainWindow::playSession(sessionStr sessionPlay) {
@@ -285,4 +304,14 @@ void MainWindow::playSession(sessionStr sessionPlay) {
 
     playDeck->start(sessionPlay);
     playDeck->show();
+}
+
+void MainWindow::hardResetDeckPlay() {
+    delete playDeck;
+    playDeck = new DeckPlay(this);
+    ui->gridMain->addWidget(playDeck);
+    playDeck->hide();
+
+    grid->show();
+    showSessions();
 }

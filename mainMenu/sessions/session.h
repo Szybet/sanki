@@ -18,6 +18,12 @@ public:
     void start(QString path);
     sessionStr sessionSaved;
 
+signals:
+    void playSession(sessionStr sessionToPlay);
+
+private slots:
+    void on_ButtonDeckPlay_clicked();
+
 private:
     Ui::session *ui;
 };

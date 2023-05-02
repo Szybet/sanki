@@ -47,7 +47,7 @@
          <number>0</number>
         </property>
         <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOn</enum>
+         <enum>Qt::ScrollBarAsNeeded</enum>
         </property>
         <property name="horizontalScrollBarPolicy">
          <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -63,7 +63,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>696</width>
+           <width>710</width>
            <height>529</height>
           </rect>
          </property>

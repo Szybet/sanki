@@ -47,6 +47,7 @@ private slots:
     void resetStatusBar();
 
     void createSession();
+    void hardResetDeckPlay();
 
 private:
     Ui::MainWindow *ui;

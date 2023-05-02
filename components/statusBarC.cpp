@@ -22,15 +22,8 @@ statusBarC::statusBarC(QWidget *parent) :
     }
 
     if(pc) {
-        ui->ButtonExit->hide();
-        ui->lineExit->hide();
-        ui->LineTime->hide();
-        ui->labelTime->hide();
-
         ui->horizontalSpacerTime_5->changeSize(0,0);
         ui->horizontalSpacerTime_6->changeSize(0,0);
-        ui->horizontalSpacerExit_3->changeSize(0,0);
-        ui->horizontalSpacerExit_4->changeSize(0,0);
     }
 
     ui->ButtonExit->setStyleSheet("border: none;");
@@ -93,3 +86,24 @@ void statusBarC::on_ButtonOption_2_clicked()
     emit option2ButtonSignal();
 }
 
+void statusBarC::OptionButtonExit(QIcon icon, bool enabled) {
+    if(enabled == false) {
+        ui->ButtonExit->hide();
+        ui->lineExit->hide();
+        ui->LineTime->hide();
+        ui->labelTime->hide();
+
+        ui->horizontalSpacerExit_3->changeSize(0,0);
+        ui->horizontalSpacerExit_4->changeSize(0,0);
+    } else {
+        ui->ButtonExit->setIcon(icon);
+        ui->ButtonExit->show();
+        ui->lineExit->show();
+        ui->LineTime->show();
+        ui->labelTime->show();
+
+        ui->horizontalSpacerExit_3->changeSize(40,40);
+        ui->horizontalSpacerExit_4->changeSize(40,40);
+    }
+
+}

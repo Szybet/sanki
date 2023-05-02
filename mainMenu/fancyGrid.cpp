@@ -41,7 +41,7 @@ void fancyGrid::addWidget(QWidget* widget) {
     widgets.append(widget);
 }
 
-void fancyGrid::show() {
+void fancyGrid::showWidgets() {
     QGridLayout* layout = ui->DeckGrid;
 
     foreach(QWidget* widget, widgets) {

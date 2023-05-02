@@ -16,33 +16,48 @@ QDataStream& operator>>(QDataStream& in, core& v) {
     return in;
 }
 QDataStream& operator<<(QDataStream& out, const times& v) {
-    out << v.created << v.lastUsed << v.played;
+    out << v.created << v.lastUsed << v.played << v.playedCount;
     return out;
 }
 QDataStream& operator>>(QDataStream& in, times& v) {
     in >> v.created;
     in >> v.lastUsed;
     in >> v.played;
+    in >> v.playedCount;
     return in;
 }
-QDataStream& operator<<(QDataStream& out, const cards& v) {
-    out << v.played << v.inverted << v.totalCards;
+QDataStream& operator<<(QDataStream& out, const deckOptions& v) {
+    out << v.inverted << v.pomodoro;
     return out;
 }
-QDataStream& operator>>(QDataStream& in, cards& v) {
-    in >> v.played;
+QDataStream& operator>>(QDataStream& in, deckOptions& v) {
     in >> v.inverted;
-    in >> v.totalCards;
+    in >> v.pomodoro;
+    return in;
+}
+QDataStream& operator<<(QDataStream& out, const card& v) {
+    out << v.id << v.deckiD << v.count << v.againCount << v.hardCount << v.goodCount << v.easyCount;
+    return out;
+}
+QDataStream& operator>>(QDataStream& in, card& v) {
+    in >> v.id;
+    in >> v.deckiD;
+    in >> v.count;
+    in >> v.againCount;
+    in >> v.hardCount;
+    in >> v.goodCount;
+    in >> v.easyCount;
     return in;
 }
 QDataStream& operator<<(QDataStream& out, const sessionStr& v) {
-    out << v.core << v.time << v.cards;
+    out << v.core << v.time << v.deckOptions << v.cardList;
     return out;
 }
 QDataStream& operator>>(QDataStream& in, sessionStr& v) {
     in >> v.core;
     in >> v.time;
-    in >> v.cards;
+    in >> v.deckOptions;
+    in >> v.cardList;
     return in;
 }
 
@@ -56,13 +71,18 @@ QDebug operator<<(QDebug dbg, const times& t) {
     return dbg.space();
 }
 
-QDebug operator<<(QDebug dbg, const cards& c) {
-    dbg.nospace() << "cards(played=" << c.played << ", inverted=" << c.inverted << ", totalCards=" << c.totalCards << ")";
+QDebug operator<<(QDebug dbg, const deckOptions& c) {
+    dbg.nospace() << "cards(inverted=" << c.inverted << ", pomodoro=" << c.pomodoro << ")";
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const card& c) {
+    dbg.nospace() << "card(id=" << c.id << ", deckiD=" << c.deckiD << ", count=" << c.count << ", againCount=" << c.againCount << ", hardCount=" << c.hardCount << ", goodCount=" << c.goodCount << ", easyCount=" << c.easyCount << ")";
     return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, const sessionStr& s) {
-    dbg.nospace() << "sessionStr(core=" << s.core << ", time=" << s.time << ", cards=" << s.cards << ")";
+    dbg.nospace() << "sessionStr(core=" << s.core << ", time=" << s.time << ", cards=" << s.deckOptions << ", cardList=" << s.cardList << ")";
     return dbg.space();
 }
 

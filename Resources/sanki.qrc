@@ -12,5 +12,7 @@
         <file>sessionAdd.svg</file>
         <file>cursor.png</file>
         <file>confirm.svg</file>
+        <file>statistics.svg</file>
+        <file>back.svg</file>
     </qresource>
 </RCC>

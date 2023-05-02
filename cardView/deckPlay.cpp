@@ -3,6 +3,7 @@
 #include "global.h"
 #include "cardView/modes/completlyRandom.h"
 #include "cardView/modes/randomNoRepeat.h"
+#include "cardView/functions/helperFunctions.h"
 
 #include <QDebug>
 #include <QSqlDatabase>
@@ -11,6 +12,10 @@
 #include <QSqlTableModel>
 #include <QScrollBar>
 #include <QTimer>
+#include <QElapsedTimer>
+
+#include <algorithm>
+#include <random>
 
 DeckPlay::DeckPlay(QWidget *parent) :
     QMainWindow(parent),
@@ -37,124 +42,66 @@ DeckPlay::~DeckPlay()
 
 void DeckPlay::start(sessionStr newSession)
 {
-    currectSession = newSession;
-
-    /*
-    // Support for this newer anki database... why did they break it
-    QFile collection21 = deckDir.path() + QDir::separator() + "collection.anki21";
-    QFile collection2 = deckDir.path() + QDir::separator() + "collection.anki2";
-    QFile* dbPath = nullptr;
-
-    if(collection21.exists() == true)
-    {
-        dbPath = &collection21;
-    } else if(collection2.exists() == true) {
-        dbPath = &collection2;
-        qCritical() << "Only old version of the database was found, propably this will cause problems";
-    } else {
-        qFatal("No supported collection file was found in this deck. It is probably too new and has not been tested.");
-    }
-
-    if (dbPath->exists() == true)
-    {
-        db = QSqlDatabase::addDatabase("QSQLITE");
-        db.setDatabaseName(dbPath->fileName());
+    currectSession = newSession;        
+    uint count = 0;
+    foreach(QString dir, currectSession.core.deckPathList) {
+        qDebug() << "deck path in session:" << dir;
         // http://katecpp.github.io/sqlite-with-qt/
+        // Important: Connection as number
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", QString::number(count));
+        db.setDatabaseName(findDatabaseFile(directories::deckStorage.filePath(dir)));
+        if (db.open() == true) {
+            qDebug() << "Test open succesfull";
+            realSqlDatabases.push_back(db);
+        } else {
+            qCritical() << "Failed to open database:" << dir;
+            db.close();
+        }
+        count = count + 1;
+    }
 
-        if (db.open() == true)
-        {
-            // Everything is good, start making the GUI, check mode
-            if(mode == CompletlyRandomised) // Completly random
-            {
-                CompletlyRandom* mode = new CompletlyRandom(this);
-                mode->setup(this, ui, &db);
-            }else if(mode == RandomisedNoRepeating) // Random - no repeat
-            {
-                randomNoRepeat* mode = new randomNoRepeat(this);
-                mode->setup(this, ui, &db);
+    qDebug() << "realSqlDatabases:" << realSqlDatabases;
+
+    if(currectSession.cardList.isEmpty()) {
+        qDebug() << "Detected first time session load, adding cards";
+        QString selectCardIds = "SELECT id FROM notes ORDER BY RANDOM()";
+        for(int i = 0; i < realSqlDatabases.count(); i++) {
+            qDebug() << "Getting id's for database:" << realSqlDatabases[i].databaseName();
+            QSqlQuery idsQuery = realSqlDatabases[i].exec(selectCardIds);
+            while(idsQuery.next()) {
+                qDebug() << idsQuery.value(0);
+                card newCard { idsQuery.value(0).toULongLong(), static_cast<uint>(i), 0, 0, 0, 0, 0 };
+                currectSession.cardList.push_back(newCard);
             }
         }
-        else
-        {
-            qFatal("Database: connection with database failed");
-        }
+        qDebug() << "Finished initializing cards:" << currectSession;
+
+        // https://www.qtcentre.org/threads/55246-Randomization-QList-lt-QString-gt-on-label
+        std::random_device rd;
+        std::mt19937 rng(rd());
+
+        ::std::shuffle(currectSession.cardList.begin(), currectSession.cardList.end(), rng);
+
+        qDebug() << "Finished shuffling cards:" << currectSession.cardList;
     }
-    else
-    {
-        qFatal("Database: doesn't exist");
-    }
-    */
-}
+    QSettings temp(directories::sessionSaves.filePath(currectSession.core.name), QSettings::IniFormat);
+    temp.setParent(this);
+    saveSession = &temp;
 
-void DeckPlay::correctMainCard(QString* mainCard, QFile mediaFile)
-{
-    // turn those weird image id's to file names
-    // this is a json file, but a weird one so...
-    // TODO: In the future this needs to be done using json parsing.
-    if(mainCard->contains("<img src="))
-    {
-        mediaFile.open(QIODevice::ReadOnly);
-        QString mediaContent = mediaFile.readAll();
-        mediaFile.close();
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &DeckPlay::saveSessionData);
+    timer->setInterval(120000);
+    timer->start();
 
-        mediaContent = mediaContent.replace("{", "");
-        mediaContent = mediaContent.replace("}", "");
+    elapsedTimer = new QElapsedTimer;
+    elapsedTimer->start();
 
-        // This is impossible becouse of:  "7": "rew-zasada lewej 1.png"
-        // media_contend = media_contend.replace(" ", "");
-        // for now this:
-        mediaContent = mediaContent.replace(": ", ":");
-        mediaContent = mediaContent.replace(", ", ",");
+    saveSessionData();
 
-        QStringList split_dot = mediaContent.split(",");
-        for(const QString &item: split_dot)
-        {
-            mediaContent = mediaContent.replace("\"", "");
 
-            qDebug() << "item is: " << item;
-
-            QStringList replace_items = item.split(":");
-            if(mainCard->contains(replace_items.last()))
-            {
-               qDebug() << "mainCard contains items_last";
-               mainCard = &mainCard->replace(replace_items.last(), replace_items.first());
-            }
-        }
-    }
-
-    // Weird: &nbsp; ( hard space in html ) sometimes doesn't get parsed
-    mainCard = &mainCard->replace("&nbsp;", " ");
-
-    // Add a line at the end becouse one line is cutted out...
-    // mainCard->append("<br>");
-    // On reader fixed cutted off line
-    // Causes problem with scroll appearing
-}
-
-void DeckPlay::splitMainCard(QString mainCard, QString* frontCard, QString* backCard) {
-    // mainCard is:
-    // frontCard + this character https://unicode-table.com/en/001F/ + backCard
-    QStringList cards = mainCard.split("\u001F");
-    qDebug() << "cards splitted are: " << cards;
-
-    *frontCard = cards.first();
-    *backCard = cards.last();
-
-    qDebug() << "frontCard is: " << *frontCard;
-    qDebug() << "backCard is: " << *backCard;
-}
-
-void DeckPlay::centerText(QTextBrowser* text) {
-    // This isEmpty() needs to be done after setText becouse it will Segment fault
-    if(text->document()->isEmpty() == false)
-    {
-        text->selectAll();
-        text->setAlignment(Qt::AlignCenter);
-
-        // This removes selection
-        QTextCursor cursor = text->textCursor();
-        cursor.clearSelection();
-        text->setTextCursor(cursor);
+    if(currectSession.core.mode == CompletlyRandomised) {
+        CompletlyRandom* mode = new CompletlyRandom(this);
+        mode->setup(this, ui);
     }
 }
 
@@ -222,22 +169,6 @@ void DeckPlay::on_horizontalScrollBar_valueChanged(int value)
     }
 }
 
-void DeckPlay::dumpScrollBarInfo(QScrollBar* scroll) {
-    if (scroll) {
-        /*
-        qDebug() << "ScrollBar - Object Name: " << scroll->objectName()
-                 << ", Minimum value: " << scroll->minimum()
-                 << ", Maximum value: " << scroll->maximum()
-                 << ", Page step: " << scroll->pageStep()
-                 << ", Single step: " << scroll->singleStep()
-                 << ", Value: " << scroll->value()
-                 << ", Slider position: " << scroll->sliderPosition();
-        */
-    } else {
-        qDebug() << "ScrollBar - Object Name: NULL";
-    }
-}
-
 void DeckPlay::scrollBarClone(QScrollBar* scrollbar, QTextBrowser* text) {
     int maximumMainScrollBar = scrollbar->maximum();
     int maximumCardScrollBar = text->horizontalScrollBar()->maximum();
@@ -283,4 +214,34 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
     // This fixes the issue that after adding text it is cutted in half
     // Doesn't work ui->textFrontCard->verticalScrollBar()->setSliderPosition(0);
     area->verticalScrollBar()->setValue(0);
+}
+
+void DeckPlay::saveSessionData() {
+    if(elapsedTimer->elapsed() > 120000 && already2Minutes == false) {
+        currectSession.time.playedCount += 1;
+        already2Minutes = true;
+    }
+
+    currectSession.time.lastUsed = QDateTime::currentDateTime();
+    currectSession.time.played = currectSession.time.played.addMSecs(elapsedTimer->elapsed());
+
+    QVariant variant = QVariant::fromValue(currectSession);
+    if(saveSession->isWritable() && variant.isValid()) {
+        saveSession->setValue("session", variant);
+        saveSession->sync();
+        qDebug() << "Saved session";
+    } else {
+        qCritical() << "Failed to save session";
+    }
+}
+
+void DeckPlay::exitIt() {
+    timer->stop();
+    timer->disconnect();
+    elapsedTimer->invalidate();
+    saveSessionData();
+}
+
+void DeckPlay::showStats() {
+    qDebug() << "showStats!";
 }

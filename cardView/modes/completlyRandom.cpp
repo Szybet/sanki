@@ -3,37 +3,19 @@
 #include "qdebug.h"
 #include "ui_deckPlay.h"
 #include "cardView/showCard.h"
+#include "cardView/functions/helperFunctions.h"
 
 #include <qobject.h>
 #include <QSqlQuery>
-
-// manage this
-/*
-    mediaFile.setFileName(deckDir.path() + QDir::separator() + "media");
-
-    qDebug() << "media file is: " << mediaFile.fileName();
-    if (mediaFile.exists()) {
-        qDebug() << "media file exists";
-    } else {
-        qDebug() << "media file does not exist";
-    }
-
-    QStringList StringListSearchPaths = {deckDir.path()};
-
-    // Important
-    ui->textBackCard->setSearchPaths(StringListSearchPaths);
-    ui->textFrontCard->setSearchPaths(StringListSearchPaths);
-*/
 
 CompletlyRandom::CompletlyRandom(QObject *parent)
 {
     qDebug() << parent->objectName();
 }
 
-void CompletlyRandom::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg, QSqlDatabase *dbArg) {
+void CompletlyRandom::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
     parent = parentArg;
     parentUi = parentUiArg;
-    db = dbArg;
 
     // Setup show/next card button
     showCard* showCardWidget = new showCard(parentArg);
@@ -46,21 +28,28 @@ void CompletlyRandom::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg, QSql
     frontText = parentUi->textFrontCard;
     backText = parentUi->textBackCard;
 
+    max = parent->currectSession.cardList.count() - 1;
+    qDebug() << "max:" << max;
+
     loop();
 }
 
 // nextCardCall
 void CompletlyRandom::loop()
 {
-    QString mainCardSql = "SELECT flds FROM notes ORDER BY RANDOM() LIMIT 1";
+    card* randomCard = &parent->currectSession.cardList[randomValue(0, max)];
+    randomCard->count += 1;
 
-    QSqlQuery MainCardQuery = db->exec(mainCardSql);
-    MainCardQuery.next();
-    QString mainCard = MainCardQuery.value(0).toString();
+    qDebug() << "random card:" << randomCard;
 
-    // Parse the text
-    parent->correctString(&mainCard);
-    parent->splitMainCard(mainCard, &frontCard, &backCard);
+    QString mainCard = cardExtract(randomCard, parent);
+
+    correctMainCard(&mainCard, findMediaFile(randomCard, &parent->currectSession));
+    splitMainCard(mainCard, &frontCard, &backCard);
+
+    QString searchPath = directories::deckStorage.filePath(parent->currectSession.core.deckPathList[randomCard->deckiD]);
+    frontText->setSearchPaths(QStringList(searchPath));
+    backText->setSearchPaths(QStringList(searchPath));
 
     parent->resetScrollState();
 
@@ -91,3 +80,4 @@ void CompletlyRandom::buttonClicked()
         loop();
     }
 }
+

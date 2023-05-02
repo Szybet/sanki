@@ -19,7 +19,7 @@ public:
     void reset();
     void addWidget(QWidget* widget);
     QList<QWidget*> widgets;
-    void show();
+    void showWidgets();
 
 public slots:
     void addItemSlot();

@@ -8,6 +8,8 @@
 #include <QMainWindow>
 #include <QDir>
 #include <QSqlDatabase>
+#include <QSettings>
+#include <QElapsedTimer>
 
 namespace Ui {
 class DeckPlay;
@@ -21,20 +23,23 @@ public:
     explicit DeckPlay(QWidget *parent = nullptr);
     ~DeckPlay();
     void start(sessionStr newSession);
-    void correctMainCard(QString* mainCard, QFile mediaFile);
-    void splitMainCard(QString mainCard, QString* frontCard, QString* backCard);
-    void centerText(QTextBrowser* text);
     void resetScrollState();
 
     bool manageFrontScrollBar = false;
     bool manageBackScrollBar = false;
 
-    void dumpScrollBarInfo(QScrollBar* scroll);
     void scrollBarClone(QScrollBar* scrollbar, QTextBrowser* text);
     void setText(QTextBrowser* area, QString text);
     bool firstLaunch = true;
 
     sessionStr currectSession;
+    QList<QSqlDatabase> realSqlDatabases; // Index as in sessionStr::core::deckPathList
+    QSettings* saveSession;
+    void saveSessionData();
+    void exitIt();
+
+public slots:
+    void showStats();
 
 private slots:
     void on_horizontalScrollBar_valueChanged(int value);
@@ -42,6 +47,9 @@ private slots:
 private:
     Ui::DeckPlay *ui;
     void cardSizeManage(QTextBrowser* text);
+    QElapsedTimer* elapsedTimer;
+    bool already2Minutes = false;
+    QTimer* timer;
 };
 
 #endif // DECKPLAY_H
