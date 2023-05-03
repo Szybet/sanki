@@ -2,7 +2,7 @@
 #include "cardView/deckPlay.h"
 #include "qdebug.h"
 #include "ui_deckPlay.h"
-#include "cardView/showCard.h"
+#include "cardView/buttons/showCard.h"
 #include "cardView/functions/helperFunctions.h"
 
 #include <qobject.h>

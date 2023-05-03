@@ -32,6 +32,7 @@ enum DeckModes {
 };
 Q_DECLARE_METATYPE(DeckModes);
 
+
 void check_device();
 void screen_geometry();
 void check_battery_level();

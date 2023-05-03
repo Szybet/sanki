@@ -19,7 +19,7 @@ Q_DECLARE_METATYPE(core);
 struct times {
     QDateTime created = QDateTime::currentDateTime(); // When the session was created
     QDateTime lastUsed = QDateTime::currentDateTime(); // When the session was last used
-    QTime played = QTime(); // For how long was it used
+    quint64 played = 0; // For how long was it used
     uint playedCount = 0; // How many times was the deck "entered" and played for more than 2 minutes
 };
 Q_DECLARE_METATYPE(times);

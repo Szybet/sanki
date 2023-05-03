@@ -2,7 +2,7 @@
 #define RANDOMNOREPEAT_H
 
 #include "cardView/deckPlay.h"
-#include "cardView/showCard.h"
+#include "cardView/buttons/showCard.h"
 #include "cardView/deckPlay.h"
 #include "ui_deckPlay.h"
 

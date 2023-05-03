@@ -67,7 +67,7 @@ QDebug operator<<(QDebug dbg, const core& c) {
 }
 
 QDebug operator<<(QDebug dbg, const times& t) {
-    dbg.nospace() << "times(created=" << t.created.toString() << ", lastUsed=" << t.lastUsed.toString() << ", played=" << t.played.toString() << ")";
+    dbg.nospace() << "times(created=" << t.created.toString() << ", lastUsed=" << t.lastUsed.toString() << ", played=" << t.played << ")";
     return dbg.space();
 }
 

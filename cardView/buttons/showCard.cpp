@@ -1,4 +1,4 @@
-#include "cardView/showCard.h"
+#include "cardView/buttons/showCard.h"
 #include "ui_showCard.h"
 
 showCard::showCard(QWidget *parent) :

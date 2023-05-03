@@ -4,6 +4,7 @@
 #include "cardView/modes/completlyRandom.h"
 #include "cardView/modes/randomNoRepeat.h"
 #include "cardView/functions/helperFunctions.h"
+#include "components/other/statistics.h"
 
 #include <QDebug>
 #include <QSqlDatabase>
@@ -84,9 +85,9 @@ void DeckPlay::start(sessionStr newSession)
 
         qDebug() << "Finished shuffling cards:" << currectSession.cardList;
     }
-    QSettings temp(directories::sessionSaves.filePath(currectSession.core.name), QSettings::IniFormat);
-    temp.setParent(this);
-    saveSession = &temp;
+
+    saveSession = new QSettings(directories::sessionSaves.filePath(currectSession.core.name), QSettings::IniFormat);
+    saveSession->setParent(this);
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &DeckPlay::saveSessionData);
@@ -222,10 +223,17 @@ void DeckPlay::saveSessionData() {
         already2Minutes = true;
     }
 
+    qDebug() << "Time for elapsedTimer when saving:" << elapsedTimer->elapsed();
+
     currectSession.time.lastUsed = QDateTime::currentDateTime();
-    currectSession.time.played = currectSession.time.played.addMSecs(elapsedTimer->elapsed());
+    currectSession.time.played += elapsedTimer->elapsed();
+
+    elapsedTimer->restart();
 
     QVariant variant = QVariant::fromValue(currectSession);
+
+    qDebug() << "Variant:" << variant;
+
     if(saveSession->isWritable() && variant.isValid()) {
         saveSession->setValue("session", variant);
         saveSession->sync();
@@ -243,5 +251,11 @@ void DeckPlay::exitIt() {
 }
 
 void DeckPlay::showStats() {
-    qDebug() << "showStats!";
+    qDebug() << "showStats";
+
+    saveSessionData();
+
+    statistics* newStats = new statistics(this);
+    newStats->start(currectSession);
+    newStats->exec();
 }

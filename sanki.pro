@@ -2,7 +2,8 @@ QT += \
     core \
     gui \
     sql \
-    widgets
+    widgets \
+    charts
 
 CONFIG += \
     c++11 \
@@ -14,23 +15,24 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs depr
 
 # Cleaning
 SOURCES += \
-    cardView/cardTrueFalse.cpp \
     cardView/deckPlay.cpp \
     cardView/functions/helperFunctions.cpp \
     cardView/modeChooser.cpp \
+    cardView/modes/boxes.cpp \
     cardView/modes/completlyRandom.cpp \
     cardView/modes/randomNoRepeat.cpp \
     components/files/file.cpp \
     components/files/fileChooser.cpp \
     components/other/askForText.cpp \
     components/other/griditemspacer.cpp \
+    components/other/statistics.cpp \
     components/settings.cpp \
     components/statusBarC.cpp \
     global.cpp \
     mainMenu/decks/deck.cpp \
     components/other/keyboard.cpp \
     main.cpp \
-    cardView/showCard.cpp \
+    cardView/buttons/showCard.cpp \
     components/other/toast.cpp \
     mainMenu/editGridObject.cpp \
     mainMenu/fancyGrid.cpp \
@@ -39,22 +41,23 @@ SOURCES += \
     mainMenu/sessions/sessionStruct.cpp
 
 HEADERS += \
-    cardView/cardTrueFalse.h \
     cardView/deckPlay.h \
     cardView/functions/helperFunctions.h \
     cardView/modeChooser.h \
+    cardView/modes/boxes.h \
     cardView/modes/completlyRandom.h \
     cardView/modes/randomNoRepeat.h \
     components/files/file.h \
     components/files/fileChooser.h \
     components/other/askForText.h \
     components/other/griditemspacer.h \
+    components/other/statistics.h \
     components/settings.h \
     components/statusBarC.h \
     global.h \
     mainMenu/decks/deck.h \
     components/other/keyboard.h \
-    cardView/showCard.h \
+    cardView/buttons/showCard.h \
     components/other/toast.h \
     mainMenu/editGridObject.h \
     mainMenu/fancyGrid.h \
@@ -63,18 +66,18 @@ HEADERS += \
     mainMenu/sessions/sessionStruct.h
 
 FORMS += \
-    cardView/cardTrueFalse.ui \
     cardView/deckPlay.ui \
     cardView/modeChooser.ui \
     components/files/file.ui \
     components/files/fileChooser.ui \
     components/other/askForText.ui \
     components/other/griditemspacer.ui \
+    components/other/statistics.ui \
     components/settings.ui \
     components/statusBarC.ui \
     mainMenu/decks/deck.ui \
     components/other/keyboard.ui \
-    cardView/showCard.ui \
+    cardView/buttons/showCard.ui \
     components/other/toast.ui \
     mainMenu/editGridObject.ui \
     mainMenu/fancyGrid.ui \
