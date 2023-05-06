@@ -6,7 +6,7 @@
 #include "components/statusBarC.h"
 #include "mainMenu/fancyGrid.h"
 #include "global.h"
-#include "cardView/modeChooser.h"
+#include "cardView/modeOptions.h"
 #include "zip.h"
 #include "components/files/fileChooser.h"
 #include "sessions/sessionStruct.h"
@@ -307,6 +307,7 @@ void MainWindow::playSession(sessionStr sessionPlay) {
 }
 
 void MainWindow::hardResetDeckPlay() {
+    playDeck->exitIt();
     delete playDeck;
     playDeck = new DeckPlay(this);
     ui->gridMain->addWidget(playDeck);

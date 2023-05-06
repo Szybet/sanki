@@ -24,6 +24,8 @@ private slots:
     void on_ButtonRandomNR_clicked();
     void on_ButtonCRandom_clicked();
 
+    void on_ButtonBoxes_clicked();
+
 private:
     Ui::modeChooser *ui;
     DeckModes mode = None;

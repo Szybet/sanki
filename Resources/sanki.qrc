@@ -14,5 +14,6 @@
         <file>confirm.svg</file>
         <file>statistics.svg</file>
         <file>back.svg</file>
+        <file>info.svg</file>
     </qresource>
 </RCC>

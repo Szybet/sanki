@@ -9,6 +9,8 @@ toast::toast(QDialog *parent) :
     ui(new Ui::toast)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
+
 }
 
 toast::~toast()

@@ -7,6 +7,8 @@ Settings::Settings(QWidget *parent) :
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
+
     if(ereader) {
         this->move(0, 0);
         this->setMinimumSize(ereaderVars::screen_x, ereaderVars::screen_y);

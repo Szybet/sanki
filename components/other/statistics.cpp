@@ -1,31 +1,36 @@
 #include "statistics.h"
 #include "ui_statistics.h"
+#include "cardView/modes/boxes/boxes.h"
 
 statistics::statistics(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::statistics)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
 
     ui->titleLabel->setAlignment(Qt::AlignCenter);
     ui->sessionLabel->setAlignment(Qt::AlignCenter);
 
-    ui->cardUsedChart->chart()->setBackgroundVisible(false);
-    ui->cardUsedChart->chart()->setTitle("How many times cards were shown");
-    ui->cardUsedChart->setRenderHint(QPainter::Antialiasing);
-    ui->cardUsedChart->rubberBand().setFlag(QChartView::RectangleRubberBand);
-    ui->cardUsedChart->chart()->legend()->hide();
-    if(pc) {
-        ui->cardUsedChart->chart()->setAnimationOptions(QChart::AllAnimations);
-        QBrush whiteBrush(Qt::white);
-        ui->cardUsedChart->chart()->setTitleBrush(whiteBrush);
-        ui->cardUsedChart->chart()->legend()->setLabelColor(QColor::fromRgb(0,0,0));
-    }
+    setUpChart(ui->cardUsedChart, "How many times cards were shown");
 }
 
 statistics::~statistics()
 {
     delete ui;
+}
+
+void statistics::setUpChart(QtCharts::QChartView* chart, QString title) {
+    chart->chart()->setBackgroundVisible(false);
+    chart->chart()->setTitle(title);
+    chart->setRenderHint(QPainter::Antialiasing);
+    chart->rubberBand().setFlag(QChartView::RectangleRubberBand);
+    chart->chart()->setAnimationOptions(QChart::NoAnimation);
+    if(pc) {
+        QBrush whiteBrush(Qt::white);
+        chart->chart()->setTitleBrush(whiteBrush);
+        chart->chart()->legend()->setLabelBrush(whiteBrush);
+    }
 }
 
 void statistics::start(sessionStr session) {
@@ -48,7 +53,7 @@ void statistics::start(sessionStr session) {
     qDebug() << "countMap:" << countMap;
 
 
-    QPieSeries *series = new QPieSeries();
+    QPieSeries *series = new QPieSeries(this);
 
     QMapIterator<uint, uint> i(countMap);
     QBrush whiteBrush(Qt::white);
@@ -56,14 +61,39 @@ void statistics::start(sessionStr session) {
         i.next();
         QPieSlice *slice = series->append(QString::number(i.key()), i.value());
         slice->setLabelBrush(whiteBrush);
-        slice->setLabel(QString::number(i.key()) + " : " + QString::number(i.value()));
+        slice->setLabel(QString::number(i.key()));
     }
-    series->setLabelsVisible(true);
+    series->setLabelsVisible(false);
 
     ui->cardUsedChart->chart()->addSeries(series);
 
+    if(session.core.mode != Boxes) {
+        ui->cardBoxesChart->hide();
+    } else {
+        setUpChart(ui->cardBoxesChart, "How much cards in which boxes");
+        QSettings settings(directories::sessionSaves.filePath(session.core.name), QSettings::IniFormat);
+        settings.sync();
+        box abox = settings.value("boxMode/box").value<box>();
+        qDebug() << "Count boxes:" << abox.howMuchBoxes;
+
+        QBarSeries* seriesBar = new QBarSeries(this);
+        for(int i = 0; i < abox.boxes.count() - 1; i++) {
+            if(abox.boxes[i].count() != 0) {
+                QBarSet *set = new QBarSet(QString::number(i));
+                *set << abox.boxes[i].count();
+                seriesBar->append(set);
+                //set->setLabel(QString::number(abox.boxes[i].count()));
+            }
+        }
+        seriesBar->setLabelsVisible(true);
+        seriesBar->setLabelsPosition(QAbstractBarSeries::LabelsOutsideEnd);
+        ui->cardBoxesChart->chart()->addSeries(seriesBar);
+    }
+
     if(pc) {
-        this->resize(this->width() * 1.4, this->height() * 2.2);
+        this->resize(this->width() * 1.4, this->height() * 1.4);
+        this->setMaximumSize(QSize(99999, 99999));
+        this->setMinimumSize(QSize(0, 0));
     }
 }
 
@@ -74,7 +104,10 @@ QString statistics::getStatsForSession(sessionStr* session, bool lastUsed) {
     // No better no problematic way
     if(session->core.mode == CompletlyRandomised) {
         mode = "Completly Randomised";
+    } else if(session->core.mode == Boxes) {
+        mode = "Boxes";
     }
+
     returnStr = returnStr + "<b>Mode:</b> " + mode + "<br>";
     returnStr = returnStr + "<b>Decks:</b> " + session->core.deckPathList.join(",") + "<br>";
     returnStr = returnStr + "<b>Created:</b> " + session->time.created.toString("dd.MM.yyyy - hh:mm") + "<br>";

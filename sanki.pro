@@ -15,10 +15,12 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs depr
 
 # Cleaning
 SOURCES += \
+    cardView/buttons/fourOptions.cpp \
     cardView/deckPlay.cpp \
     cardView/functions/helperFunctions.cpp \
-    cardView/modeChooser.cpp \
-    cardView/modes/boxes.cpp \
+    cardView/modeOptions.cpp \
+    cardView/modes/boxes/askforboxesoptions.cpp \
+    cardView/modes/boxes/boxes.cpp \
     cardView/modes/completlyRandom.cpp \
     cardView/modes/randomNoRepeat.cpp \
     components/files/file.cpp \
@@ -41,10 +43,12 @@ SOURCES += \
     mainMenu/sessions/sessionStruct.cpp
 
 HEADERS += \
+    cardView/buttons/fourOptions.h \
     cardView/deckPlay.h \
     cardView/functions/helperFunctions.h \
-    cardView/modeChooser.h \
-    cardView/modes/boxes.h \
+    cardView/modeOptions.h \
+    cardView/modes/boxes/askforboxesoptions.h \
+    cardView/modes/boxes/boxes.h \
     cardView/modes/completlyRandom.h \
     cardView/modes/randomNoRepeat.h \
     components/files/file.h \
@@ -66,8 +70,10 @@ HEADERS += \
     mainMenu/sessions/sessionStruct.h
 
 FORMS += \
+    cardView/buttons/fourOptions.ui \
     cardView/deckPlay.ui \
-    cardView/modeChooser.ui \
+    cardView/modeOptions.ui \
+    cardView/modes/boxes/askforboxesoptions.ui \
     components/files/file.ui \
     components/files/fileChooser.ui \
     components/other/askForText.ui \

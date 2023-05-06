@@ -16,6 +16,7 @@ public:
     explicit CompletlyRandom(QObject *parent = nullptr);
     bool showedBack = false;
     void loop();
+    void setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg);
     QString frontCard;
     QString backCard;
 
@@ -23,7 +24,6 @@ signals:
     void setText(QString text);
 
 public slots:
-    void setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg);
     void buttonClicked();
 
 private:

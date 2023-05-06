@@ -1,5 +1,5 @@
-#include "cardView/modeChooser.h"
-#include "ui_modeChooser.h"
+#include "cardView/modeOptions.h"
+#include "ui_modeOptions.h"
 #include "global.h"
 
 #include <QDebug>
@@ -26,14 +26,12 @@ void modeChooser::on_ButtonConfirm_clicked()
 {
     emit setMode(mode);
     this->setResult(QDialog::Accepted);
-
     this->deleteLater();
     this->done(QDialog::Accepted);
 }
 
 void modeChooser::modeManager(DeckModes newMode) {
     ui->ButtonConfirm->setEnabled(true);
-
     ui->ButtonCRandom->setChecked(false);
     ui->ButtonRandomNR->setChecked(false);
 
@@ -41,6 +39,8 @@ void modeChooser::modeManager(DeckModes newMode) {
         ui->ButtonRandomNR->setChecked(true);
     } else if(newMode == CompletlyRandomised) {
         ui->ButtonCRandom->setChecked(true);
+    } else if(newMode == Boxes) {
+        ui->ButtonBoxes->setChecked(true);
     }
 
     mode = newMode;
@@ -55,3 +55,9 @@ void modeChooser::on_ButtonCRandom_clicked()
 {
     modeManager(CompletlyRandomised);
 }
+
+void modeChooser::on_ButtonBoxes_clicked()
+{
+    modeManager(Boxes);
+}
+

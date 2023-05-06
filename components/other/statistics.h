@@ -3,6 +3,7 @@
 
 #include "mainMenu/sessions/sessionStruct.h"
 
+#include <QChartView>
 #include <QDialog>
 
 namespace Ui {
@@ -18,6 +19,7 @@ public:
     ~statistics();
     void start(sessionStr session);
     QString getStatsForSession(sessionStr* session, bool lastUsed);
+    void setUpChart(QtCharts::QChartView* chart, QString title);
 
 private:
     Ui::statistics *ui;

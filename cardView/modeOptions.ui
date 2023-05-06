@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>570</width>
-    <height>394</height>
+    <width>546</width>
+    <height>227</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -43,6 +43,13 @@
         <bool>false</bool>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QRadioButton" name="ButtonBoxes">
+          <property name="text">
+           <string>Boxes</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QRadioButton" name="ButtonCRandom">
           <property name="text">

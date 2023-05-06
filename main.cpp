@@ -1,6 +1,7 @@
 #include "mainMenu/mainWindow.h"
 #include "global.h"
 #include "mainMenu/sessions/sessionStruct.h"
+#include "cardView/modes/boxes/boxes.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -17,7 +18,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
     const char *function = context.function ? context.function : "";
 
     switch (type) {
-    case QtDebugMsg:
+    case QtDebugMsg: {
         if(enableDebug == true) {
             if(context.line != 0) {
                 fprintf(stderr, "Debug: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
@@ -26,17 +27,27 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
             }
         }
         break;
-    case QtInfoMsg:
+    }
+    case QtInfoMsg: {
+
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.setText(localMsg.constData());
+        msgBox.exec();
+
         fprintf(stderr, "Info: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
         break;
+    }
     case QtWarningMsg: {
 
         fprintf(stderr, "Warning: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
 
-        QMessageBox msgBox;
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText(localMsg.constData());
-        msgBox.exec();
+        if(warningsEnabled == true) {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText(localMsg.constData());
+            msgBox.exec();
+        }
 
         break;
     }
@@ -120,6 +131,8 @@ int main(int argc, char *argv[])
     qRegisterMetaTypeStreamOperators<card>("card");
     qRegisterMetaTypeStreamOperators<sessionStr>("sessionStr");
 
+    qRegisterMetaTypeStreamOperators<box>("box");
+
     qRegisterMetaType<QList<QString>>("QList<QString>");
     qRegisterMetaType<DeckModes>("DeckModes");
     qRegisterMetaType<core>("core");
@@ -127,6 +140,8 @@ int main(int argc, char *argv[])
     qRegisterMetaType<deckOptions>("deckOptions");
     qRegisterMetaType<card>("card");
     qRegisterMetaType<sessionStr>("sessionStr");
+
+    qRegisterMetaType<box>("box");
 
     MainWindow w;
 

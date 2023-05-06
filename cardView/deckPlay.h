@@ -41,6 +41,9 @@ public:
 public slots:
     void showStats();
 
+signals:
+    void saveData();
+
 private slots:
     void on_horizontalScrollBar_valueChanged(int value);
 

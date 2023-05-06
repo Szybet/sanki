@@ -8,6 +8,7 @@ session::session(QWidget *parent) :
     ui(new Ui::session)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 session::~session()

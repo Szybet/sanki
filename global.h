@@ -5,6 +5,7 @@
 #include <QString>
 
 extern bool debugEnabled;
+extern bool warningsEnabled;
 
 // Those variables check if it's running on this device
 extern bool pc;
@@ -29,6 +30,7 @@ enum DeckModes {
     None,
     CompletlyRandomised,
     RandomisedNoRepeating,
+    Boxes,
 };
 Q_DECLARE_METATYPE(DeckModes);
 

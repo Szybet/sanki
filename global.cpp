@@ -19,6 +19,7 @@
 
 // Default values
 bool debugEnabled = false;
+bool warningsEnabled = true;
 
 bool pc = false;
 bool ereader = false;

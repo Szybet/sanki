@@ -1,10 +1,12 @@
 #include "cardView/deckPlay.h"
+#include "qglobal.h"
 #include "ui_deckPlay.h"
 #include "global.h"
 #include "cardView/modes/completlyRandom.h"
 #include "cardView/modes/randomNoRepeat.h"
 #include "cardView/functions/helperFunctions.h"
 #include "components/other/statistics.h"
+#include "cardView/modes/boxes/boxes.h"
 
 #include <QDebug>
 #include <QSqlDatabase>
@@ -53,7 +55,7 @@ void DeckPlay::start(sessionStr newSession)
         db.setDatabaseName(findDatabaseFile(directories::deckStorage.filePath(dir)));
         if (db.open() == true) {
             qDebug() << "Test open succesfull";
-            realSqlDatabases.push_back(db);
+            realSqlDatabases.append(db);
         } else {
             qCritical() << "Failed to open database:" << dir;
             db.close();
@@ -99,9 +101,12 @@ void DeckPlay::start(sessionStr newSession)
 
     saveSessionData();
 
-
     if(currectSession.core.mode == CompletlyRandomised) {
         CompletlyRandom* mode = new CompletlyRandom(this);
+        mode->setup(this, ui);
+    } else if (currectSession.core.mode == Boxes) {
+        boxes* mode = new boxes(this);
+        connect(this, &DeckPlay::saveData, mode, &boxes::saveBox);
         mode->setup(this, ui);
     }
 }
@@ -223,6 +228,9 @@ void DeckPlay::saveSessionData() {
         already2Minutes = true;
     }
 
+    emit saveData();
+    QApplication::processEvents();
+
     qDebug() << "Time for elapsedTimer when saving:" << elapsedTimer->elapsed();
 
     currectSession.time.lastUsed = QDateTime::currentDateTime();
@@ -244,10 +252,19 @@ void DeckPlay::saveSessionData() {
 }
 
 void DeckPlay::exitIt() {
+    qDebug() << "Exit it DeckPlay called";
     timer->stop();
     timer->disconnect();
     elapsedTimer->invalidate();
     saveSessionData();
+    qDebug() << "Count of connections:" << realSqlDatabases.count();
+    // Is there a cleaner way?
+    warningsEnabled = false;
+    for(int i = 0; i < realSqlDatabases.count(); i++) {
+        realSqlDatabases[i].close();
+        QSqlDatabase::removeDatabase(QString::number(i));
+    }
+    warningsEnabled = true;
 }
 
 void DeckPlay::showStats() {

@@ -1,12 +1,12 @@
 #include "completlyRandom.h"
 #include "cardView/deckPlay.h"
-#include "qdebug.h"
 #include "ui_deckPlay.h"
 #include "cardView/buttons/showCard.h"
 #include "cardView/functions/helperFunctions.h"
 
-#include <qobject.h>
+#include <QObject>
 #include <QSqlQuery>
+#include <QDebug>
 
 CompletlyRandom::CompletlyRandom(QObject *parent)
 {
@@ -16,6 +16,8 @@ CompletlyRandom::CompletlyRandom(QObject *parent)
 void CompletlyRandom::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
     parent = parentArg;
     parentUi = parentUiArg;
+    frontText = parentUi->textFrontCard;
+    backText = parentUi->textBackCard;
 
     // Setup show/next card button
     showCard* showCardWidget = new showCard(parentArg);
@@ -23,10 +25,7 @@ void CompletlyRandom::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
     connect(showCardWidget, &showCard::clicked, this, &CompletlyRandom::buttonClicked); // Button slot
     connect(this, &CompletlyRandom::setText, showCardWidget, &showCard::setText);
 
-    parentUiArg->gridManageCard->addWidget(showCardWidget);
-
-    frontText = parentUi->textFrontCard;
-    backText = parentUi->textBackCard;
+    parentUi->gridManageCard->addWidget(showCardWidget);
 
     max = parent->currectSession.cardList.count() - 1;
     qDebug() << "max:" << max;
