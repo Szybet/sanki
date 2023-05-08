@@ -1,6 +1,8 @@
 #include "mainMenu/decks/deck.h"
+#include "global.h"
 #include "ui_deck.h"
-#include "mainMenu/editGridObject.h"
+#include "mainMenu/decks/editDeck.h"
+#include "cardView/functions/helperFunctions.h"
 
 #include <QMainWindow>
 #include <QWidget>
@@ -16,7 +18,7 @@ deck::deck(QWidget *parent)
     this->setAttribute(Qt::WA_DeleteOnClose);
 
     ui->deck->setStyleSheet("font-size: 8pt");
-    ui->ButtoneditGridObject->setStyleSheet("font-size: 8pt");
+    ui->ButtoneditDeck->setStyleSheet("font-size: 8pt");
     ui->LabelStats->setStyleSheet("font-size: 8pt");
     ui->ButtonDeckSelect->setStyleSheet("font-size: 8pt");
 
@@ -26,28 +28,59 @@ void deck::start(QString path) {
     mainPath = path;
     name = path.split(QDir::separator()).last();
     ui->deck->setText(name);
+
+    QString stats;
+
+    QDir dir(mainPath);
+    if(dir.exists() == false) {
+        qWarning() << "Deck doesn't exists?" << path;
+    }
+    QFile fileAdded(dir.filePath(deckAddedFileName));
+
+    qDebug() << "fileAdded:" << fileAdded << "exists:" << fileAdded.exists();
+
+    if(fileAdded.exists()) {
+        fileAdded.open(QIODevice::ReadOnly);
+        QString date = fileAdded.readAll();
+        fileAdded.close();
+        stats = stats + "Added: " + date + "<br>";
+    }
+
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "0");
+        db.setDatabaseName(findDatabaseFile(dir));
+        if(db.open()) {
+            QSqlQuery answer = db.exec("SELECT COUNT(id) FROM notes");
+            answer.next();
+            stats = stats + "Cards: " + answer.value(0).toString();
+        }
+        db.close();
+    }
+    QSqlDatabase::removeDatabase("0");
+    ui->LabelStats->setText(stats);
 }
 
-void deck::on_ButtoneditGridObject_clicked()
+void deck::on_ButtoneditDeck_clicked()
 {
     qDebug() << "Edit button clicked, editing deck: " << mainPath;
-
-    editGridObject* edit_widget = new editGridObject();
-    edit_widget->deckInfo = mainPath;
-    edit_widget->update_deck();
-
-    connect(edit_widget, SIGNAL(refresh_decks_edit_signal()), this, SLOT(refresh_decks_slot()));
-    edit_widget->exec();
+    editDeck* editWidget = new editDeck();
+    connect(editWidget, &editDeck::refreshDecksSignal, this, &deck::refreshDecksSlot);
+    editWidget->updateDeck(mainPath);
+    editWidget->exec();
 }
 
 void deck::on_deck_selectionChanged()
 {
     // This shows the full name when clicked
     ui->deck->setSelection(0, 0);
-    QToolTip::showText( ui->deck->mapToGlobal( QPoint( 0, 0 ) ), mainPath );
+    QToolTip::showText( ui->deck->mapToGlobal( QPoint( 0, 0 ) ), mainPath.split(QDir::separator()).last() );
 }
 
 void deck::on_ButtonDeckSelect_clicked()
 {
     emit selectedDeck(mainPath);
+}
+
+void deck::refreshDecksSlot() {
+    emit refreshDecks();
 }

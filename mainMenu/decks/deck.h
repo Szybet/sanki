@@ -15,13 +15,16 @@ public:
     QString mainPath;
     QString name;
 
+public slots:
+    void refreshDecksSlot();
+
 signals:
     void refreshDecks();
     void selectedDeck(QString);
 
 private slots:
 
-    void on_ButtoneditGridObject_clicked();
+    void on_ButtoneditDeck_clicked();
 
     void on_deck_selectionChanged();
 

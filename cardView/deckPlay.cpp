@@ -223,7 +223,8 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
 }
 
 void DeckPlay::saveSessionData() {
-    if(elapsedTimer->elapsed() > 120000 && already2Minutes == false) {
+    qint64 timerElapsed = elapsedTimer->restart();
+    if(timerElapsed > 120000 && already2Minutes == false) {
         currectSession.time.playedCount += 1;
         already2Minutes = true;
     }
@@ -231,12 +232,10 @@ void DeckPlay::saveSessionData() {
     emit saveData();
     QApplication::processEvents();
 
-    qDebug() << "Time for elapsedTimer when saving:" << elapsedTimer->elapsed();
+    qDebug() << "Time for elapsedTimer when saving:" << timerElapsed << "and currectSession.time.played:" << currectSession.time.played;
 
     currectSession.time.lastUsed = QDateTime::currentDateTime();
-    currectSession.time.played += elapsedTimer->elapsed();
-
-    elapsedTimer->restart();
+    currectSession.time.played += timerElapsed;
 
     QVariant variant = QVariant::fromValue(currectSession);
 
@@ -253,10 +252,11 @@ void DeckPlay::saveSessionData() {
 
 void DeckPlay::exitIt() {
     qDebug() << "Exit it DeckPlay called";
+    saveSessionData();
     timer->stop();
     timer->disconnect();
     elapsedTimer->invalidate();
-    saveSessionData();
+    delete elapsedTimer;
     qDebug() << "Count of connections:" << realSqlDatabases.count();
     // Is there a cleaner way?
     warningsEnabled = false;

@@ -28,11 +28,22 @@ QDir directories::config = QStandardPaths::writableLocation(QStandardPaths::AppD
 QDir directories::deckStorage = directories::config.path() + QDir::separator() + "decks";
 QDir directories::sessionSaves = directories::config.path() + QDir::separator() + "sessions";
 QDir directories::deckSelect = QDir::homePath();
+QString deckAddedFileName = "creationTime";
 
 QString ereaderVars::model = "";
 int ereaderVars::screen_x = 1920;
 int ereaderVars::screen_y = 1080;
 int ereaderVars::batt_level_int = 100;
+
+bool renameDir(QDir & dir, const QString & newName) {
+    // https://stackoverflow.com/questions/39229177/qdirrename-redundant-parameters
+    auto src = QDir::cleanPath(dir.filePath("."));
+    auto dst = QDir::cleanPath(
+        dir.filePath(QStringLiteral("..%1%2").arg(QDir::separator()).arg(newName)));
+    auto rc = QFile::rename(src, dst);
+    if (rc) dir.setPath(dst);
+    return rc;
+}
 
 void check_device()
 {

@@ -24,6 +24,8 @@ signals:
 private slots:
     void on_ButtonDeckPlay_clicked();
 
+    void on_ButtonOptions_clicked();
+
 private:
     Ui::session *ui;
 };

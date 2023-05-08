@@ -99,7 +99,8 @@ void MainWindow::showDecks() {
         deck* newDeck = new deck(grid);
 
         connect(newDeck, &deck::selectedDeck, this, &MainWindow::getDeck);
-        newDeck->start(file);
+        connect(newDeck, &deck::refreshDecks, this, &MainWindow::showDecks);
+        newDeck->start(directories::deckStorage.filePath(file));
 
         grid->addWidget(newDeck);
     }
@@ -148,9 +149,14 @@ void MainWindow::extractDeck()
         const char *char_converted = zipFilePath.toLocal8Bit().data();
         int arg = 2; // why
         zip_extract(char_converted, newDeck.path().toLocal8Bit().data(), 0, &arg);
+
+        // For deck stats
+        QFile creationTime(newDeck.filePath(deckAddedFileName));
+        creationTime.open(QIODevice::WriteOnly);
+        creationTime.write(QDateTime::currentDateTime().toString("dd.MM.yyyy - hh:mm").toStdString().c_str());
+        creationTime.close();
     }
-    // Update decks
-    qDebug() << "extractDeck emitted";
+    showDecks();
 }
 
 void MainWindow::getFile(QString file)

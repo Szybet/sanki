@@ -17,6 +17,7 @@ namespace directories {
     extern QDir sessionSaves;
     extern QDir deckSelect; // File chooser will open here
 }
+extern QString deckAddedFileName;
 
 namespace ereaderVars {
     extern QString model;
@@ -34,7 +35,7 @@ enum DeckModes {
 };
 Q_DECLARE_METATYPE(DeckModes);
 
-
+bool renameDir(QDir & dir, const QString & newName);
 void check_device();
 void screen_geometry();
 void check_battery_level();

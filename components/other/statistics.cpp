@@ -117,6 +117,7 @@ QString statistics::getStatsForSession(sessionStr* session, bool lastUsed) {
 
     QString hours = QString::number(session->time.played / (1000 * 60 * 60)); // Calculate hours
     QString minutes = QString::number(session->time.played / (1000 * 60)); // Calculate minutes
+    QString seconds = QString::number(session->time.played / 1000); // Calculate minutes
 
     if(hours.count() == 1) {
         hours = "0" + hours;
@@ -124,10 +125,13 @@ QString statistics::getStatsForSession(sessionStr* session, bool lastUsed) {
     if(minutes.count() == 1) {
         minutes = "0" + minutes;
     }
+    if(seconds.count() == 1) {
+        seconds = "0" + seconds;
+    }
 
-    qDebug() << "Played time:" << session->time.played << "hours:" << hours << "minutes:" << minutes;
+    qDebug() << "Played time:" << session->time.played << "hours:" << hours << "minutes:" << minutes << "seconds:" << seconds;
 
-    returnStr = returnStr + "<b>Time spend:</b> " + hours + ":" + minutes + "<br>";
+    returnStr = returnStr + "<b>Time spend:</b> " + hours + ":" + minutes + ":" + seconds + "<br>";
 
     returnStr = returnStr + "<b>How many times used:</b> " + QString::number(session->time.playedCount) + "<br>";
     returnStr = returnStr + "<b>Total cards:</b> " + QString::number(session->cardList.count()) + "<br>";

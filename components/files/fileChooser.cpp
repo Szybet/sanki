@@ -4,7 +4,6 @@
 #include "global.h"
 #include "file.h"
 #include "components/other/keyboard.h"
-#include "components/other/toast.h"
 
 #include <QScrollBar>
 
@@ -40,10 +39,10 @@ fileChooserCustom::~fileChooserCustom()
 
 void fileChooserCustom::updateFiles()
 {
-    keyboard_opened = true;
+    keyboardOpened = true;
     ui->lineEditPath->setText(start_path);
     ui->lineEditPath->setCursorPosition(0);
-    keyboard_opened = false;
+    keyboardOpened = false;
 
     emit remove_buttons();
     QDir dir = start_path;
@@ -111,13 +110,7 @@ void fileChooserCustom::on_ButtonConfirm_clicked()
         }
         this->close();
     } else {
-        QString error_message = "ERROR\n Choose a file with " + file_extension + " extension";
-
-        toast* new_toast = new toast;
-        new_toast->label_text = error_message;
-        new_toast->show_time_ms = 100000;
-        new_toast->activate();
-        new_toast->exec();
+        qCritical() << "Choose a file with" << file_extension << " extension";
     }
 }
 
@@ -152,14 +145,14 @@ void fileChooserCustom::on_lineEditPath_selectionChanged()
     ui->lineEditPath->setSelection(0, 0);
 }
 
-void fileChooserCustom::keyboard_closed(bool update_name)
+void fileChooserCustom::keyboardClosed(bool updateName)
 {
-    if(update_name == true)
+    if(updateName == true)
     {
         updatedName = true;
     }
     ui->lineEditPath->setText(ui->lineEditPath->text().remove("|"));
-    keyboard_opened = false;
+    keyboardOpened = false;
 
     start_path = ui->lineEditPath->text();
     updateFiles();
@@ -167,9 +160,9 @@ void fileChooserCustom::keyboard_closed(bool update_name)
 
 void fileChooserCustom::on_lineEditPath_cursorPositionChanged(int oldpos, int newpos)
 {
-    if(first_open == false)
+    if(firstOpen == false)
     {
-        if(keyboard_opened == false)
+        if(keyboardOpened == false)
         {
             if(newpos != 0)
             {
@@ -178,26 +171,26 @@ void fileChooserCustom::on_lineEditPath_cursorPositionChanged(int oldpos, int ne
                 keyboard_nameedit->cursor_main = newpos;
                 keyboard_nameedit->main_string = ui->lineEditPath->text();
                 keyboard_nameedit->edited_string = ui->lineEditPath->text();
-                connect(keyboard_nameedit, SIGNAL(update_data(QString, int)), this, SLOT(update_widget(QString, int)));
-                connect(keyboard_nameedit, SIGNAL(keyboard_closed(bool)), this, SLOT(keyboard_closed(bool)));
-                keyboard_opened = true;
-                update_widget(ui->lineEditPath->text(), ui->lineEditPath->cursorPosition()); // to create the cursor
+                connect(keyboard_nameedit, SIGNAL(update_data(QString, int)), this, SLOT(updateWidget(QString, int)));
+                connect(keyboard_nameedit, SIGNAL(keyboardClosed(bool)), this, SLOT(keyboardClosed(bool)));
+                keyboardOpened = true;
+                updateWidget(ui->lineEditPath->text(), ui->lineEditPath->cursorPosition()); // to create the cursor
                 keyboard_nameedit->exec();
             }
         }
     } else {
         ui->lineEditPath->setCursorPosition(0);
-        first_open = false;
+        firstOpen = false;
     }
 }
 
-void fileChooserCustom::update_deck()
+void fileChooserCustom::updateDeck()
 {
     QString deck_name = deckInfo.baseName();
     ui->lineEditPath->setText(deck_name);
 }
 
-void fileChooserCustom::update_widget(QString string, int cursor)
+void fileChooserCustom::updateWidget(QString string, int cursor)
 {
          // Adding cursor, this is so stupid
          QString string_with_cursor = string;

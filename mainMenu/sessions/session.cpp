@@ -37,3 +37,9 @@ void session::on_ButtonDeckPlay_clicked()
     emit playSession(sessionSaved);
 }
 
+
+void session::on_ButtonOptions_clicked()
+{
+
+}
+

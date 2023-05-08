@@ -92,10 +92,10 @@ void fancyGrid::addItemSlot() {
 }
 
 /*
-void fancyGrid::update_decks()
+void fancyGrid::updateDecks()
 {
-    qDebug() << "update_decks slot called";
-    emit remove_decks();
+    qDebug() << "updateDecks slot called";
+    emit removeDecks();
 
     QFileInfoList dir_list = directories::deckStorage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
     for (QFileInfo file_info: dir_list) {
@@ -120,8 +120,8 @@ void fancyGrid::update_decks()
         newDeck->set_deck_name(fileName);
         newDeck->deckInfo = file_info;
         // addWidget(QWidget *widget, int row, int column, Qt::Alignment alignment = Qt::Alignment())
-        connect(this, SIGNAL(remove_decks()), newDeck, SLOT(close()));
-        connect(newDeck, SIGNAL(refresh_decks_signal()), this, SLOT(update_decks()));
+        connect(this, SIGNAL(removeDecks()), newDeck, SLOT(close()));
+        connect(newDeck, SIGNAL(refresh_decks_signal()), this, SLOT(updateDecks()));
         connect(newDeck, SIGNAL(playDeck(QDir)), this, SLOT(play_deck_slott(QDir)));
         scrollbar_layout->addWidget(newDeck, row, column);
         column = column + 1;

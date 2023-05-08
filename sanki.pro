@@ -35,10 +35,10 @@ SOURCES += \
     components/other/keyboard.cpp \
     main.cpp \
     cardView/buttons/showCard.cpp \
-    components/other/toast.cpp \
-    mainMenu/editGridObject.cpp \
+    mainMenu/decks/editDeck.cpp \
     mainMenu/fancyGrid.cpp \
     mainMenu/mainWindow.cpp \
+    mainMenu/sessions/editSesion.cpp \
     mainMenu/sessions/session.cpp \
     mainMenu/sessions/sessionStruct.cpp
 
@@ -62,10 +62,10 @@ HEADERS += \
     mainMenu/decks/deck.h \
     components/other/keyboard.h \
     cardView/buttons/showCard.h \
-    components/other/toast.h \
-    mainMenu/editGridObject.h \
+    mainMenu/decks/editDeck.h \
     mainMenu/fancyGrid.h \
     mainMenu/mainWindow.h \
+    mainMenu/sessions/editSession.h \
     mainMenu/sessions/session.h \
     mainMenu/sessions/sessionStruct.h
 
@@ -84,10 +84,10 @@ FORMS += \
     mainMenu/decks/deck.ui \
     components/other/keyboard.ui \
     cardView/buttons/showCard.ui \
-    components/other/toast.ui \
-    mainMenu/editGridObject.ui \
+    mainMenu/decks/editDeck.ui \
     mainMenu/fancyGrid.ui \
     mainMenu/mainWindow.ui \
+    mainMenu/sessions/editSession.ui \
     mainMenu/sessions/session.ui
 
 # Default rules for deployment.

@@ -26,8 +26,8 @@ public slots:
     void enter_dir();
 
     // Keyboard:
-    void update_widget(QString string, int cursor);
-    void update_deck();
+    void updateWidget(QString string, int cursor);
+    void updateDeck();
 
 signals:
     void remove_buttons();
@@ -43,7 +43,7 @@ private slots:
 
     // Keyboard:
     void on_lineEditPath_selectionChanged();
-    void keyboard_closed(bool update_name);
+    void keyboardClosed(bool updateName);
     void on_lineEditPath_cursorPositionChanged(int arg1, int arg2);
 
 
@@ -55,8 +55,8 @@ private:
 
     // Keyboard:
     bool updatedName;
-    bool first_open = true; // this is changed to false after launching in on_lineeditGridObjectName_cursorPositionChanged
-    bool keyboard_opened = false;
+    bool firstOpen = true; // this is changed to false after launching in on_lineeditDeckName_cursorPositionChanged
+    bool keyboardOpened = false;
 };
 
 #endif // fileChooserCustom_H
