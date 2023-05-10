@@ -20,14 +20,14 @@ askForBoxesOptions::~askForBoxesOptions()
     delete ui;
 }
 
-void askForBoxesOptions::start(boxes* parentArg) {
-    parent = parentArg;
-    ui->againSpinBox->setValue(parent->theBox.againValue);
-    ui->hardSpinBox_2->setValue(parent->theBox.hardValue);
-    ui->goodSpinBox_3->setValue(parent->theBox.goodValue);
-    ui->easySpinBox_4->setValue(parent->theBox.easyValue);
-    ui->boxesSpinBox->setValue(parent->theBox.howMuchBoxes);
-    ui->skipSpinBox->setValue(parent->theBox.defaultSkipValue);
+void askForBoxesOptions::start(box* parentArg) {
+    boxEdit = parentArg;
+    ui->againSpinBox->setValue(boxEdit->againValue);
+    ui->hardSpinBox_2->setValue(boxEdit->hardValue);
+    ui->goodSpinBox_3->setValue(boxEdit->goodValue);
+    ui->easySpinBox_4->setValue(boxEdit->easyValue);
+    ui->boxesSpinBox->setValue(boxEdit->howMuchBoxes);
+    ui->skipSpinBox->setValue(boxEdit->defaultSkipValue);
 }
 
 void askForBoxesOptions::on_acceptButton_clicked()
@@ -42,31 +42,31 @@ void askForBoxesOptions::on_infoButton_clicked()
 
 void askForBoxesOptions::on_againSpinBox_valueChanged(int arg1)
 {
-    parent->theBox.againValue = arg1;
+    boxEdit->againValue = arg1;
 }
 
 void askForBoxesOptions::on_hardSpinBox_2_valueChanged(int arg1)
 {
-    parent->theBox.hardValue = arg1;
+    boxEdit->hardValue = arg1;
 }
 
 void askForBoxesOptions::on_goodSpinBox_3_valueChanged(int arg1)
 {
-    parent->theBox.goodValue = arg1;
+    boxEdit->goodValue = arg1;
 }
 
 void askForBoxesOptions::on_easySpinBox_4_valueChanged(int arg1)
 {
-    parent->theBox.easyValue = arg1;
+    boxEdit->easyValue = arg1;
 }
 
 void askForBoxesOptions::on_boxesSpinBox_valueChanged(int arg1)
 {
-    parent->theBox.howMuchBoxes = arg1;
+    boxEdit->howMuchBoxes = arg1;
 }
 
 void askForBoxesOptions::on_skipSpinBox_valueChanged(int arg1)
 {
-    parent->theBox.defaultSkipValue = arg1;
+    boxEdit->defaultSkipValue = arg1;
 }
 

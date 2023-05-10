@@ -32,7 +32,7 @@ void boxes::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
         qDebug() << "There is no saved config for box mode, asking things";
         theBox = box();
         askForBoxesOptions* options = new askForBoxesOptions(parent);
-        options->start(this);
+        options->start(&theBox);
         options->exec();
 
         for(uint i = 0; i < theBox.howMuchBoxes; i++) {

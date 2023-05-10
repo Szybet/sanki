@@ -96,7 +96,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Save and Exit</string>
+           <string>Save changes</string>
           </property>
          </widget>
         </item>

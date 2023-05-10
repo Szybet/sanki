@@ -77,6 +77,7 @@ void MainWindow::showSessions() {
         session* newSession = new session(grid);
         newSession->start(file);
         connect(newSession, &session::playSession, this, &MainWindow::playSession);
+        connect(newSession, &session::refreshSessionsSignal, this, &MainWindow::showSessions);
 
         grid->addWidget(newSession);
     }

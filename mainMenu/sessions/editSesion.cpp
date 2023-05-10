@@ -1,14 +1,92 @@
+#include "cardView/modes/boxes/askforboxesoptions.h"
 #include "editSession.h"
 #include "ui_editSession.h"
+#include "components/other/statistics.h"
+
+#include <QDebug>
+
 
 editSession::editSession(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::editSession)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 editSession::~editSession()
 {
     delete ui;
+}
+
+void editSession::start(sessionStr session) {
+    sessionSaved = session;
+    if(sessionSaved.core.mode != Boxes) {
+        ui->comboBox->removeItem(1);
+    }
+    ui->lineEdit->setText(sessionSaved.core.name);
+    settingsSession = new QSettings(directories::sessionSaves.filePath(session.core.name), QSettings::IniFormat);
+    settingsSession->sync();
+}
+
+void editSession::on_cancelButton_clicked() {
+    qDebug() << "Cancel button clicked";
+    this->close();
+}
+
+void editSession::on_comboBox_textActivated(const QString &arg1) {
+    qDebug() << "Combobox button clicked" << arg1;
+    if(arg1 == "Show full statistics") {
+        statistics* newStats = new statistics(this);
+        newStats->start(sessionSaved);
+        newStats->exec();
+    } else if(arg1 == "Box mode settings") {
+        if(settingsSession->value("boxMode/box").isNull() == true && settingsSession->value("boxMode/box").isValid() == false)
+        {
+            qWarning() << "There is no saved data for this deck, for box mode";
+        } else {
+            boxesSettings = settingsSession->value("boxMode/box").value<box>();
+            boxSettingsChanged = true;
+            askForBoxesOptions* options = new askForBoxesOptions();
+            options->start(&boxesSettings);
+            options->exec();
+        }
+    }
+}
+
+void editSession::on_lineEdit_editingFinished() {
+    rename = true;
+}
+
+void editSession::on_saveButton_clicked() {
+    if(rename == true && boxSettingsChanged == true && deleteSession == false) {
+        qWarning() << "Renamed and deleted, aborting";
+        this->close();
+    }
+
+    if(boxSettingsChanged == true) {
+        QVariant variant = QVariant::fromValue(boxesSettings);
+        settingsSession->setValue("boxMode/box", variant);
+        settingsSession->sync();
+    }
+
+    if(rename == true) {
+        QString oldName = sessionSaved.core.name;
+        sessionSaved.core.name = ui->lineEdit->text();
+        QVariant variant = QVariant::fromValue(sessionSaved);
+        settingsSession->setValue("session", variant);
+        settingsSession->sync();
+        directories::sessionSaves.rename(oldName, ui->lineEdit->text());
+    }
+
+    if(deleteSession == true) {
+        directories::sessionSaves.remove(sessionSaved.core.name);
+    }
+
+    emit refreshSessionsSignal();
+    this->close();
+}
+
+void editSession::on_removeSession_toggled(bool checked) {
+    deleteSession = checked;
 }

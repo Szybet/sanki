@@ -1,5 +1,6 @@
 #include "session.h"
 #include "ui_session.h"
+#include "mainMenu/sessions/editSession.h"
 
 #include <QSettings>
 
@@ -40,6 +41,11 @@ void session::on_ButtonDeckPlay_clicked()
 
 void session::on_ButtonOptions_clicked()
 {
-
+    editSession* editSessionDialog = new editSession(this);
+    connect(editSessionDialog, &editSession::refreshSessionsSignal, this, &session::refreshSessionsSlot);
+    editSessionDialog->exec();
 }
 
+void session::refreshSessionsSlot() {
+    emit refreshSessionsSignal();
+}

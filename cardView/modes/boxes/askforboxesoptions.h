@@ -17,8 +17,8 @@ class askForBoxesOptions : public QDialog
 public:
     explicit askForBoxesOptions(QWidget *parent = nullptr);
     ~askForBoxesOptions();
-    void start(boxes* parentArg);
-    boxes* parent;
+    void start(box* parentArg);
+    box* boxEdit;
 private slots:
     void on_acceptButton_clicked();
 

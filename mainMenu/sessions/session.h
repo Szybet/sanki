@@ -18,8 +18,12 @@ public:
     void start(QString path);
     sessionStr sessionSaved;
 
+public slots:
+    void refreshSessionsSlot();
+
 signals:
     void playSession(sessionStr sessionToPlay);
+    void refreshSessionsSignal();
 
 private slots:
     void on_ButtonDeckPlay_clicked();
