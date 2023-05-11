@@ -52,7 +52,7 @@ void fancyGrid::showWidgets() {
     }
 
     // Don't show if it's needed to create a seperate row
-    if(widgets.isEmpty() == true || column != 0) {
+    if(widgets.isEmpty() == true || column == 1 || row == 1) {
         gridItemSpacer* plus = new gridItemSpacer(this);
         connect(plus, &gridItemSpacer::addItem, this, &fancyGrid::addItem);
         connect(this, &fancyGrid::clearItems, plus, &QWidget::close);

@@ -120,3 +120,100 @@ sessionStr mapToSessionStr(const QMap<QString, QVariant> map)
     return session;
 }
 */
+
+QString getStatsForSession(sessionStr* session, bool lastUsed, bool creationTime) {
+    QString returnStr;
+
+    QString mode;
+    // No better no problematic way
+    if(session->core.mode == CompletlyRandomised) {
+        mode = "Completly Randomised";
+    } else if(session->core.mode == Boxes) {
+        mode = "Boxes";
+    }
+
+    returnStr = returnStr + "<b>Mode:</b> " + mode + "<br>";
+    QStringList decks;
+    foreach(QString path, session->core.deckPathList) {
+        decks.append(path.split("/").last());
+    }
+    returnStr = returnStr + "<b>Decks:</b> " + decks.join(",") + "<br>";
+    if(creationTime == true) {
+        returnStr = returnStr + "<b>Created:</b> " + session->time.created.toString("dd.MM.yyyy - hh:mm") + "<br>";
+    }
+    if(lastUsed) {
+        returnStr = returnStr + "<b>Last used:</b> " + session->time.lastUsed.toString("dd.MM.yyyy - hh:mm") + "<br>";
+    }
+
+    QString hours = QString::number(session->time.played / (1000 * 60 * 60)); // Calculate hours
+    QString minutes = QString::number(session->time.played / (1000 * 60)); // Calculate minutes
+    QString seconds = QString::number(session->time.played / 1000); // Calculate minutes
+
+    if(hours.count() == 1) {
+        hours = "0" + hours;
+    }
+    if(minutes.count() == 1) {
+        minutes = "0" + minutes;
+    }
+    if(seconds.count() == 1) {
+        seconds = "0" + seconds;
+    }
+
+    qDebug() << "Played time:" << session->time.played << "hours:" << hours << "minutes:" << minutes << "seconds:" << seconds;
+
+    returnStr = returnStr + "<b>Time spend:</b> " + hours + ":" + minutes + ":" + seconds + "<br>";
+
+    returnStr = returnStr + "<b>How many times used:</b> " + QString::number(session->time.playedCount) + "<br>";
+    if(QString::number(session->cardList.count()) != 0) {
+        returnStr = returnStr + "<b>Total cards:</b> " + QString::number(session->cardList.count()) + "<br>";
+    }
+
+    return returnStr;
+}
+
+QString getSmallStatsForSession(sessionStr* session, bool lastUsed) {
+    QString returnStr;
+
+    QString mode;
+    // No better no problematic way
+    if(session->core.mode == CompletlyRandomised) {
+        mode = "Completly Randomised";
+    } else if(session->core.mode == Boxes) {
+        mode = "Boxes";
+    }
+
+    returnStr = returnStr + mode + "<br>";
+    QStringList decks;
+    foreach(QString path, session->core.deckPathList) {
+        decks.append(path.split("/").last());
+    }
+    returnStr = returnStr + decks.join(",") + "<br>";
+
+    if(lastUsed) {
+        returnStr = returnStr + session->time.lastUsed.toString("dd.MM.yyyy - hh:mm") + "<br>";
+    }
+
+    QString hours = QString::number(session->time.played / (1000 * 60 * 60)); // Calculate hours
+    QString minutes = QString::number(session->time.played / (1000 * 60)); // Calculate minutes
+    QString seconds = QString::number(session->time.played / 1000); // Calculate minutes
+
+    if(hours.count() == 1) {
+        hours = "0" + hours;
+    }
+    if(minutes.count() == 1) {
+        minutes = "0" + minutes;
+    }
+    if(seconds.count() == 1) {
+        seconds = "0" + seconds;
+    }
+
+    qDebug() << "Played time:" << session->time.played << "hours:" << hours << "minutes:" << minutes << "seconds:" << seconds;
+
+    returnStr = returnStr + hours + ":" + minutes + ":" + seconds + "<br>";
+
+    returnStr = returnStr + QString::number(session->time.playedCount) + "<br>";
+    if(QString::number(session->cardList.count()) != 0) {
+        returnStr = returnStr + QString::number(session->cardList.count()) + "<br>";
+    }
+    return returnStr;
+}

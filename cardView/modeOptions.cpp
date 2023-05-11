@@ -61,3 +61,17 @@ void modeChooser::on_ButtonBoxes_clicked()
     modeManager(Boxes);
 }
 
+
+void modeChooser::on_boxesInfoButton_clicked()
+{
+    QString info = "This is the closest to the Anki experience<br><br>"
+                   "Cards are put in boxes, and depending on the button value ( good, bad... etc ) it is moved to a diffrent box<br><br>"
+        "this determines how often the card is shown";
+    qInfo() << info;
+}
+
+
+void modeChooser::on_CRInfoButton_clicked()
+{
+    qInfo() << "Completly randomly choosed cards are shown. There is no making sure that they don't repeat often";
+}

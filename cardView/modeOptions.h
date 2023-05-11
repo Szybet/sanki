@@ -26,6 +26,10 @@ private slots:
 
     void on_ButtonBoxes_clicked();
 
+    void on_boxesInfoButton_clicked();
+
+    void on_CRInfoButton_clicked();
+
 private:
     Ui::modeChooser *ui;
     DeckModes mode = None;

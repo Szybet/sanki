@@ -59,7 +59,7 @@ void editSession::on_lineEdit_editingFinished() {
 }
 
 void editSession::on_saveButton_clicked() {
-    if(rename == true && boxSettingsChanged == true && deleteSession == false) {
+    if((rename == true || boxSettingsChanged == true) && deleteSession == false) {
         qWarning() << "Renamed and deleted, aborting";
         this->close();
     }

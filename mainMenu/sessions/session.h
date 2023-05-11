@@ -17,9 +17,12 @@ public:
     ~session();
     void start(QString path);
     sessionStr sessionSaved;
+    QTimer* timer;
+    bool normalStats = false;
 
 public slots:
     void refreshSessionsSlot();
+    void statsManager();
 
 signals:
     void playSession(sessionStr sessionToPlay);
@@ -27,8 +30,10 @@ signals:
 
 private slots:
     void on_ButtonDeckPlay_clicked();
-
     void on_ButtonOptions_clicked();
+
+    void showRegularStats();
+    void showFocusedStats();
 
 private:
     Ui::session *ui;

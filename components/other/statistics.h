@@ -18,7 +18,6 @@ public:
     explicit statistics(QWidget *parent = nullptr);
     ~statistics();
     void start(sessionStr session);
-    QString getStatsForSession(sessionStr* session, bool lastUsed);
     void setUpChart(QtCharts::QChartView* chart, QString title);
 
 private:

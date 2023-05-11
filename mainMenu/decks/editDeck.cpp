@@ -9,7 +9,7 @@
 #include <QTimer>
 #include <QCursor>
 #include <QProgressDialog>
-#include <QSettings>>
+#include <QSettings>
 
 editDeck::editDeck(QDialog *parent) :
     QDialog(parent),

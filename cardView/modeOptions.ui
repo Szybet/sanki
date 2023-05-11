@@ -44,21 +44,66 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QRadioButton" name="ButtonBoxes">
-          <property name="text">
-           <string>Boxes</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QRadioButton" name="ButtonBoxes">
+            <property name="text">
+             <string>Boxes</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="boxesInfoButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../Resources/sanki.qrc">
+              <normaloff>:/icons/info.svg</normaloff>:/icons/info.svg</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QRadioButton" name="ButtonCRandom">
-          <property name="text">
-           <string>Completly randomised</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QRadioButton" name="ButtonCRandom">
+            <property name="text">
+             <string>Completly randomised</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="CRInfoButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../Resources/sanki.qrc">
+              <normaloff>:/icons/info.svg</normaloff>:/icons/info.svg</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QRadioButton" name="ButtonRandomNR">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Randomised - No repeating</string>
           </property>
@@ -94,6 +139,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../Resources/sanki.qrc"/>
+  <include location="../Resources/sanki.qrc"/>
+ </resources>
  <connections/>
 </ui>
