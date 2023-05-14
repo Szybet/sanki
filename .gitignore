@@ -94,3 +94,5 @@ inkbox_userapp/sanki/app-bin/*.bin
 
 # just to be sure...
 *.pem
+
+target/
