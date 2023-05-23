@@ -111,9 +111,11 @@ int main(int argc, char *argv[])
     qDebug() << "Running platform: PC";
 #endif
 
-#ifdef ereader
+#ifdef EREADER
     ereader = true;
     qDebug() << "Running platform: ereader";
+    checkEreaderModel();
+    warningsEnabled = false; // fb plugin
 #endif
 
     QApplication a(argc, argv);
@@ -143,52 +145,54 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<box>("box");
 
-    MainWindow w;
-
-    // TODO: deckSelect for ereader app-data and save the selected path to config, on pc too
-    qDebug() << "Deck storage path is" << directories::deckStorage;
-    if(directories::deckStorage.exists() == false) {
-        QDir newDir; // Why variable is needed
-        newDir.mkpath(directories::deckStorage.path());
-    }
-
-    // TODO: deckSelect for ereader app-data and save the selected path to config, on pc too
-    qDebug() << "Session saves path is" << directories::sessionSaves;
-    if(directories::sessionSaves.exists() == false) {
-        QDir newDir; // Why variable is needed
-        newDir.mkpath(directories::sessionSaves.path());
-    }
-
     if(ereader) {
         // https://github.com/Szybet/niAudio/blob/main/apps-on-kobo/fix-special-characters-qt.md
         QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
 
-        // TODO
-        // Check and apply stylesheet if available
-        /*
-        screen_geometry();
-        check_device();
+        screenGeometry();
 
-        if(running_on_kobo == true)
-        {
-            // inkbox user app
-            //QFile style_file("/mnt/onboard/.adds/inkbox/eink.qss");
-            // TODO
-            QFile style_file("/etc/eink.qss");
+        a.setStyle("windows");
+        QFile stylesheetFile("://other/eink.qss");
+        stylesheetFile.open(QFile::ReadOnly);
+        a.setStyleSheet(stylesheetFile.readAll());
+        stylesheetFile.close();
+        qDebug() << "Applied stylesheet for ereader";
 
-            if(style_file.exists() == false)
-            {
-                //debugLog("stylesheet file doesn't exist", "main.cpp", "main()");
-            }
-
-            style_file.open(QFile::ReadOnly);
-            QString styleSheet = QLatin1String(style_file.readAll());
-            a.setStyleSheet(styleSheet);
+        if(ereaderVars::inkboxUserApp == true) {
+            directories::config = QDir("/app-data");
+            directories::deckSelect = QDir("/app-data"); // For now
+        } else {
+            directories::config = QDir("/sanki_debug_dir");
+            directories::deckSelect = QDir("/"); // For now
         }
-        */
+        directories::deckStorage = directories::config.path() + QDir::separator() + "decks";
+        directories::sessionSaves = directories::config.path() + QDir::separator() + "sessions";
+    }
+
+    MainWindow w;
+
+    if(ereader) {
         w.showFullScreen();
+        warningsEnabled = true;
     } else if(pc) {
         w.show();
+    }
+
+    if(directories::config.exists() == false) {
+        QDir newDir; // Why variable is needed
+        newDir.mkpath(directories::config.path());
+    }
+
+    qDebug() << "Deck storage path is" << directories::deckStorage;
+    if(directories::deckStorage.exists() == false) {
+        QDir newDir;
+        newDir.mkpath(directories::deckStorage.path());
+    }
+
+    qDebug() << "Session saves path is" << directories::sessionSaves;
+    if(directories::sessionSaves.exists() == false) {
+        QDir newDir;
+        newDir.mkpath(directories::sessionSaves.path());
     }
 
     return a.exec();

@@ -1,0 +1,451 @@
+
+QPushButton[type="borderless"]
+{
+    background: white;
+    border: none;
+    padding: 2px;
+    outline: none;
+}
+
+QPushButton[type="borderless"]:focus
+{
+    border: none;
+}
+
+QPushButton[type="borderless"]:pressed
+{
+    background: black;
+    color: white;
+    border: none;
+}
+
+QPushButton[type="bw"]
+{
+    background: white;
+    border: none;
+    padding: 2px;
+    outline: none;
+    font-size: 10pt;
+}
+QPushButton[type="bw"]:focus
+{
+    border: none;
+}
+
+QPushButton[type="bw"]
+{
+    background: black;
+    color: white;
+    border: none;
+}
+
+QLabel[type="mangainfolabel"]
+{
+    font-weight: bold;
+    font-size: 10pt;
+}
+
+QLabel[type="mangainfocontent"]
+{
+    font-size: 10pt;
+}
+
+QFrame#listViewSources
+{
+    border: none;
+    font-size: 7pt;
+    outline: none;
+}
+
+QListView#listViewMangas
+{
+    border: none;
+    padding: 8px;
+    font-size: 12pt;
+}
+
+QFrame#listViewChapters
+{
+    border: none;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 12pt;
+}
+
+QFrame#topButtonsFrame
+{
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+QFrame#frameButtons
+{
+    border-top: 1px solid black;
+}
+
+QListView::item:selected#listViewSources
+{
+    background: white;
+    color: black;
+}
+
+QListView::item:focused#listViewSources
+{
+    background: white;
+    color: black;
+}
+
+QFrame#frameProgress
+{
+    border: 1px solid black;
+}
+
+QLineEdit#lineEditFilter
+{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    font-size: 12pt;
+}
+
+QFrame#searchButtonFrame
+{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border:1px solid black;
+}
+
+QPushButton#pushButtonFilterClear
+{
+    font-size: 16pt;
+}
+
+
+QWidget
+{
+    background-color: white;
+    selection-color: white;
+    selection-background-color: black;
+    font-size: 10pt;
+}
+
+QMenu
+{
+  border: 1px solid black;
+  background-color:white;
+}
+QMenu::item::selected
+{
+  background: grey;
+  border: 3px solid black;
+}
+QMenu::item
+{
+  padding: 0px 25px 0px 20px;
+  border-bottom: 5px solid transparent;
+}
+QMenu::indicator
+{
+    width: 20px;
+    height: 20px;
+}
+QMenu::indicator:exclusive:checked
+{
+    image: url(://resources/checkbox-checked.png);
+}
+
+QCheckBox::indicator
+{
+  width: 25px;
+  height: 25px;
+  margin: 3px;
+  border: none;
+}
+
+QCheckBox::indicator:checked
+{
+  image: url(:/resources/checkbox-checked.png);
+}
+
+QCheckBox::indicator:unchecked
+{
+  image: url(:/resources/checkbox-unchecked.png);
+}
+
+QLineEdit, QDoubleSpinBox
+{
+  background-color:white;
+  border:1px solid black;
+  padding: 2px;
+  border-radius: 10px;
+}
+
+QLineEdit:focus, QDoubleSpinBox:focus
+{
+  border: 1px solid black;
+  padding: 1px;
+}
+QLineEdit:edit-focus, QDoubleSpinBox:edit-focus
+{
+  border: 3px solid black;
+  padding: 1px;
+}
+
+QTextEdit
+{
+  border: none;
+}
+QTextEdit:focus
+{
+  border: none;
+}
+QTextEdit:edit-focus
+{
+  border: none;
+}
+
+QComboBox
+{
+  background-color:white;
+  border: 1.5px solid black;
+  border-radius:10px;
+  padding-top: 3px;
+  padding-right: 0px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+}
+QComboBox:focus
+{
+  border: 3px solid black;
+  padding-top: 1px;
+  padding-right: 0px;
+  padding-bottom: 1px;
+  padding-left: 3px;
+}
+QComboBox::drop-down
+{
+  border-width:1px;
+  border-radius:10px;
+}
+QComboBox::down-arrow {
+  image:url(:/down-arrow.png);
+  padding-top: 2px;
+  padding-right: 5px;
+  padding-bottom: 2px;
+  padding-left: 0px;
+}
+QComboBox::down-arrow:focus
+{
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+}
+QTreeView {
+    padding: 2px;
+    border: 1px solid black;
+    background: white;
+    outline: none;
+    font-size: 10pt;
+}
+QListView {
+    padding: 6px;
+    border: 1px solid black;
+    background: white;
+    outline: none;
+    font-size: 12pt;
+}
+QTreeView:focus, QTableView:focus {
+    padding: 1px;
+    border: 1px solid black;
+}
+QTreeView:edit-focus, QListView:edit-focus, QTableView:edit-focus {
+    padding: 0px;
+    border: 3px solid black;
+}
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings
+{
+    border-image: none;
+    image: url(:/plus.png);
+}
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings
+{
+    border-image: none;
+    image: url(:/minus.png);
+}
+
+QPushButton
+{
+    background: white;
+    color: black;
+    padding: 2px;
+    outline: none;
+    border-radius: 10px;
+}
+QPushButton:focus {
+    background: grey;
+    padding: 2px;
+}
+QPushButton:pressed
+{
+    background: black;
+    color: white;
+    padding: 2px;
+}
+
+QToolButton
+{
+    background: transparent;
+    border: none;
+    color: black;
+    padding: 2px;
+    outline: none;
+}
+QToolButton:checked
+{
+    border: none;
+}
+
+QToolButton:focus {
+    border: none;
+    padding: 2px;
+}
+QToolButton:pressed {
+    background: black;
+    border: none;
+    padding: 2px;
+}
+
+QSlider::groove:horizontal {
+     border: 1.5px solid black;
+     height: 30px;
+     background: white;
+     margin: 0px 0;
+}
+QSlider::handle:horizontal {
+     background: black;
+     border: 1.5px solid black;
+     height: 30px;
+     width: 40px;
+     margin: 0px 0;
+}
+
+QSlider::handle:horizontal::focus {
+     background: black;
+}
+
+QScrollBar {
+    background: white;
+    border: 5px solid lightGrey;
+}
+
+QScrollBar:vertical {
+    width: 35px
+}
+QScrollBar:horizontal {
+    height: 35px
+}
+QScrollBar::handle {
+    background: black;
+    min-width: 25px;
+    min-height: 25px;
+    border: 5px;
+}
+QScrollBar::add-line {
+    width: 0px;
+}
+QScrollBar::sub-line {
+    width: 0px;
+}
+
+QDialog {
+    border: 3px solid black;
+    background: white;
+}
+
+QProgressBar {
+    border: 1.5px solid black;
+    border-radius: 10px;
+    text-align: center;
+    background: white;
+    color: rgb(160, 160, 160);
+}
+
+QProgressBar::chunk {
+    background: black;
+    color: white;
+    border-radius: 7px;
+}
+
+QTreeView::branch:has-siblings:!adjoins-item {
+    border-image: url(://resources/vline.png) 0;
+}
+
+QTreeView::branch:has-siblings:adjoins-item {
+    border-image: url(://resources/branch-more.png) 0;
+}
+
+QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+    border-image: url(://resources/branch-end.png) 0;
+}
+
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings {
+        border-image: none;
+        image: url(://resources/branch-closed.png);
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings  {
+        border-image: none;
+        image: url(://resources/branch-open.png);
+}
+
+QSpinBox {
+    background-color: white;
+    border-width: 0;
+    padding-left: 10px;
+    padding-right: 20px;
+}
+
+QSpinBox::up-button {
+    subcontrol-position: right;
+    width: 35px;
+    height: 35px;
+    image: url(://resources/up-arrow.png);
+}
+
+QSpinBox::down-button {
+    subcontrol-position: left;
+    width: 35px;
+    height: 35px;
+    image: url(://resources/down-arrow.png);
+}
+
+QSpinBox::up-button:pressed {
+    border-image: url(://resources/up-arrow-pressed.png) 1;
+}
+
+QSpinBox::down-button:pressed {
+    border-image: url(://resources/down-arrow-pressed.png) 1;
+}
+
+QTabBar::tab:selected {
+    background: lightgrey
+}
+
+QTabBar::tab {
+    border: 2px solid black;
+    border-bottom-color: black;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    min-width: 5ex;
+    padding: 3px;
+}
+
+QTabBar {
+    border-bottom: 2px solid black;
+}

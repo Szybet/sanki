@@ -31,9 +31,10 @@ QDir directories::deckSelect = QDir::homePath();
 QString deckAddedFileName = "creationTime";
 
 QString ereaderVars::model = "";
-int ereaderVars::screen_x = 1920;
-int ereaderVars::screen_y = 1080;
-int ereaderVars::batt_level_int = 100;
+bool ereaderVars::inkboxUserApp = false;
+int ereaderVars::screenX = 1920;
+int ereaderVars::screenY = 1080;
+int ereaderVars::batteryLevel = 100;
 
 bool renameDir(QDir & dir, const QString & newName) {
     // https://stackoverflow.com/questions/39229177/qdirrename-redundant-parameters
@@ -45,29 +46,33 @@ bool renameDir(QDir & dir, const QString & newName) {
     return rc;
 }
 
-void check_device()
+void checkEreaderModel()
 {
-    // If its running on kobo
-    if(qgetenv("QT_QPA_PLATFORM") == "kobo")
-    {
-        ereaderVars::model = qgetenv("DEVICE_CODENAME");
-        ereaderVars::model = ereaderVars::model.remove("\n"); // Yes, just to be sure
+    QFile versionFile = QFile{"/mnt/onboard/.kobo/version"};
+    if(versionFile.exists() == false) {
+        qDebug() << "Unknown ereader device or in debug mode";
+        return void();
+    }
+    versionFile.open(QIODevice::ReadOnly);
+    ereaderVars::model = versionFile.readAll().replace("\n", "");
+    versionFile.close();
+    qDebug() << "Sanki is running on a kobo:" << ereaderVars::model;
 
-        qDebug() << "Sanki is running on a kobo " << ereaderVars::model;
+    if(ereaderVars::model.length() > 6) {
+        ereaderVars::inkboxUserApp = false;
     } else {
-        qDebug() << "Sanki is not running on a kobo";
+        ereaderVars::inkboxUserApp = true;
     }
 }
 
 
-// This function creates all global variables that need to be accesed at the begging
-void screen_geometry()
+// Ereader mainly
+void screenGeometry()
 {
-    // Window geometry
     QRect screenGeometry = QGuiApplication::screens()[0]->geometry();
-    ereaderVars::screen_x = screenGeometry.width();
-    ereaderVars::screen_y = screenGeometry.height();
-    qDebug() << "Screen size is x:" << ereaderVars::screen_x << "y:" << ereaderVars::screen_y;
+    ereaderVars::screenX = screenGeometry.width();
+    ereaderVars::screenY = screenGeometry.height();
+    qDebug() << "Screen size is x:" << ereaderVars::screenX << "y:" << ereaderVars::screenY;
 }
 void check_battery_level()
 {
@@ -83,11 +88,11 @@ void check_battery_level()
         //message.append(batt_level);
         //debugLog(message, "globals.h", "check_battery_level");
 
-        ereaderVars::batt_level_int = batt_level.toInt();
+        ereaderVars::batteryLevel = batt_level.toInt();
         batt_level_file.close();
     }
     else {
-        ereaderVars::batt_level_int = 100;
+        ereaderVars::batteryLevel = 100;
     }
 }
 void set_brightness(int value) {

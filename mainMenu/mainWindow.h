@@ -30,6 +30,7 @@ public slots:
 
     void getDeck(QString file);
     void doneSelectingDecks();
+    void updateGrid();
 
     void playSession(sessionStr sessionPlay);
 
@@ -57,5 +58,6 @@ private:
     statusBarC* statusBarCWidget;
     DeckPlay* playDeck;
     QList<QString> deckPathList;
+    bool areDecksShown = false;
 };
 #endif // MAINWINDOW_H

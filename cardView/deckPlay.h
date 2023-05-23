@@ -53,6 +53,7 @@ private:
     QElapsedTimer* elapsedTimer;
     bool already2Minutes = false;
     QTimer* timer;
+    bool working = true;
 };
 
 #endif // DECKPLAY_H

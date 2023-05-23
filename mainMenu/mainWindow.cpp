@@ -62,6 +62,7 @@ void MainWindow::resetGrid() {
 
 void MainWindow::resetStatusBar() {
     statusBarCWidget->disconnect();
+    connect(statusBarCWidget, &statusBarC::refreshDecksSignal, this, &MainWindow::updateGrid);
 }
 
 void MainWindow::showSessions() {
@@ -83,6 +84,7 @@ void MainWindow::showSessions() {
     }
 
     grid->showWidgets();
+    areDecksShown = false;
 }
 
 void MainWindow::showDecks() {
@@ -106,6 +108,7 @@ void MainWindow::showDecks() {
         grid->addWidget(newDeck);
     }
     grid->showWidgets();
+    areDecksShown = true;
 }
 
 void MainWindow::getDeck(QString path) {
@@ -230,7 +233,7 @@ void MainWindow::addSlotSession() {
 void MainWindow::doneSelectingDecks() {
     qDebug() << "doneSelectingDecks called";
     if(deckPathList.isEmpty() == true) {
-        qCritical() << "No decks selected";
+        qWarning() << "No decks selected";
         returnToStart();
         return void();
     }
@@ -252,7 +255,7 @@ void MainWindow::createSession() {
     }
 
     if (continueCreating == false || text.isEmpty() == true) {
-        qCritical() << "No session text provided";
+        qWarning() << "No session text provided";
         returnToStart();
         return void();
     }
@@ -260,7 +263,7 @@ void MainWindow::createSession() {
     qDebug() << "Selected session name:" << text;
 
     if(QFile(directories::sessionSaves.filePath(text)).exists() == true) {
-        qCritical() << "Session of such name already exists";
+        qWarning() << "Session of such name already exists";
         returnToStart();
         return void();
     }
@@ -311,6 +314,7 @@ void MainWindow::playSession(sessionStr sessionPlay) {
 
     playDeck->start(sessionPlay);
     playDeck->show();
+    areDecksShown = false;
 }
 
 void MainWindow::hardResetDeckPlay() {
@@ -322,4 +326,12 @@ void MainWindow::hardResetDeckPlay() {
 
     grid->show();
     showSessions();
+}
+
+// Settings need it
+void MainWindow::updateGrid() {
+    // Only when deck are shown
+    if(areDecksShown == true) {
+        showDecks();
+    }
 }

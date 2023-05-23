@@ -79,6 +79,7 @@ void statusBarC::on_ButtonSettings_clicked()
 {
     Settings* settings_qdialog = new Settings;
     settings_qdialog->exec();
+    emit refreshDecksSignal();
 }
 
 void statusBarC::on_ButtonOption_2_clicked()

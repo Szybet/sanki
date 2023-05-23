@@ -8,12 +8,14 @@
         <file>battery_half.png</file>
         <file>battery_full.png</file>
         <file>deckAdd.svg</file>
-        <file>sanki.qrc</file>
         <file>sessionAdd.svg</file>
         <file>cursor.png</file>
         <file>confirm.svg</file>
         <file>statistics.svg</file>
         <file>back.svg</file>
         <file>info.svg</file>
+    </qresource>
+    <qresource prefix="/other">
+        <file>eink.qss</file>
     </qresource>
 </RCC>

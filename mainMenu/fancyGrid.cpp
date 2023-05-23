@@ -83,7 +83,7 @@ void fancyGrid::manageCells() {
         column = 0;
         row = row + 1;
     } else if(column > 2) {
-        qCritical() << "Column is above limit";
+        qWarning() << "Column is above limit";
     }
 }
 

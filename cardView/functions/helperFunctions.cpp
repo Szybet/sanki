@@ -100,11 +100,13 @@ QString findDatabaseFile(QDir deckPath) {
         return collection21.fileName();
     } else if(collection2.exists() == true) {
         qDebug() << "Returning:" << collection2.fileName();
-        qWarning() << "Only old version of the database was found for deck" << deckPath.dirName() << "\npropably this will cause problems";
+        // Actually important debug
+        qDebug() << "Only old version of the database was found for deck" << deckPath.dirName() << "propably this will cause problems";
         return collection2.fileName();
     } else {
-        QString message = "No supported collection file was found in this deck: " + deckPath.dirName() + "\nIt is probably too new and has not been tested.";
-        qFatal("%s", message.toStdString().c_str());
+        QString message = "No supported collection file was found in this deck: " + deckPath.dirName() + "<br>It is probably too new and has not been tested, <strong>Or the deck is missing</strong>";
+        qWarning() << message;
+        return "none";
     }
 }
 
@@ -113,7 +115,7 @@ QString findMediaFile(card* acard, sessionStr* session) {
     if(QFile(mediaFile).exists() == true) {
         return mediaFile;
     } else {
-        qCritical() << "Media file doesn't found for deck at:" << mediaFile;
+        qWarning() << "Media file doesn't found for deck at:" << mediaFile;
     }
     return QString(); // Supress warning
 }
@@ -125,7 +127,7 @@ QString cardExtract(card* acard, DeckPlay* parent) {
         query.next();
         return query.value(0).toString();
     } else {
-        qCritical() << "Failed to find card content:" << &acard;
+        qWarning() << "Failed to find card content:" << &acard;
     }
 
 }

@@ -52,13 +52,21 @@ void DeckPlay::start(sessionStr newSession)
         // http://katecpp.github.io/sqlite-with-qt/
         // Important: Connection as number
         QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", QString::number(count));
-        db.setDatabaseName(findDatabaseFile(directories::deckStorage.filePath(dir)));
+
+        QString databaseFile = findDatabaseFile(directories::deckStorage.filePath(dir));
+        if(databaseFile == "none") {
+            working = false;
+            return void();
+        }
+        db.setDatabaseName(databaseFile);
         if (db.open() == true) {
             qDebug() << "Test open succesfull";
             realSqlDatabases.append(db);
         } else {
-            qCritical() << "Failed to open database:" << dir;
+            qWarning() << "Failed to open database:" << dir;
+            working = false;
             db.close();
+            return void();
         }
         count = count + 1;
     }
@@ -223,6 +231,9 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
 }
 
 void DeckPlay::saveSessionData() {
+    if(working == false) {
+        return void();
+    }
     qint64 timerElapsed = elapsedTimer->restart();
     if(timerElapsed > 120000 && already2Minutes == false) {
         currectSession.time.playedCount += 1;
@@ -246,12 +257,15 @@ void DeckPlay::saveSessionData() {
         saveSession->sync();
         qDebug() << "Saved session";
     } else {
-        qCritical() << "Failed to save session";
+        qWarning() << "Failed to save session";
     }
 }
 
 void DeckPlay::exitIt() {
     qDebug() << "Exit it DeckPlay called";
+    if(working == false) {
+        return void();
+    }
     saveSessionData();
     timer->stop();
     timer->disconnect();
@@ -269,9 +283,11 @@ void DeckPlay::exitIt() {
 
 void DeckPlay::showStats() {
     qDebug() << "showStats";
-
+    // Avoid crashes
+    if(working == false) {
+        return void();
+    }
     saveSessionData();
-
     statistics* newStats = new statistics(this);
     newStats->start(currectSession);
     newStats->exec();

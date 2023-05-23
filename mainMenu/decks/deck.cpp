@@ -47,7 +47,7 @@ void deck::start(QString path) {
     }
 
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "0");
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "cardCounter");
         db.setDatabaseName(findDatabaseFile(dir));
         if(db.open()) {
             QSqlQuery answer = db.exec("SELECT COUNT(id) FROM notes");

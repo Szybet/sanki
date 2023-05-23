@@ -219,7 +219,7 @@ async fn main() {
 
     let loop_thread = tokio::spawn(async move {
         loop {
-            thread::sleep(time::Duration::from_millis(300));
+            thread::sleep(time::Duration::from_millis(5000));
 
             let locked = unsafe { DECK_LIST.lock().await };
             if locked.is_empty() {

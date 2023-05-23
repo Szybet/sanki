@@ -8,11 +8,6 @@ keyboard::keyboard(QDialog *parent) :
 {
     ui->setupUi(this);
 
-    int y = (ereaderVars::screen_y / 2);
-    this->move(0, y);
-    this->setMinimumSize(ereaderVars::screen_x, y);
-    this->adjustSize();
-
     ui->lineEdit->setVisible(false);
     lower_case_buttons();
     lower_case = true;

@@ -3,11 +3,15 @@ QT += \
     gui \
     sql \
     widgets \
-    charts
+    charts \
+    network
+
+QTPLUGIN += qtvirtualkeyboardplugin
 
 CONFIG += \
     c++11 \
-    c++17
+    c++17 \
+    disable-desktop
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -27,6 +31,7 @@ SOURCES += \
     components/files/fileChooser.cpp \
     components/other/askForText.cpp \
     components/other/griditemspacer.cpp \
+    components/other/lineEditVirtualKeyboard.cpp \
     components/other/statistics.cpp \
     components/settings.cpp \
     components/statusBarC.cpp \
@@ -55,6 +60,7 @@ HEADERS += \
     components/files/fileChooser.h \
     components/other/askForText.h \
     components/other/griditemspacer.h \
+    components/other/lineEditVirtualKeyboard.h \
     components/other/statistics.h \
     components/settings.h \
     components/statusBarC.h \
@@ -94,7 +100,8 @@ FORMS += \
 unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES +=
+DISTFILES += \
+    Resources/eink.qss
 
 RESOURCES += \
     Resources/sanki.qrc
@@ -108,15 +115,15 @@ TARGET_DEVICE = $$(TARGET_DEVICE) # You need to set TARGET_DEVICE in your qtcrea
 # https://stackoverflow.com/questions/39338987/how-to-detect-target-ios-architecture-in-qmake
 # https://stackoverflow.com/questions/60898385/if-else-if-equivalent-for-qmake-pro-qt-file
 
-if(contains(TARGET_DEVICE, KOBO)) {
+if(contains(TARGET_DEVICE, EREADER)) {
     LIBS += -L$$PWD/libraries/zip_libraries/lib-build/KOBO -lzip
     DESTDIR = build/kobo/
     OBJECTS_DIR = build/kobo/.obj
     MOC_DIR = build/kobo/.moc
     RCC_DIR = build/kobo/.rcc
     UI_DIR = build/kobo/.ui
-    message("Choosed libraries for KOBO")
-    DEFINES += KOBO=true
+    message("Choosed libraries for EREADER")
+    DEFINES += EREADER=true
 }
 
 if(contains(TARGET_DEVICE, PC)) {

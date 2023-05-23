@@ -33,6 +33,7 @@ signals:
     void optionButtonSignal();
     void closeButtonSignal();
     void option2ButtonSignal();
+    void refreshDecksSignal();
 
 private:
     Ui::statusBarC *ui;

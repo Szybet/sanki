@@ -95,7 +95,7 @@ void boxes::loop() {
         }
     }
     if(first == true) {
-        qCritical() << "Didn't found any card to view? The program will propably crash";
+        qWarning() << "Didn't found any card to view? The program will propably crash";
     }
     // All cards have a skip attribute - so choosing the first one in the row
     if(found == false && first == false) {

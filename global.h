@@ -21,10 +21,11 @@ extern QString deckAddedFileName;
 
 namespace ereaderVars {
     extern QString model;
+    extern bool inkboxUserApp;
     extern bool running_on_kobo;
-    extern int screen_x;
-    extern int screen_y;
-    extern int batt_level_int;
+    extern int screenX;
+    extern int screenY;
+    extern int batteryLevel;
 }
 
 enum DeckModes {
@@ -36,8 +37,8 @@ enum DeckModes {
 Q_DECLARE_METATYPE(DeckModes);
 
 bool renameDir(QDir & dir, const QString & newName);
-void check_device();
-void screen_geometry();
+void checkEreaderModel();
+void screenGeometry();
 void check_battery_level();
 void set_brightness(int value);
 int get_brightness();

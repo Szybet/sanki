@@ -23,14 +23,22 @@ private slots:
 
     void requestEreaderPage();
     void requestMenuPage();
+    void requestSyncPage();
+
+    void on_buttonSyncInfo_clicked();
+
+    void on_buttonSync_clicked();
+
+    void on_checkBox_stateChanged(int arg1);
+
 private:
     Ui::Settings *ui;
-    int maxPageNumber = 1;
     enum Direction{
         Right,
         Left,
     };
     void managePage(int newIndex, Direction fromWhere);
+    bool overwriteDeck = false;
 };
 
 #endif // SETTINGS_H

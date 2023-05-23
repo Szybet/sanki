@@ -24,6 +24,8 @@ editDeck::editDeck(QDialog *parent) :
         ui->frame->setStyleSheet(".QFrame{background-color: white; border: 4px solid black; border-radius: 10px;}");
     }
 
+
+
     // this->adjustSize();
 }
 
@@ -77,7 +79,7 @@ void editDeck::on_ButtonSaveExit_clicked()
 
     if(removeDeck == true and updatedName == true)
     {
-        qCritical() << "Renamed and removed. try again with only one option";
+        qWarning() << "Renamed and removed. try again with only one option";
     }
 
     if (updatedName == true) {
@@ -102,7 +104,7 @@ void editDeck::on_ButtonSaveExit_clicked()
 
                 sessionStr session = settings.value("session").value<sessionStr>();
                 if(session.core.name != file) {
-                    qCritical() << "Failed to load session, sessions with this deck are corrupted...";
+                    qWarning() << "Failed to load session, sessions with this deck are corrupted...";
                     progress.close();
                     break;
                 }
@@ -119,7 +121,7 @@ void editDeck::on_ButtonSaveExit_clicked()
 
                 QVariant toSave = QVariant::fromValue(session);
                 if(toSave.isValid() == false || toSave.isNull() == true) {
-                    qCritical() << "Failed to save session, sessions with this deck are corrupted...";
+                    qWarning() << "Failed to save session, sessions with this deck are corrupted...";
                     progress.close();
                     break;
                 }

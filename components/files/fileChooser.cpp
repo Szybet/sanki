@@ -12,10 +12,6 @@ fileChooserCustom::fileChooserCustom(QDialog *parent) :
     ui(new Ui::fileChooserCustom)
 {
     ui->setupUi(this);
-    this->move(0, 0);
-    this->setMinimumSize(ereaderVars::screen_x, ereaderVars::screen_y);
-    this->setMaximumSize(ereaderVars::screen_x, ereaderVars::screen_y);
-    this->adjustSize();
 
     // ("border: 0px solid black; border-radius: 0px;");
 
@@ -110,7 +106,7 @@ void fileChooserCustom::on_ButtonConfirm_clicked()
         }
         this->close();
     } else {
-        qCritical() << "Choose a file with" << file_extension << " extension";
+        qWarning() << "Choose a file with" << file_extension << " extension";
     }
 }
 
