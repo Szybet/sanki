@@ -74,6 +74,7 @@ void screenGeometry()
     ereaderVars::screenY = screenGeometry.height();
     qDebug() << "Screen size is x:" << ereaderVars::screenX << "y:" << ereaderVars::screenY;
 }
+
 void check_battery_level()
 {
     // Copied from inkbox

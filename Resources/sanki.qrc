@@ -9,13 +9,25 @@
         <file>battery_full.png</file>
         <file>deckAdd.svg</file>
         <file>sessionAdd.svg</file>
-        <file>cursor.png</file>
         <file>confirm.svg</file>
         <file>statistics.svg</file>
         <file>back.svg</file>
         <file>info.svg</file>
+        <file>left.svg</file>
+        <file>right.svg</file>
     </qresource>
     <qresource prefix="/other">
         <file>eink.qss</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>eink/checkbox-checked-small.png</file>
+        <file>eink/checkbox-checked.png</file>
+        <file>eink/checkbox-indeterminate.png</file>
+        <file>eink/checkbox-unchecked-small.png</file>
+        <file>eink/checkbox-unchecked.png</file>
+        <file>eink/checkbox-x-small.png</file>
+        <file>eink/checkbox-x.png</file>
+        <file>eink/down-arrow-pressed.png</file>
+        <file>eink/up-arrow-pressed.png</file>
     </qresource>
 </RCC>

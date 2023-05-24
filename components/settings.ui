@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>456</width>
+    <height>405</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
-    <number>4</number>
+    <number>10</number>
    </property>
    <property name="leftMargin">
     <number>4</number>
@@ -27,7 +27,7 @@
     <number>4</number>
    </property>
    <property name="bottomMargin">
-    <number>20</number>
+    <number>10</number>
    </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -108,7 +108,7 @@
       <number>0</number>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="Page0Ereader">
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -277,24 +277,14 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="labelIp_2">
            <property name="text">
             <string>IP and port to connect to:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit">
-           <property name="inputMask">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="placeholderText">
-            <string>address:port</string>
-           </property>
-          </widget>
+          <widget class="QLineEdit" name="textIP"/>
          </item>
         </layout>
        </item>

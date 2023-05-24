@@ -103,7 +103,7 @@
        </layout>
       </item>
       <item>
-       <widget class="LineEdit" name="lineeditDeckName">
+       <widget class="QLineEdit" name="lineeditDeckName">
         <property name="tabletTracking">
          <bool>false</bool>
         </property>
@@ -150,13 +150,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>LineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">components/other/lineEditVirtualKeyboard.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

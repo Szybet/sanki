@@ -2,7 +2,7 @@
 #include "ui_settings.h"
 #include "global.h"
 #include "zip.h"
-#include "components/other/lineEditVirtualKeyboard.h"
+#include "other/keyboard.h"
 
 #include <QHostAddress>
 #include <QNetworkInterface>
@@ -10,6 +10,7 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QProgressDialog>
+#include <QTimer>
 
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
@@ -30,10 +31,21 @@ Settings::Settings(QWidget *parent) :
         ui->ButtonLeft->setStyleSheet("font-size: 9pt; border: 0px solid black;");
         ui->ButtonRight->setStyleSheet("font-size: 9pt; border: 0px solid black;");
         ui->ButtonOk->setStyleSheet("font-size: 8pt; border: 0px solid black;");
+
+        timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, &Settings::manageKeyboards);
+        timer->start(800);
+        /*
+        ui->textIP->setStyleSheet("border: 2px solid black;");
+        ui->textIP->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        ui->textIP->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        ui->textIP->setFixedHeight(ui->checkBox->height() + 15);
+        */
+
+        ui->buttonSyncInfo->setStyleSheet("border: 3px solid black");
+        ui->buttonSync->setStyleSheet("border: 3px solid black");
     }
 
-    LineEdit* dsa = new LineEdit(this);
-    ui->horizontalLayout_2->addWidget(dsa);
 }
 
 Settings::~Settings()
@@ -155,7 +167,7 @@ void Settings::on_buttonSync_clicked()
         qWarning() << "Current device IP address is not available, so propably there is no internet connection?";
         return void();
     }
-    QString address = ui->lineEdit->text();
+    QString address = ui->textIP->text();
 
     QProgressDialog progress("Downloading index file", "", 0, 100, this);
     progress.setWindowModality(Qt::WindowModal);
@@ -171,6 +183,7 @@ void Settings::on_buttonSync_clicked()
 
     loop.exec();
 
+    qDebug() << "The whole url is:" << request.url() << "address is:" << address;
     if (reply->error() == QNetworkReply::NoError)
     {
         QStringList data = QString(reply->readAll()).split("\n");
@@ -244,3 +257,16 @@ void Settings::on_checkBox_stateChanged(int arg1)
     }
 }
 
+void Settings::manageKeyboards() {
+    QLineEdit* textEditToCheck = ui->textIP;
+    if(textEditToCheck->underMouse() == true && textEditToCheck->hasFocus() == true) {
+        keyboard* ereaderKeyboard = new keyboard(this);
+        ereaderKeyboard->start(textEditToCheck);
+        int y = this->pos().y();
+        this->move(this->pos().x(), 0);
+        ereaderKeyboard->exec();
+        textEditToCheck->clearFocus();
+        this->move(this->pos().x(), y);
+        return void();
+    }
+}

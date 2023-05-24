@@ -158,6 +158,8 @@ int main(int argc, char *argv[])
         stylesheetFile.close();
         qDebug() << "Applied stylesheet for ereader";
 
+        a.setCursorFlashTime(0);
+
         if(ereaderVars::inkboxUserApp == true) {
             directories::config = QDir("/app-data");
             directories::deckSelect = QDir("/app-data"); // For now

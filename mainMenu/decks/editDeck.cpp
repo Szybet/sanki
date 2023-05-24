@@ -150,34 +150,7 @@ void editDeck::on_ButtonSaveExit_clicked()
 
 void editDeck::on_lineeditDeckName_cursorPositionChanged(int oldpos, int newpos)
 {
-    if(ereader) {
-        qDebug() << "cursor position changed to: " << newpos << "from:" << oldpos;
-        if(firstOpen == false)
-        {
-            if(keyboardOpened == false)
-            {
-                if(newpos != 0)
-                {
-                    qDebug() << "Keyboard open";
-                    QTimer::singleShot(0, this, SLOT(debugLog()));
-                    keyboard* keyboard_nameedit = new keyboard;
-                    keyboard_nameedit->cursor_main = newpos;
-                    keyboard_nameedit->main_string = ui->lineeditDeckName->text();
-                    keyboard_nameedit->edited_string = ui->lineeditDeckName->text();
-                    connect(keyboard_nameedit, SIGNAL(update_data(QString, int)), this, SLOT(updateWidget(QString, int)));
-                    connect(keyboard_nameedit, SIGNAL(keyboardClosed(bool)), this, SLOT(keyboardClosed(bool)));
-                    keyboardOpened = true;
-                    updateWidget(ui->lineeditDeckName->text(), ui->lineeditDeckName->cursorPosition()); // to create the cursor
-                    keyboard_nameedit->exec();
-                }
-            }
-        } else {
-            qDebug() << "First open, skipping cursor change";
-
-            ui->lineeditDeckName->setCursorPosition(0);
-            firstOpen = false;
-        }
-    }
+    // TODO
 }
 
 void editDeck::keyboardClosed(bool updateName)

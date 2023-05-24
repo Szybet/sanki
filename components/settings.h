@@ -1,6 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "components/other/keyboard.h"
 #include <QDialog>
 
 namespace Ui {
@@ -20,15 +21,11 @@ private slots:
     void on_ButtonRight_clicked();
     void on_ScrollBarBrightness_valueChanged(int value);
     void on_ButtonOk_clicked();
-
     void requestEreaderPage();
     void requestMenuPage();
     void requestSyncPage();
-
     void on_buttonSyncInfo_clicked();
-
     void on_buttonSync_clicked();
-
     void on_checkBox_stateChanged(int arg1);
 
 private:
@@ -39,6 +36,8 @@ private:
     };
     void managePage(int newIndex, Direction fromWhere);
     bool overwriteDeck = false;
+    QTimer* timer;
+    void manageKeyboards();
 };
 
 #endif // SETTINGS_H

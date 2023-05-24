@@ -135,24 +135,28 @@ QMenu
   border: 1px solid black;
   background-color:white;
 }
+
 QMenu::item::selected
 {
   background: grey;
   border: 3px solid black;
 }
+
 QMenu::item
 {
   padding: 0px 25px 0px 20px;
   border-bottom: 5px solid transparent;
 }
+
 QMenu::indicator
 {
     width: 20px;
     height: 20px;
 }
+
 QMenu::indicator:exclusive:checked
 {
-    image: url(://resources/checkbox-checked.png);
+    image: url(://eink/checkbox-checked.png);
 }
 
 QCheckBox::indicator
@@ -165,12 +169,12 @@ QCheckBox::indicator
 
 QCheckBox::indicator:checked
 {
-  image: url(:/resources/checkbox-checked.png);
+  image: url(://eink/checkbox-checked.png);
 }
 
 QCheckBox::indicator:unchecked
 {
-  image: url(:/resources/checkbox-unchecked.png);
+  image: url(://eink/checkbox-unchecked.png);
 }
 
 QLineEdit, QDoubleSpinBox
@@ -196,10 +200,12 @@ QTextEdit
 {
   border: none;
 }
+
 QTextEdit:focus
 {
   border: none;
 }
+
 QTextEdit:edit-focus
 {
   border: none;
@@ -215,6 +221,7 @@ QComboBox
   padding-bottom: 3px;
   padding-left: 5px;
 }
+
 QComboBox:focus
 {
   border: 3px solid black;
@@ -223,11 +230,13 @@ QComboBox:focus
   padding-bottom: 1px;
   padding-left: 3px;
 }
+
 QComboBox::drop-down
 {
   border-width:1px;
   border-radius:10px;
 }
+
 QComboBox::down-arrow {
   image:url(:/down-arrow.png);
   padding-top: 2px;
@@ -235,6 +244,7 @@ QComboBox::down-arrow {
   padding-bottom: 2px;
   padding-left: 0px;
 }
+
 QComboBox::down-arrow:focus
 {
   padding-top: 0px;
@@ -242,6 +252,7 @@ QComboBox::down-arrow:focus
   padding-bottom: 0px;
   padding-left: 0px;
 }
+
 QTreeView {
     padding: 2px;
     border: 1px solid black;
@@ -249,6 +260,7 @@ QTreeView {
     outline: none;
     font-size: 10pt;
 }
+
 QListView {
     padding: 6px;
     border: 1px solid black;
@@ -256,20 +268,24 @@ QListView {
     outline: none;
     font-size: 12pt;
 }
+
 QTreeView:focus, QTableView:focus {
     padding: 1px;
     border: 1px solid black;
 }
+
 QTreeView:edit-focus, QListView:edit-focus, QTableView:edit-focus {
     padding: 0px;
     border: 3px solid black;
 }
+
 QTreeView::branch:has-children:!has-siblings:closed,
 QTreeView::branch:closed:has-children:has-siblings
 {
     border-image: none;
     image: url(:/plus.png);
 }
+
 QTreeView::branch:open:has-children:!has-siblings,
 QTreeView::branch:open:has-children:has-siblings
 {
@@ -285,10 +301,7 @@ QPushButton
     outline: none;
     border-radius: 10px;
 }
-QPushButton:focus {
-    background: grey;
-    padding: 2px;
-}
+
 QPushButton:pressed
 {
     background: black;
@@ -304,6 +317,7 @@ QToolButton
     padding: 2px;
     outline: none;
 }
+
 QToolButton:checked
 {
     border: none;
@@ -313,6 +327,7 @@ QToolButton:focus {
     border: none;
     padding: 2px;
 }
+
 QToolButton:pressed {
     background: black;
     border: none;
@@ -325,6 +340,7 @@ QSlider::groove:horizontal {
      background: white;
      margin: 0px 0;
 }
+
 QSlider::handle:horizontal {
      background: black;
      border: 1.5px solid black;
@@ -345,18 +361,22 @@ QScrollBar {
 QScrollBar:vertical {
     width: 35px
 }
+
 QScrollBar:horizontal {
     height: 35px
 }
+
 QScrollBar::handle {
     background: black;
     min-width: 25px;
     min-height: 25px;
     border: 5px;
 }
+
 QScrollBar::add-line {
     width: 0px;
 }
+
 QScrollBar::sub-line {
     width: 0px;
 }
@@ -381,27 +401,27 @@ QProgressBar::chunk {
 }
 
 QTreeView::branch:has-siblings:!adjoins-item {
-    border-image: url(://resources/vline.png) 0;
+    border-image: url(://eink/vline.png) 0;
 }
 
 QTreeView::branch:has-siblings:adjoins-item {
-    border-image: url(://resources/branch-more.png) 0;
+    border-image: url(://eink/branch-more.png) 0;
 }
 
 QTreeView::branch:!has-children:!has-siblings:adjoins-item {
-    border-image: url(://resources/branch-end.png) 0;
+    border-image: url(://eink/branch-end.png) 0;
 }
 
 QTreeView::branch:has-children:!has-siblings:closed,
 QTreeView::branch:closed:has-children:has-siblings {
         border-image: none;
-        image: url(://resources/branch-closed.png);
+        image: url(://eink/branch-closed.png);
 }
 
 QTreeView::branch:open:has-children:!has-siblings,
 QTreeView::branch:open:has-children:has-siblings  {
         border-image: none;
-        image: url(://resources/branch-open.png);
+        image: url(://eink/branch-open.png);
 }
 
 QSpinBox {
@@ -415,22 +435,22 @@ QSpinBox::up-button {
     subcontrol-position: right;
     width: 35px;
     height: 35px;
-    image: url(://resources/up-arrow.png);
+    image: url(://eink/up-arrow.png);
 }
 
 QSpinBox::down-button {
     subcontrol-position: left;
     width: 35px;
     height: 35px;
-    image: url(://resources/down-arrow.png);
+    image: url(://eink/down-arrow.png);
 }
 
 QSpinBox::up-button:pressed {
-    border-image: url(://resources/up-arrow-pressed.png) 1;
+    border-image: url(://eink/up-arrow-pressed.png) 1;
 }
 
 QSpinBox::down-button:pressed {
-    border-image: url(://resources/down-arrow-pressed.png) 1;
+    border-image: url(://eink/down-arrow-pressed.png) 1;
 }
 
 QTabBar::tab:selected {

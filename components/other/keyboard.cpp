@@ -2,15 +2,19 @@
 #include "ui_keyboard.h"
 #include "global.h"
 
+#include <QTimer>
+#include <QDebug>
+
 keyboard::keyboard(QDialog *parent) :
     QDialog(parent),
     ui(new Ui::keyboard)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
 
-    ui->lineEdit->setVisible(false);
-    lower_case_buttons();
-    lower_case = true;
+
+    lowerCaseButtons();
+    lowerCase = true;
     special = false;
 }
 
@@ -19,17 +23,31 @@ keyboard::~keyboard()
     delete ui;
 }
 
-// TODO remove this
-void keyboard::update_string(QString new_string)
-{
-    edited_string.remove("|");
-
-    edited_string.insert(cursor_main, new_string);
-
-    emit update_data(edited_string, cursor_main);
+void keyboard::start(QLineEdit* textEditorToAdd) {
+    textEditor = textEditorToAdd;
+    moveToPosition();
+    mainString = textEditor->text();
+    textEditor->setSelection(0,0);
+    textEditor->setCursorPosition(textEditor->text().length());
 }
 
-void keyboard::lower_case_buttons()
+void keyboard::moveToPosition() {
+    float multiplier = 1.8;
+    this->setFixedSize(ereaderVars::screenX, ereaderVars::screenY - ereaderVars::screenY / multiplier);
+    this->move(0,  ereaderVars::screenY / multiplier);
+}
+
+void keyboard::updateString(QString new_string)
+{
+    int cursorPosition = textEditor->cursorPosition();
+    textEditor->setText(textEditor->text().replace(cursorCharacter, "")); // This resets the position
+
+    textEditor->setText(textEditor->text().insert(cursorPosition, new_string));
+    textEditor->setText(textEditor->text().insert(cursorPosition + 1, cursorCharacter));
+    textEditor->setCursorPosition(cursorPosition + 1);
+}
+
+void keyboard::lowerCaseButtons()
 {
     ui->Button_q->setText("q");
     ui->Button_w->setText("w");
@@ -61,7 +79,7 @@ void keyboard::lower_case_buttons()
     ui->Button_m->setText("m");
 }
 
-void keyboard::upper_case_buttons()
+void keyboard::upperCaseButtons()
 {
     ui->Button_q->setText("Q");
     ui->Button_w->setText("W");
@@ -98,14 +116,14 @@ void keyboard::on_Button_Caps_clicked()
     // this can be changed in the future for more characters
     if(special == false)
     {
-        if(lower_case == true)
+        if(lowerCase == true)
         {
-            lower_case = false;
-            upper_case_buttons();
+            lowerCase = false;
+            upperCaseButtons();
             ui->Button_Caps->setStyleSheet("font-weight: bold");
         } else {
-            lower_case = true;
-            lower_case_buttons();
+            lowerCase = true;
+            lowerCaseButtons();
             ui->Button_Caps->setStyleSheet("font-weight: normal");
         }
     }
@@ -113,20 +131,17 @@ void keyboard::on_Button_Caps_clicked()
 
 void keyboard::on_Button_space_clicked()
 {
-    update_string(" ");
+    updateString(" ");
 }
 
 void keyboard::on_Button_backspace_clicked()
 {
-    edited_string.remove("|");
+    int cursorPosition = textEditor->cursorPosition();
+    textEditor->setText(textEditor->text().replace(cursorCharacter, ""));
 
-    if(cursor_main != 0)
-    {
-        cursor_main = cursor_main - 1;
-    }
-    QString new_string = edited_string.remove(cursor_main, 1);
-    edited_string = new_string;
-    update_string("");
+    textEditor->setText(textEditor->text().remove(cursorPosition - 1, 1));
+    textEditor->setText(textEditor->text().insert(cursorPosition - 1, cursorCharacter));
+    textEditor->setCursorPosition(cursorPosition - 1);
 }
 
 void keyboard::on_Button_Special_clicked()
@@ -145,47 +160,62 @@ void keyboard::on_Button_Special_clicked()
         ui->Button_i->setText("8");
         ui->Button_o->setText("9");
         ui->Button_p->setText("0");
-        ui->Button_Cancel->setText("⟵");
-        ui->Button_Confirm->setText("⟶");
+        ui->Button_Cancel->setIcon(QIcon(":/icons/left.svg"));
+        ui->Button_Confirm->setIcon(QIcon(":/icons/right.svg"));
+
+        ui->Button_v->setText(":");
     } else {
         special = false;
         ui->Button_Special->setStyleSheet("font-weight: normal");
-        ui->Button_Cancel->setText("Cancel");
-        ui->Button_Confirm->setText("Confirm");
-        if(lower_case == true)
+        ui->Button_Cancel->setIcon(QIcon(":/icons/close.png"));
+        ui->Button_Confirm->setIcon(QIcon(":/icons/confirm.svg"));
+        if(lowerCase == true)
         {
-            lower_case_buttons();
+            lowerCaseButtons();
         } else {
-            upper_case_buttons();
+            upperCaseButtons();
         }
     }
 }
 
 void keyboard::on_Button_Cancel_clicked()
 {
-    if(ui->Button_Cancel->text() == "Cancel")
-    {
-        emit update_data(main_string, 0);
-        emit keyboardClosed(false);
-        this->close();
+    if(special == true) {
+        qDebug() << "Cursor backwards";
+        int cursorPosition = textEditor->cursorPosition() - 1;
+        textEditor->setText(textEditor->text().replace(cursorCharacter, ""));
+
+        textEditor->setText(textEditor->text().insert(cursorPosition, cursorCharacter));
+        textEditor->setCursorPosition(cursorPosition);
     } else {
-        cursor_main = cursor_main - 1;
-        emit update_data(edited_string, cursor_main);
+        textEditor->setText(mainString);
+        textEditor->setText(textEditor->text().replace(cursorCharacter, ""));
+        QString newText = mainString;
+        while(newText.endsWith(" ") == true) {
+            newText.chop(1);
+        }
+        textEditor->setText(newText);
+        this->close();
     }
 }
 
 
 void keyboard::on_Button_Confirm_clicked()
 {
-    if(ui->Button_Confirm->text() == "Confirm")
-    {
-        edited_string.remove("|");
-        emit keyboardClosed(true);
-        this->close();
+    if(special == true) {
+        int cursorPosition = textEditor->cursorPosition() + 1;
+        textEditor->setText(textEditor->text().replace(cursorCharacter, ""));
+
+        textEditor->setText(textEditor->text().insert(cursorPosition, cursorCharacter));
+        textEditor->setCursorPosition(cursorPosition);
     } else {
-        cursor_main = cursor_main + 1;
-        edited_string.remove("|");
-        emit update_data(edited_string, cursor_main);
+        textEditor->setText(textEditor->text().replace(cursorCharacter, ""));
+        QString newText = textEditor->text();
+        while(newText.endsWith(" ") == true) {
+            newText.chop(1);
+        }
+        textEditor->setText(newText);
+        this->close();
     }
 }
 
@@ -193,142 +223,140 @@ void keyboard::on_Button_Confirm_clicked()
 
 void keyboard::on_Button_q_clicked()
 {
-    update_string(ui->Button_q->text());
+    updateString(ui->Button_q->text());
 }
 
 void keyboard::on_Button_w_clicked()
 {
-    update_string(ui->Button_w->text());
+    updateString(ui->Button_w->text());
 }
-
 
 void keyboard::on_Button_e_clicked()
 {
-    update_string(ui->Button_e->text());
+    updateString(ui->Button_e->text());
 }
-
 
 void keyboard::on_Button_r_clicked()
 {
-    update_string(ui->Button_r->text());
+    updateString(ui->Button_r->text());
 }
 
 void keyboard::on_Button_t_clicked()
 {
-    update_string(ui->Button_t->text());
+    updateString(ui->Button_t->text());
 }
 
 void keyboard::on_Button_y_clicked()
 {
-    update_string(ui->Button_y->text());
+    updateString(ui->Button_y->text());
 }
 
 void keyboard::on_Button_u_clicked()
 {
-    update_string(ui->Button_u->text());
+    updateString(ui->Button_u->text());
 }
 
 void keyboard::on_Button_i_clicked()
 {
-    update_string(ui->Button_i->text());
+    updateString(ui->Button_i->text());
 }
 
 void keyboard::on_Button_o_clicked()
 {
-    update_string(ui->Button_o->text());
+    updateString(ui->Button_o->text());
 }
 
 void keyboard::on_Button_p_clicked()
 {
-    update_string(ui->Button_p->text());
+    updateString(ui->Button_p->text());
 }
 
 ///
 
 void keyboard::on_Button_a_clicked()
 {
-    update_string(ui->Button_a->text());
+    updateString(ui->Button_a->text());
 }
 
 void keyboard::on_Button_s_clicked()
 {
-    update_string(ui->Button_s->text());
+    updateString(ui->Button_s->text());
 }
 
 void keyboard::on_Button_d_clicked()
 {
-    update_string(ui->Button_d->text());
+    updateString(ui->Button_d->text());
 }
 
 void keyboard::on_Button_f_clicked()
 {
-    update_string(ui->Button_f->text());
+    updateString(ui->Button_f->text());
 }
 
 void keyboard::on_Button_g_clicked()
 {
-    update_string(ui->Button_g->text());
+    updateString(ui->Button_g->text());
 }
 
 void keyboard::on_Button_h_clicked()
 {
-    update_string(ui->Button_h->text());
+    updateString(ui->Button_h->text());
 }
 
 void keyboard::on_Button_j_clicked()
 {
-    update_string(ui->Button_j->text());
+    updateString(ui->Button_j->text());
 }
 
 void keyboard::on_Button_k_clicked()
 {
-    update_string(ui->Button_k->text());
+    updateString(ui->Button_k->text());
 }
 
 void keyboard::on_Button_l_clicked()
 {
-    update_string(ui->Button_l->text());
+    updateString(ui->Button_l->text());
 }
 
 ///
 
 void keyboard::on_Button_z_clicked()
 {
-    update_string(ui->Button_z->text());
+    updateString(ui->Button_z->text());
 }
 
 void keyboard::on_Button_x_clicked()
 {
-    update_string(ui->Button_x->text());
+    updateString(ui->Button_x->text());
 }
 
 void keyboard::on_Button_c_clicked()
 {
-    update_string(ui->Button_c->text());
+    updateString(ui->Button_c->text());
 }
 
 void keyboard::on_Button_v_clicked()
 {
-    update_string(ui->Button_v->text());
+    updateString(ui->Button_v->text());
 }
 
 void keyboard::on_Button_b_clicked()
 {
-    update_string(ui->Button_b->text());
+    updateString(ui->Button_b->text());
 }
 
 void keyboard::on_Button_n_clicked()
 {
-    update_string(ui->Button_n->text());
+    updateString(ui->Button_n->text());
 }
 
 void keyboard::on_Button_m_clicked()
 {
-    update_string(ui->Button_m->text());
+    updateString(ui->Button_m->text());
 }
 
 void keyboard::on_Button_dot_clicked()
 {
-    update_string(ui->Button_m->text());
+    updateString(ui->Button_dot->text());
 }
 

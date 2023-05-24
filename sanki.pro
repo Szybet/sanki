@@ -31,7 +31,6 @@ SOURCES += \
     components/files/fileChooser.cpp \
     components/other/askForText.cpp \
     components/other/griditemspacer.cpp \
-    components/other/lineEditVirtualKeyboard.cpp \
     components/other/statistics.cpp \
     components/settings.cpp \
     components/statusBarC.cpp \
@@ -60,7 +59,6 @@ HEADERS += \
     components/files/fileChooser.h \
     components/other/askForText.h \
     components/other/griditemspacer.h \
-    components/other/lineEditVirtualKeyboard.h \
     components/other/statistics.h \
     components/settings.h \
     components/statusBarC.h \

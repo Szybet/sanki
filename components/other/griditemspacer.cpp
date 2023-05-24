@@ -24,9 +24,9 @@ void gridItemSpacer::selectPage(Page pageSel) {
         ui->stackedWidget->setCurrentWidget(ui->addPage_2);
         if(ereader) {
             qDebug() << "Setting ereader sizes for grid item spacer";
-            ui->addButton->setStyleSheet("font-size: 20pt");
+            ui->addButton->setStyleSheet("font-size: 60pt");
             ui->addButton->setFixedSize(QSize(120, 120));
-            ui->addButton->setStyleSheet("border-color: black; border-width: 3;");
+            ui->addButton->setStyleSheet("border: 3px solid black");
         }
     }
 }

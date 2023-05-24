@@ -156,28 +156,7 @@ void fileChooserCustom::keyboardClosed(bool updateName)
 
 void fileChooserCustom::on_lineEditPath_cursorPositionChanged(int oldpos, int newpos)
 {
-    if(firstOpen == false)
-    {
-        if(keyboardOpened == false)
-        {
-            if(newpos != 0)
-            {
-
-                keyboard* keyboard_nameedit = new keyboard;
-                keyboard_nameedit->cursor_main = newpos;
-                keyboard_nameedit->main_string = ui->lineEditPath->text();
-                keyboard_nameedit->edited_string = ui->lineEditPath->text();
-                connect(keyboard_nameedit, SIGNAL(update_data(QString, int)), this, SLOT(updateWidget(QString, int)));
-                connect(keyboard_nameedit, SIGNAL(keyboardClosed(bool)), this, SLOT(keyboardClosed(bool)));
-                keyboardOpened = true;
-                updateWidget(ui->lineEditPath->text(), ui->lineEditPath->cursorPosition()); // to create the cursor
-                keyboard_nameedit->exec();
-            }
-        }
-    } else {
-        ui->lineEditPath->setCursorPosition(0);
-        firstOpen = false;
-    }
+    // todo
 }
 
 void fileChooserCustom::updateDeck()

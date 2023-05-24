@@ -2,6 +2,7 @@
 #define KEYBOARD_H
 
 #include <QDialog>
+#include <QLineEdit>
 
 namespace Ui {
 class keyboard;
@@ -14,18 +15,17 @@ class keyboard : public QDialog
 public:
     explicit keyboard(QDialog *parent = nullptr);
     ~keyboard();
-    QString main_string;
-    QString edited_string;
-    int cursor_main;
-
-signals:
-    void update_data(QString string, int cursor);
-    void keyboardClosed(bool save_string);
+    void moveToPosition();
+    void start(QLineEdit* textEditorToAdd);
+    QLineEdit* textEditor;
+    QString mainString;
+    QString editedString;
+    QChar cursorCharacter = '|';
 
 private slots:
-    void update_string(QString new_string);
-    void lower_case_buttons();
-    void upper_case_buttons();
+    void updateString(QString new_string);
+    void lowerCaseButtons();
+    void upperCaseButtons();
     void on_Button_Caps_clicked();
     void on_Button_space_clicked();
     void on_Button_backspace_clicked();
@@ -66,8 +66,7 @@ private slots:
 
 private:
     Ui::keyboard *ui;
-    bool init = false;
-    bool lower_case = true;
+    bool lowerCase = true;
     bool special = false;
 };
 

@@ -97,4 +97,4 @@ inkbox_userapp/sanki/app-bin/*.bin
 
 # anki-sync
 target/
-decks/
+sanki-sync/decks/
