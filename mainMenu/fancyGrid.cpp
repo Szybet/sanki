@@ -97,9 +97,9 @@ void fancyGrid::updateDecks()
     qDebug() << "updateDecks slot called";
     emit removeDecks();
 
-    QFileInfoList dir_list = directories::deckStorage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
-    for (QFileInfo file_info: dir_list) {
-        QString fileName = file_info.baseName();
+    QFileInfoList dirList = directories::deckStorage.QDir::entryInfoList(QDir::Dirs, QDir::Time);
+    for (QFileInfo fileInfo: dirList) {
+        QString fileName = fileInfo.baseName();
         if (fileName == "") {
             continue;
         }
@@ -110,15 +110,15 @@ void fancyGrid::updateDecks()
 
     int row = 0; // horizontal
     int column = 0; // vertical
-    for (QFileInfo file_info: dir_list) {
-        QString fileName = file_info.baseName();
+    for (QFileInfo fileInfo: dirList) {
+        QString fileName = fileInfo.baseName();
         // Becouse of ".." and "."
         if (fileName == "") {
             continue;
         }
         deck* newDeck = new deck(this);
         newDeck->set_deck_name(fileName);
-        newDeck->deckInfo = file_info;
+        newDeck->deckInfo = fileInfo;
         // addWidget(QWidget *widget, int row, int column, Qt::Alignment alignment = Qt::Alignment())
         connect(this, SIGNAL(removeDecks()), newDeck, SLOT(close()));
         connect(newDeck, SIGNAL(refresh_decks_signal()), this, SLOT(updateDecks()));

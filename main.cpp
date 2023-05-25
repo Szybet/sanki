@@ -162,10 +162,10 @@ int main(int argc, char *argv[])
 
         if(ereaderVars::inkboxUserApp == true) {
             directories::config = QDir("/app-data");
-            directories::deckSelect = QDir("/app-data"); // For now
+            directories::fileSelect = QDir("/app-data"); // For now
         } else {
             directories::config = QDir("/sanki_debug_dir");
-            directories::deckSelect = QDir("/"); // For now
+            directories::fileSelect = QDir("/"); // For now
         }
         directories::deckStorage = directories::config.path() + QDir::separator() + "decks";
         directories::sessionSaves = directories::config.path() + QDir::separator() + "sessions";

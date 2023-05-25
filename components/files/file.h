@@ -1,6 +1,7 @@
 #ifndef FILE_H
 #define FILE_H
 
+#include <QIcon>
 #include <QWidget>
 
 namespace Ui {
@@ -14,22 +15,22 @@ class file : public QWidget
 public:
     explicit file(QWidget *parent = nullptr);
     ~file();
-    bool is_directory = false;
-    void set_button_look(QString, QIcon);
+    void start(bool isDirectoryProvided, QString fileName, QIcon icon);
 
 signals:
-    void im_clicked(QString);
-    void enter_dir();
+    void fileClicked(QString);
+    void enterDirectory();
 
 public slots:
-    void remove_bold();
+    void removeBold();
 
 private slots:
     void on_pushButton_clicked();
 
 private:
     Ui::file *ui;
-    bool ignore_remove_bold_signal = false;
+    bool ignoreRemoveBoldSignal = false;
+    bool isDirectory;
 };
 
 #endif // FILE_H

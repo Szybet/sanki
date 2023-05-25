@@ -20,7 +20,7 @@ deck::deck(QWidget *parent)
     ui->deck->setStyleSheet("font-size: 8pt");
     ui->ButtoneditDeck->setStyleSheet("font-size: 8pt");
     ui->LabelStats->setStyleSheet("font-size: 8pt");
-    ui->ButtonDeckSelect->setStyleSheet("font-size: 8pt");
+    ui->ButtonfileSelect->setStyleSheet("font-size: 8pt");
 
 }
 
@@ -77,7 +77,7 @@ void deck::on_deck_selectionChanged()
     QToolTip::showText( ui->deck->mapToGlobal( QPoint( 0, 0 ) ), mainPath.split(QDir::separator()).last() );
 }
 
-void deck::on_ButtonDeckSelect_clicked()
+void deck::on_ButtonfileSelect_clicked()
 {
     emit selectedDeck(mainPath);
 }

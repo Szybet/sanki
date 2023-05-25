@@ -27,7 +27,7 @@ bool ereader = false;
 QDir directories::config = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QDir::separator() + "sanki";
 QDir directories::deckStorage = directories::config.path() + QDir::separator() + "decks";
 QDir directories::sessionSaves = directories::config.path() + QDir::separator() + "sessions";
-QDir directories::deckSelect = QDir::homePath();
+QDir directories::fileSelect = QDir::homePath();
 QString deckAddedFileName = "creationTime";
 
 QString ereaderVars::model = "";

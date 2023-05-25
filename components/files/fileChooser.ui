@@ -60,7 +60,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>  Up  </string>
+          <string>        Up        </string>
          </property>
         </widget>
        </item>
@@ -113,6 +113,9 @@
         <widget class="QLineEdit" name="lineEditPath">
          <property name="focusPolicy">
           <enum>Qt::StrongFocus</enum>
+         </property>
+         <property name="frame">
+          <bool>true</bool>
          </property>
          <property name="cursorMoveStyle">
           <enum>Qt::VisualMoveStyle</enum>
@@ -188,7 +191,7 @@
         <x>0</x>
         <y>0</y>
         <width>799</width>
-        <height>549</height>
+        <height>551</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">

@@ -28,7 +28,7 @@ private slots:
 
     void on_deck_selectionChanged();
 
-    void on_ButtonDeckSelect_clicked();
+    void on_ButtonfileSelect_clicked();
 
 private:
      Ui::MainQwidget *ui;

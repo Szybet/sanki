@@ -6,14 +6,14 @@
 #include "components/other/keyboard.h"
 
 #include <QScrollBar>
+#include <QTimer>
 
 fileChooserCustom::fileChooserCustom(QDialog *parent) :
     QDialog(parent),
     ui(new Ui::fileChooserCustom)
 {
     ui->setupUi(this);
-
-    // ("border: 0px solid black; border-radius: 0px;");
+    this->setAttribute(Qt::WA_DeleteOnClose);
 
     // This could be editable in settings
     ui->scrollArea->verticalScrollBar()->setStyleSheet(
@@ -23,9 +23,15 @@ fileChooserCustom::fileChooserCustom(QDialog *parent) :
 
     ui->ButtonUpPath->setStyleSheet("font-size: 9.5pt");
 
-    // This is becouse the QDialog has borders
+    // This is because the QDialog has borders
     this->setStyleSheet("QDialog {border: 0px solid black; border-radius: 0px; background: white;}");
     ui->lineEditPath->setCursorPosition(20);
+
+    ui->layoutFiles->setAlignment(Qt::AlignTop);
+
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &fileChooserCustom::manageKeyboards);
+    timer->start(800);
 }
 
 fileChooserCustom::~fileChooserCustom()
@@ -33,80 +39,77 @@ fileChooserCustom::~fileChooserCustom()
     delete ui;
 }
 
-void fileChooserCustom::updateFiles()
-{
-    keyboardOpened = true;
-    ui->lineEditPath->setText(start_path);
-    ui->lineEditPath->setCursorPosition(0);
-    keyboardOpened = false;
-
-    emit remove_buttons();
-    QDir dir = start_path;
-    QFileInfoList dir_list = dir.QDir::entryInfoList(QDir::Filters(QDir::AllDirs | QDir::Files), QDir::SortFlag(QDir::Type));
-
-    qDebug() << "Gathered dir_list:" << dir_list;
-
-    QVBoxLayout* file_layout = ui->layoutFiles;
-
-    for (QFileInfo file_info: dir_list) {
-        // Becouse of ".." and "."
-        if (file_info.baseName() == "") {
-            continue;
-        }
-        file* file_button = new file;
-
-        if(file_info.isSymLink() == true or file_info.isSymbolicLink() == true)
-        {
-            continue;
-
-        } if(file_info.isDir() == true)
-        {
-            file_button->is_directory = true;
-            QIcon icon = QIcon(":/icons/folder.png");
-            file_button->set_button_look(file_info.fileName() + "/", icon);
-        } else if(file_info.fileName().contains(".apkg")) {
-            QIcon icon = QIcon(":/icons/apkg_file.png");
-            file_button->set_button_look(file_info.fileName(), icon);
-        } else {
-            QIcon icon = QIcon("NONE");
-            file_button->set_button_look(file_info.fileName(), icon);
-        }
-
-
-        connect(this, SIGNAL(remove_buttons()), file_button, SLOT(close()));
-        connect(file_button, SIGNAL(im_clicked(QString)), this, SLOT(file_clicked(QString)));
-        connect(this, SIGNAL(remove_bold()), file_button, SLOT(remove_bold()));
-        connect(file_button, SIGNAL(enter_dir()), this, SLOT(enter_dir()));
-
-        qDebug() << "added widget:" << file_info.fileName();
-
-        file_layout->addWidget(file_button);
-    }
-    // To align items to the top
-    file_layout->setAlignment(Qt::AlignTop);
-
+void fileChooserCustom::start(QString fileExtensionProvided) {
+    fileExtension = fileExtensionProvided;
+    startPath = directories::fileSelect.path();
+    ui->lineEditPath->setText(startPath);
+    this->setFixedSize(ereaderVars::screenX, ereaderVars::screenY);
+    this->move(0, 0);
+    updateFiles();
 }
 
-void fileChooserCustom::file_clicked(QString file)
+void fileChooserCustom::updateFiles()
 {
-    choosed_file = file;
-    emit remove_bold();
+    emit removeButtons();
+    ui->lineEditPath->setText(startPath);
+    QDir dir = startPath;
+    QFileInfoList dirList = dir.QDir::entryInfoList(QDir::Filters(QDir::AllDirs | QDir::Files), QDir::SortFlag(QDir::Type));
+
+    qDebug() << "Gathered dirList:" << dirList;
+
+    QVBoxLayout* fileLayout = ui->layoutFiles;
+
+    foreach(QFileInfo fileInfo, dirList) {
+        // Because of ".." and "."
+        if(fileInfo.isSymLink() == true || fileInfo.isSymbolicLink() == true || fileInfo.baseName().isEmpty())
+        {
+            continue;
+        }
+
+        file* fileButton = new file(this);
+        QIcon icon;
+        if(fileInfo.isDir() == true) {
+            icon = QIcon(":/icons/folder.svg");
+        } else if(fileInfo.fileName().contains(".apkg")) {
+            icon = QIcon(":/icons/apkgFile.png");
+        }  else if(fileInfo.fileName().contains(".zip")) {
+            icon = QIcon(":/icons/folderZip.svg");
+        } else {
+            icon = QIcon("NONE");
+        }
+        fileButton->start(fileInfo.isDir(), fileInfo.fileName(), icon);
+
+        connect(this, &fileChooserCustom::removeButtons, fileButton, &file::close);
+        connect(fileButton, &file::fileClicked, this, &fileChooserCustom::FileClicked);
+        connect(this, &fileChooserCustom::removeBold, fileButton, &file::removeBold);
+        connect(fileButton, &file::enterDirectory, this, &fileChooserCustom::enterDirectory);
+
+        qDebug() << "Added widget:" << fileInfo.fileName();
+
+        fileLayout->addWidget(fileButton);
+    }
+}
+
+void fileChooserCustom::FileClicked(QString file)
+{
+    choosedFile = file;
+    emit removeBold();
 }
 
 void fileChooserCustom::on_ButtonConfirm_clicked()
 {
-    if(choosed_file.contains(file_extension) == true)
+    if(choosedFile.contains(fileExtension) == true)
     {
-        // becouse if start_path is "/" it will be "//"
-        if(start_path.end() != QString("/"))
+        // Because if startPath is "/" it will be "//"
+        if(startPath.end() != QString("/"))
         {
-            emit provideFile(start_path + choosed_file);
+            emit provideFile(startPath + choosedFile);
         } else {
-            emit provideFile(start_path + "/" + choosed_file);
+            emit provideFile(startPath + QDir::separator() + choosedFile);
         }
         this->close();
     } else {
-        qWarning() << "Choose a file with" << file_extension << " extension";
+        qWarning() << "Choose a file with" << fileExtension << "extension";
     }
 }
 
@@ -116,70 +119,39 @@ void fileChooserCustom::on_ButtonCancel_clicked()
     this->close();
 }
 
-void fileChooserCustom::enter_dir()
+void fileChooserCustom::enterDirectory()
 {
-    start_path = start_path + choosed_file;
+    startPath = startPath + choosedFile;
     updateFiles();
 }
 
 void fileChooserCustom::on_ButtonUpPath_clicked()
 {
-    emit remove_buttons();
-    QDir new_path = start_path;
-    new_path.cdUp();
-    start_path = new_path.path();
-
-    qDebug() << "Go up path:" << start_path;
-
+    emit removeButtons();
+    QDir newPath = startPath;
+    newPath.cdUp();
+    startPath = newPath.path();
+    qDebug() << "Go up path:" << startPath;
     updateFiles();
 }
 
-// Everything for keyboard:
+void fileChooserCustom::manageKeyboards() {
+    QLineEdit* textEditToCheck = ui->lineEditPath;
+    if(textEditToCheck->underMouse() == true && textEditToCheck->hasFocus() == true) {
+        QString old = textEditToCheck->text();
 
-void fileChooserCustom::on_lineEditPath_selectionChanged()
-{
-    ui->lineEditPath->setSelection(0, 0);
-}
+        keyboard* ereaderKeyboard = new keyboard(this);
+        ereaderKeyboard->start(textEditToCheck);
+        ereaderKeyboard->exec();
+        textEditToCheck->clearFocus();
 
-void fileChooserCustom::keyboardClosed(bool updateName)
-{
-    if(updateName == true)
-    {
-        updatedName = true;
+        if(QDir(textEditToCheck->text()).exists() == false) {
+            qWarning() << "Such directory doesn't exist";
+            textEditToCheck->setText(old);
+        } else {
+            startPath = textEditToCheck->text();
+            updateFiles();
+        }
+        return void();
     }
-    ui->lineEditPath->setText(ui->lineEditPath->text().remove("|"));
-    keyboardOpened = false;
-
-    start_path = ui->lineEditPath->text();
-    updateFiles();
-}
-
-void fileChooserCustom::on_lineEditPath_cursorPositionChanged(int oldpos, int newpos)
-{
-    // todo
-}
-
-void fileChooserCustom::updateDeck()
-{
-    QString deck_name = deckInfo.baseName();
-    ui->lineEditPath->setText(deck_name);
-}
-
-void fileChooserCustom::updateWidget(QString string, int cursor)
-{
-         // Adding cursor, this is so stupid
-         QString string_with_cursor = string;
-         if(cursor == 0)
-         {
-             if(string == "")
-             {
-                 ui->lineEditPath->setText(" ");
-             }
-             string_with_cursor.insert(cursor, "|");
-         } else {
-             string_with_cursor.insert(cursor, "|");
-         }
-
-         ui->lineEditPath->setText(string_with_cursor);
-         ui->lineEditPath->setCursorPosition(cursor);
 }

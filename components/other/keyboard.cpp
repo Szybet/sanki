@@ -164,6 +164,7 @@ void keyboard::on_Button_Special_clicked()
         ui->Button_Confirm->setIcon(QIcon(":/icons/right.svg"));
 
         ui->Button_v->setText(":");
+        ui->Button_m->setText("/");
     } else {
         special = false;
         ui->Button_Special->setStyleSheet("font-weight: normal");

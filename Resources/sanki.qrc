@@ -3,7 +3,6 @@
         <file>close.png</file>
         <file>settings.png</file>
         <file>backspace.png</file>
-        <file>apkg_file.png</file>
         <file>battery_empty.png</file>
         <file>battery_half.png</file>
         <file>battery_full.png</file>
@@ -15,6 +14,9 @@
         <file>info.svg</file>
         <file>left.svg</file>
         <file>right.svg</file>
+        <file>apkgFile.png</file>
+        <file>folderZip.svg</file>
+        <file>folder.svg</file>
     </qresource>
     <qresource prefix="/other">
         <file>eink.qss</file>
@@ -29,5 +31,7 @@
         <file>eink/checkbox-x.png</file>
         <file>eink/down-arrow-pressed.png</file>
         <file>eink/up-arrow-pressed.png</file>
+        <file>eink/radioButtonChecked.svg</file>
+        <file>eink/radioButtonUnchecked.svg</file>
     </qresource>
 </RCC>

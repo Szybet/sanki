@@ -15,7 +15,7 @@ namespace directories {
     extern QDir config;
     extern QDir deckStorage;
     extern QDir sessionSaves;
-    extern QDir deckSelect; // File chooser will open here
+    extern QDir fileSelect; // File chooser will open here
 }
 extern QString deckAddedFileName;
 

@@ -29,7 +29,7 @@ SOURCES += \
     cardView/modes/randomNoRepeat.cpp \
     components/files/file.cpp \
     components/files/fileChooser.cpp \
-    components/other/askForText.cpp \
+    components/other/askText.cpp \
     components/other/griditemspacer.cpp \
     components/other/statistics.cpp \
     components/settings.cpp \
@@ -57,7 +57,7 @@ HEADERS += \
     cardView/modes/randomNoRepeat.h \
     components/files/file.h \
     components/files/fileChooser.h \
-    components/other/askForText.h \
+    components/other/askText.h \
     components/other/griditemspacer.h \
     components/other/statistics.h \
     components/settings.h \
@@ -80,7 +80,7 @@ FORMS += \
     cardView/modes/boxes/askforboxesoptions.ui \
     components/files/file.ui \
     components/files/fileChooser.ui \
-    components/other/askForText.ui \
+    components/other/askText.ui \
     components/other/griditemspacer.ui \
     components/other/statistics.ui \
     components/settings.ui \

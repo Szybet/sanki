@@ -3,18 +3,30 @@
 #include "global.h"
 
 #include <QDebug>
+#include <QTimer>
 
 modeChooser::modeChooser(QDialog *parent) :
     QDialog(parent),
     ui(new Ui::modeChooser)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
 
-    if(ereader) ui->groupBox->setStyleSheet("border: 4px solid back;");
     ui->ButtonConfirm->setEnabled(false);
 
     // To check if the dialog was closed on PC with close button
     this->setResult(QDialog::Rejected);
+
+    if(ereader) {
+        ui->groupBox->setStyleSheet("border: 2px solid back;");
+        ui->boxesInfoButton->setStyleSheet("border: none");
+        ui->CRInfoButton->setStyleSheet("border: none");
+        ui->ButtonBoxes->setStyleSheet("border: none");
+        ui->ButtonCRandom->setStyleSheet("border: none");
+        ui->ButtonRandomNR->setStyleSheet("border: none");
+
+        ui->groupBox->layout()->setContentsMargins(9, 50, 9, 9);
+    }
 }
 
 modeChooser::~modeChooser()
@@ -26,7 +38,6 @@ void modeChooser::on_ButtonConfirm_clicked()
 {
     emit setMode(mode);
     this->setResult(QDialog::Accepted);
-    this->deleteLater();
     this->done(QDialog::Accepted);
 }
 

@@ -8,7 +8,7 @@ file::file(QWidget *parent) :
     ui(new Ui::file)
 {
     ui->setupUi(this);
-    ui->pushButton->setStyleSheet("Text-align: left; font-size: 7pt; font-weight: normal; background: white");
+    this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 file::~file()
@@ -16,23 +16,25 @@ file::~file()
     delete ui;
 }
 
-void file::set_button_look(QString text, QIcon icon)
+void file::start(bool isDirectoryProvided, QString text, QIcon icon)
 {
+    isDirectory = isDirectoryProvided;
     ui->pushButton->setText(text);
     ui->pushButton->setIcon(icon);
+
+    ui->pushButton->setStyleSheet("Text-align: left; font-size: 7pt; font-weight: normal; background: white");
 }
 
-void file::remove_bold()
+void file::removeBold()
 {
-    if(ignore_remove_bold_signal == true)
+    if(ignoreRemoveBoldSignal == true)
     {
-        ignore_remove_bold_signal = false;
+        ignoreRemoveBoldSignal = false;
     } else {
-        if(is_directory == true)
+        if(isDirectory == true)
         {
             ui->pushButton->setText(ui->pushButton->text().remove(" →"));
         }
-
         // this resets
         ui->pushButton->setStyleSheet("Text-align: left; font-size: 7pt; font-weight: normal; background: white");
     }
@@ -40,24 +42,23 @@ void file::remove_bold()
 
 void file::on_pushButton_clicked()
 {
-    if(is_directory == true)
+    if(isDirectory == true)
     {
         // this checks if its clicked, if yes then enter the dir
         if(ui->pushButton->text().contains(" →") == true)
         {
-            emit enter_dir();
+            emit enterDirectory();
         }
     }
-    ignore_remove_bold_signal = true;
+    ignoreRemoveBoldSignal = true;
 
-    emit im_clicked(ui->pushButton->text());
-    if(is_directory == true)
+    emit fileClicked(ui->pushButton->text());
+    if(isDirectory == true)
     {
         ui->pushButton->setText(ui->pushButton->text() + " →");
     }
 
     // this resets
     ui->pushButton->setStyleSheet("Text-align: left; font-size: 7pt; font-weight: bold; background: lightGrey");
-
 }
 

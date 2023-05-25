@@ -141,7 +141,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="ButtonDeckSelect">
+           <widget class="QPushButton" name="ButtonfileSelect">
             <property name="text">
              <string>Select</string>
             </property>

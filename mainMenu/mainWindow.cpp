@@ -10,6 +10,7 @@
 #include "zip.h"
 #include "components/files/fileChooser.h"
 #include "sessions/sessionStruct.h"
+#include "components/other/askText.h"
 
 #include <QTime>
 #include <QTimer>
@@ -128,25 +129,27 @@ void MainWindow::extractDeck()
     if(ereader) {
         // TODO: select file type
         fileChooserCustom* fileChooserCustomDialog = new fileChooserCustom;
-        fileChooserCustomDialog->start_path = directories::deckSelect.path();
-        fileChooserCustomDialog->updateFiles();
+        fileChooserCustomDialog->start(".apkg");
         connect(fileChooserCustomDialog, &fileChooserCustom::provideFile, this, &MainWindow::getFile);
         fileChooserCustomDialog->exec();
     } else if(pc) {
-        zipFilePath = QFileDialog::getOpenFileName(this, "Select anki deck", directories::deckSelect.path(), "Anki Files (*.zip *.apkg)");
+        zipFilePath = QFileDialog::getOpenFileName(this, "Select anki deck", directories::fileSelect.path(), "Anki Files (*.zip *.apkg)");
     }
 
+    if(zipFilePath.isEmpty() == true) {
+        return void();
+    }
     QFile zipFile{zipFilePath};
     if (zipFile.exists()) {
         qDebug() << "zip to be added exists";
 
         QDir newDeck;
-        QFileInfo zipFile_info(zipFilePath);
-        newDeck.setPath(directories::deckStorage.path() + QDir::separator() + zipFile_info.baseName());
+        QFileInfo zipfileInfo(zipFilePath);
+        newDeck.setPath(directories::deckStorage.path() + QDir::separator() + zipfileInfo.baseName());
 
         qDebug() << "new deck path: " << newDeck.path();
 
-        directories::deckStorage.mkdir(zipFile_info.baseName());
+        directories::deckStorage.mkdir(zipfileInfo.baseName());
 
         // Converting to acceptable string
         QByteArray ba = zipFilePath.toLocal8Bit();
@@ -159,6 +162,8 @@ void MainWindow::extractDeck()
         creationTime.open(QIODevice::WriteOnly);
         creationTime.write(QDateTime::currentDateTime().toString("dd.MM.yyyy - hh:mm").toStdString().c_str());
         creationTime.close();
+    } else {
+        qWarning() << "File doesn't exist?:" << zipFilePath;
     }
     showDecks();
 }
@@ -243,7 +248,7 @@ void MainWindow::doneSelectingDecks() {
 void MainWindow::createSession() {
     // Ask for name
     bool continueCreating = true;
-    QString text;
+    QString text = "";
 
     if(pc) {
         text = QInputDialog::getText(this, tr("Insert text"),
@@ -251,7 +256,13 @@ void MainWindow::createSession() {
                                              "", &continueCreating);
     }
     if(ereader) {
-        // TODO: use custom askText dialog
+        askText* askTextDialog = new askText(this);
+        askTextDialog->textToSet = &text;
+        int code = askTextDialog->exec();
+        if(code != QDialog::Accepted) {
+            return void();
+        }
+        qDebug() << "Received code in askText for ereader:" << text;
     }
 
     if (continueCreating == false || text.isEmpty() == true) {

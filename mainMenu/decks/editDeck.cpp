@@ -23,10 +23,6 @@ editDeck::editDeck(QDialog *parent) :
     if(ereader) {
         ui->frame->setStyleSheet(".QFrame{background-color: white; border: 4px solid black; border-radius: 10px;}");
     }
-
-
-
-    // this->adjustSize();
 }
 
 editDeck::~editDeck()
