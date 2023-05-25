@@ -46,8 +46,9 @@ void deck::start(QString path) {
         stats = stats + "Added: " + date + "<br>";
     }
 
+    QString databaseName = "cardCounter";
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "cardCounter");
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", databaseName);
         db.setDatabaseName(findDatabaseFile(dir));
         if(db.open()) {
             QSqlQuery answer = db.exec("SELECT COUNT(id) FROM notes");
@@ -56,7 +57,7 @@ void deck::start(QString path) {
         }
         db.close();
     }
-    QSqlDatabase::removeDatabase("0");
+    QSqlDatabase::removeDatabase(databaseName);
     ui->LabelStats->setText(stats);
 }
 
