@@ -35,6 +35,8 @@ private slots:
     void showRegularStats();
     void showFocusedStats();
 
+    void on_sessionName_cursorPositionChanged(int arg1, int arg2);
+
 private:
     Ui::session *ui;
 };

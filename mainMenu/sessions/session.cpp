@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QSettings>
 #include <QTimer>
+#include <QToolTip>
 
 session::session(QWidget *parent) :
     QWidget(parent),
@@ -13,6 +14,15 @@ session::session(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
+
+    if(ereader) {
+        qDebug() << "Applying ereader settings in session";
+        //ui->sessionName->setStyleSheet("font-size: 9pt");
+        //ui->ButtonOptions->setStyleSheet("font-size: 6pt");
+        //ui->ButtonDeckPlay->setStyleSheet("font-size: 6pt");
+        ui->LabelStats->setStyleSheet("font-size: 7pt");
+        //ui->frame->setContentsMargins(0, 0, 0, 0);
+    }
 }
 
 session::~session()
@@ -39,6 +49,9 @@ void session::start(QString path) {
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &session::statsManager);
     timer->start(800);
+
+    QFont font("Arial", 7);
+    QToolTip::setFont(font);
 }
 
 void session::on_ButtonDeckPlay_clicked()
@@ -63,7 +76,14 @@ void session::showRegularStats() {
 }
 
 void session::showFocusedStats() {
-    ui->LabelStats->setText(getStatsForSession(&sessionSaved, true, false));
+    QString info = getStatsForSession(&sessionSaved, true, false);
+    qDebug() << "Focused info length:" << info.length();
+    if(info.length() > 300) {
+        QToolTip::showText( ui->LabelStats->mapToGlobal( QPoint( 0, 0 ) ), info);
+    } else {
+        ui->LabelStats->setText(info);
+    }
+    ui->LabelStats->clearFocus();
 }
 
 void session::statsManager() {
@@ -77,3 +97,12 @@ void session::statsManager() {
         }
     }
 }
+
+void session::on_sessionName_cursorPositionChanged(int arg1, int arg2)
+{
+    Q_UNUSED(arg1);
+    Q_UNUSED(arg2);
+    ui->sessionName->setSelection(0, 0);
+    QToolTip::showText( ui->sessionName->mapToGlobal( QPoint( 0, 0 ) ), ui->sessionName->text());
+}
+

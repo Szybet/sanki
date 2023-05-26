@@ -174,6 +174,11 @@ void Settings::on_buttonSync_clicked()
     progress.setCancelButton(nullptr); // Um?
     progress.show();
 
+    if(ereader) {
+        progress.setFixedWidth(ereaderVars::screenX);
+        progress.move(0, progress.y());
+    }
+
     QNetworkAccessManager manager(this);
     QNetworkRequest request(QUrl("http://" + address +  "/index.txt"));
     QNetworkReply *reply = manager.get(request);
@@ -208,13 +213,21 @@ void Settings::on_buttonSync_clicked()
                 }
             }
             progress.setLabelText("Downloading file: " + file);
-            QNetworkRequest request(QUrl("http://" + address +  "/" + file));
+            QUrl theUrl = QUrl("http://" + address.toUtf8() +  "/" + file);
+            qDebug() << "theUrl";
+            QNetworkRequest request(theUrl);
             QNetworkReply *reply = manager.get(request);
             QEventLoop loop(this);
             QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
             qDebug() << "Downloading it...";
             loop.exec();
             qDebug() << "Downloaded finished?";
+
+            if(reply->error() != QNetworkReply::NoError) {
+                qWarning() << "Failed to download file:" << file << "error:" << reply->error();
+                continue;
+            }
+
             QByteArray zipData = reply->readAll();
             qDebug() << "Bytes received";
 
@@ -233,6 +246,12 @@ void Settings::on_buttonSync_clicked()
                 qWarning() << "Failed to extract deck" << name;
                 return void();
             }
+
+            // For deck stats
+            QFile creationTime(QDir(fullPath).filePath(deckAddedFileName));
+            creationTime.open(QIODevice::WriteOnly);
+            creationTime.write(QDateTime::currentDateTime().toString("dd.MM.yyyy - hh:mm").toStdString().c_str());
+            creationTime.close();
 
             progress.setValue(progress.value() + 1);
         }

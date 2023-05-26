@@ -103,8 +103,8 @@ void statusBarC::OptionButtonExit(QIcon icon, bool enabled) {
         ui->LineTime->show();
         ui->labelTime->show();
 
-        ui->horizontalSpacerExit_3->changeSize(40,40);
-        ui->horizontalSpacerExit_4->changeSize(40,40);
+        ui->horizontalSpacerExit_3->changeSize(10,0);
+        ui->horizontalSpacerExit_4->changeSize(10,0);
     }
 
 }

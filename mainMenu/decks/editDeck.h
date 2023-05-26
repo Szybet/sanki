@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QDir>
 #include <QProxyStyle>
+#include <QTimer>
 
 namespace Ui {
 class editDeck;
@@ -27,18 +28,16 @@ private slots:
     void on_ButtonRemoveDeck_clicked();
     void on_ButtonCancelEdit_clicked();
     void on_ButtonSaveExit_clicked();
-    void on_lineeditDeckName_cursorPositionChanged(int arg1, int arg2);
-    void on_lineeditDeckName_selectionChanged();
     void on_lineeditDeckName_textChanged(const QString &arg1);
 
-    void keyboardClosed(bool updateName);
 
 private:
     Ui::editDeck *ui;
     bool updatedName = false;;
     bool removeDeck = false;
     bool firstOpen = true; // this is changed to false after launching in on_lineeditDeckName_cursorPositionChanged
-    bool keyboardOpened = false;
+    QTimer* timer;
+    void manageKeyboards();
 };
 
 #endif // editDeck_H

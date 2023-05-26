@@ -2,8 +2,8 @@
 extern crate log;
 
 use std::fs::File;
-use std::{io::Write};
-use std::{thread};
+use std::io::Write;
+use std::thread;
 
 use axum::{
     body::Body,
@@ -45,13 +45,13 @@ struct AppState {}
 
 static mut DECK_LIST: Mutex<Vec<String>> = Mutex::const_new(Vec::new());
 
-async fn my_middleware<B>(State(state): State<AppState>, request: Request<B>) -> Request<B> {
+async fn my_middleware<B>(State(_state): State<AppState>, request: Request<B>) -> Request<B> {
     // do something with `state` and `request`...
     let mut locked = unsafe { DECK_LIST.lock().await };
 
     debug!("Current list: {:?}", locked);
 
-    let mut name = request.uri().to_string();
+    let mut name = request.uri().to_string().replace("%20", " "); // URL space
     name.remove(0);
 
     info!("Requested: {:?}", name);
@@ -107,7 +107,7 @@ async fn main() {
         action: String::from("deckNames"),
         version: 6,
     };
-    
+
     client
         .post("http://127.0.0.1:8765")
         .json(&params_sync)
@@ -235,5 +235,4 @@ async fn main() {
     if !args.target_directory.is_empty() {
         std::fs::remove_dir_all(path_dir);
     }
-    
 }

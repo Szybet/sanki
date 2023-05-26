@@ -1,4 +1,5 @@
 #include "cardView/modes/boxes/askforboxesoptions.h"
+#include "components/other/keyboard.h"
 #include "editSession.h"
 #include "ui_editSession.h"
 #include "components/other/statistics.h"
@@ -12,6 +13,12 @@ editSession::editSession(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
+
+    if(ereader) {
+        timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, &editSession::manageKeyboards);
+        timer->start(800);
+    }
 }
 
 editSession::~editSession()
@@ -89,4 +96,18 @@ void editSession::on_saveButton_clicked() {
 
 void editSession::on_removeSession_toggled(bool checked) {
     deleteSession = checked;
+}
+
+void editSession::manageKeyboards() {
+    QLineEdit* textEditToCheck = ui->lineEdit;
+    if(textEditToCheck->underMouse() == true && textEditToCheck->hasFocus() == true) {
+        keyboard* ereaderKeyboard = new keyboard(this);
+        ereaderKeyboard->start(textEditToCheck);
+        int y = this->pos().y();
+        this->move(this->pos().x(), 0);
+        ereaderKeyboard->exec();
+        textEditToCheck->clearFocus();
+        this->move(this->pos().x(), y);
+        return void();
+    }
 }

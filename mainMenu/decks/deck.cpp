@@ -17,11 +17,10 @@ deck::deck(QWidget *parent)
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
 
-    ui->deck->setStyleSheet("font-size: 8pt");
-    ui->ButtoneditDeck->setStyleSheet("font-size: 8pt");
-    ui->LabelStats->setStyleSheet("font-size: 8pt");
-    ui->ButtonfileSelect->setStyleSheet("font-size: 8pt");
-
+    if(ereader) {
+        qDebug() << "Applying ereader settings in deck";
+        ui->LabelStats->setStyleSheet("font-size: 9pt");
+    }
 }
 
 void deck::start(QString path) {
@@ -58,7 +57,7 @@ void deck::start(QString path) {
         db.close();
     }
     QSqlDatabase::removeDatabase(databaseName);
-    ui->LabelStats->setText(stats);
+    ui->LabelStats->setText("<p style=\"text-align:center\">" + stats + "</p>");
 }
 
 void deck::on_ButtoneditDeck_clicked()

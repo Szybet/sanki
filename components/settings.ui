@@ -284,7 +284,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="textIP"/>
+          <widget class="QLineEdit" name="textIP">
+           <property name="inputMask">
+            <string/>
+           </property>
+           <property name="placeholderText">
+            <string>:8766</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

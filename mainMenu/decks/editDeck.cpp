@@ -22,6 +22,9 @@ editDeck::editDeck(QDialog *parent) :
     ui->ButtonSaveExit->setStyleSheet("font-size: 8pt");
     if(ereader) {
         ui->frame->setStyleSheet(".QFrame{background-color: white; border: 4px solid black; border-radius: 10px;}");
+        timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, &editDeck::manageKeyboards);
+        timer->start(800);
     }
 }
 
@@ -144,32 +147,22 @@ void editDeck::on_ButtonSaveExit_clicked()
     editDeck::close();
 }
 
-void editDeck::on_lineeditDeckName_cursorPositionChanged(int oldpos, int newpos)
-{
-    // TODO
-}
-
-void editDeck::keyboardClosed(bool updateName)
-{
-    if(updateName == true)
-    {
-        updatedName = true;
-    }
-    ui->lineeditDeckName->setText(ui->lineeditDeckName->text().remove("|"));
-    ui->lineeditDeckName->setCursorPosition(0);
-    keyboardOpened = false;
-}
-
-void editDeck::on_lineeditDeckName_selectionChanged()
-{
-    if(ereader) {
-        ui->lineeditDeckName->setSelection(0, 0);
-    }
-}
-
 void editDeck::on_lineeditDeckName_textChanged(const QString &arg1)
 {
     Q_UNUSED(arg1);
     updatedName = true;
 }
 
+void editDeck::manageKeyboards() {
+    QLineEdit* textEditToCheck = ui->lineeditDeckName;
+    if(textEditToCheck->underMouse() == true && textEditToCheck->hasFocus() == true) {
+        keyboard* ereaderKeyboard = new keyboard(this);
+        ereaderKeyboard->start(textEditToCheck);
+        int y = this->pos().y();
+        this->move(this->pos().x(), 0);
+        ereaderKeyboard->exec();
+        textEditToCheck->clearFocus();
+        this->move(this->pos().x(), y);
+        return void();
+    }
+}

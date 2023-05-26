@@ -13,6 +13,26 @@ statistics::statistics(QWidget *parent) :
     ui->sessionLabel->setAlignment(Qt::AlignCenter);
 
     setUpChart(ui->cardUsedChart, "How many times cards were shown");
+
+    if(ereader) {
+        this->move(0, 0);
+        this->setFixedSize(ereaderVars::screenX, ereaderVars::screenY);
+        ui->cardUsedChart->setFixedHeight(800);
+        ui->cardBoxesChart->setFixedHeight(800);
+
+        // QTextBrowser has here some wierd problems
+        //ui->cardBoxesChart->setFixedSize(600, 600);
+        //ui->textBrowser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        //ui->textBrowser->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        //ui->textBrowser->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+        ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+        this->adjustSize();
+    }
+
+    if(pc) {
+        ui->exitButton->setVisible(true);
+    }
 }
 
 statistics::~statistics()
@@ -38,7 +58,12 @@ void statistics::start(sessionStr session) {
 
     qDebug() << "Statistics for session:" << session;
 
-    ui->textBrowser->setHtml(getStatsForSession(&session, false));
+    QString stats = getStatsForSession(&session, false);
+
+    qDebug() << "The stats are:" << stats;
+
+    ui->textBrowser->setText(stats);
+
 
     // https://stackoverflow.com/questions/48362864/how-to-insert-qchartview-in-form-with-qt-designer
 
@@ -96,3 +121,9 @@ void statistics::start(sessionStr session) {
         this->setMinimumSize(QSize(0, 0));
     }
 }
+
+void statistics::on_exitButton_clicked()
+{
+    this->close();
+}
+

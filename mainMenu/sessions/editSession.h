@@ -5,6 +5,7 @@
 
 #include "mainMenu/sessions/sessionStruct.h"
 #include "cardView/modes/boxes/boxes.h"
+#include <QTimer>
 
 namespace Ui {
 class editSession;
@@ -41,7 +42,8 @@ private:
     bool deleteSession = false;
     bool boxSettingsChanged = false;
     box boxesSettings;
-
+    QTimer* timer;
+    void manageKeyboards();
 };
 
 #endif // EDITSESSION_H

@@ -204,12 +204,16 @@ void MainWindow::statusBarDeckAdd() {
     connect(statusBarCWidget, &statusBarC::optionButtonSignal, this, &MainWindow::extractDeck);
     connect(statusBarCWidget, &statusBarC::option2ButtonSignal, this, &MainWindow::doneSelectingDecks);
 
+    /*
     if(ereader) {
         statusBarCWidget->OptionButtonExit(QIcon(":/icons/close.png"), true);
         connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::close);
     } else {
         statusBarCWidget->OptionButtonExit(QIcon(), false);
     }
+    */
+    statusBarCWidget->OptionButtonExit(QIcon(":/icons/back.svg"), true);
+    connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::showSessions);
 }
 
 void MainWindow::returnToStart()

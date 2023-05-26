@@ -13,6 +13,16 @@ askForBoxesOptions::askForBoxesOptions(QWidget *parent) :
     ui->label->setAlignment(Qt::AlignCenter);
 
     ui->infoButton->setIcon(QIcon(":/icons/info.svg"));
+
+    if(ereader) {
+        QString spaces = "   ";
+        ui->againSpinBox->setSuffix(spaces);
+        ui->hardSpinBox_2->setSuffix(spaces);
+        ui->goodSpinBox_3->setSuffix(spaces);
+        ui->easySpinBox_4->setSuffix(spaces);
+        ui->boxesSpinBox->setSuffix(spaces);
+        ui->skipSpinBox->setSuffix(spaces);
+    }
 }
 
 askForBoxesOptions::~askForBoxesOptions()

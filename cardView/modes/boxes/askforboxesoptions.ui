@@ -88,6 +88,18 @@
      </item>
      <item>
       <widget class="QSpinBox" name="boxesSpinBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="suffix">
+        <string/>
+       </property>
+       <property name="prefix">
+        <string/>
+       </property>
        <property name="minimum">
         <number>2</number>
        </property>
@@ -108,7 +120,20 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="skipSpinBox"/>
+      <widget class="QSpinBox" name="skipSpinBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="suffix">
+        <string/>
+       </property>
+       <property name="prefix">
+        <string/>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -123,6 +148,12 @@
      </item>
      <item>
       <widget class="QSpinBox" name="againSpinBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="suffix">
         <string/>
        </property>
@@ -153,6 +184,18 @@
      </item>
      <item>
       <widget class="QSpinBox" name="hardSpinBox_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="suffix">
+        <string/>
+       </property>
+       <property name="prefix">
+        <string/>
+       </property>
        <property name="minimum">
         <number>-20</number>
        </property>
@@ -174,6 +217,18 @@
      </item>
      <item>
       <widget class="QSpinBox" name="goodSpinBox_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="suffix">
+        <string/>
+       </property>
+       <property name="prefix">
+        <string/>
+       </property>
        <property name="minimum">
         <number>1</number>
        </property>
@@ -195,6 +250,18 @@
      </item>
      <item>
       <widget class="QSpinBox" name="easySpinBox_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="suffix">
+        <string>  </string>
+       </property>
+       <property name="prefix">
+        <string/>
+       </property>
        <property name="minimum">
         <number>1</number>
        </property>
@@ -219,7 +286,6 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../Resources/sanki.qrc"/>
   <include location="../../../Resources/sanki.qrc"/>
  </resources>
  <connections/>

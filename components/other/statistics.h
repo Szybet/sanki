@@ -20,6 +20,9 @@ public:
     void start(sessionStr session);
     void setUpChart(QtCharts::QChartView* chart, QString title);
 
+private slots:
+    void on_exitButton_clicked();
+
 private:
     Ui::statistics *ui;
 };

@@ -1,7 +1,6 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include "components/other/keyboard.h"
 #include <QDialog>
 
 namespace Ui {

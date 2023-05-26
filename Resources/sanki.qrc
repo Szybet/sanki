@@ -33,5 +33,7 @@
         <file>eink/up-arrow-pressed.png</file>
         <file>eink/radioButtonChecked.svg</file>
         <file>eink/radioButtonUnchecked.svg</file>
+        <file>eink/down-arrow.png</file>
+        <file>eink/up-arrow.png</file>
     </qresource>
 </RCC>

@@ -33,6 +33,10 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
         QMessageBox msgBox;
         msgBox.setIcon(QMessageBox::Information);
         msgBox.setText(localMsg.constData());
+        if(ereader) {
+            qDebug() << "Info dialog resized";
+            msgBox.setFixedWidth(ereaderVars::screenX);
+        }
         msgBox.exec();
 
         fprintf(stderr, "Info: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
