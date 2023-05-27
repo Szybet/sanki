@@ -2,6 +2,7 @@
 #include "global.h"
 #include "mainMenu/sessions/sessionStruct.h"
 #include "cardView/modes/boxes/boxes.h"
+#include "components/other/infoDialog.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -30,14 +31,23 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
     }
     case QtInfoMsg: {
 
-        QMessageBox msgBox;
-        msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText(localMsg.constData());
+
         if(ereader) {
-            qDebug() << "Info dialog resized";
-            msgBox.setFixedWidth(ereaderVars::screenX);
+            qDebug() << "Info dialog ereader mode";
+            // Doesn't work ;/
+            // msgBox.setFixedWidth(ereaderVars::screenX);
+            infoDialog* infoDialogEreader = new infoDialog();
+            infoDialogEreader->setModal(true);
+            infoDialogEreader->show(); // Size and stuff
+            infoDialogEreader->move(0, infoDialogEreader->y());
+            infoDialogEreader->setFixedWidth(ereaderVars::screenX);
+            infoDialogEreader->setText(localMsg.constData());
+        } else {
+            QMessageBox msgBox;
+            msgBox.setIcon(QMessageBox::Information);
+            msgBox.setText(localMsg.constData());
+            msgBox.exec();
         }
-        msgBox.exec();
 
         fprintf(stderr, "Info: \"%s\" (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
         break;
@@ -166,18 +176,21 @@ int main(int argc, char *argv[])
 
         if(ereaderVars::inkboxUserApp == true) {
             directories::config = QDir("/app-data");
-            directories::fileSelect = QDir("/app-data"); // For now
+            directories::fileSelect = QDir("/app-data");
         } else {
+            // Debug
             directories::config = QDir("/sanki_debug_dir");
             directories::fileSelect = QDir("/"); // For now
         }
         directories::deckStorage = directories::config.path() + QDir::separator() + "decks";
         directories::sessionSaves = directories::config.path() + QDir::separator() + "sessions";
+        directories::globalSettings.setFileName(directories::config.filePath("sanki.ini"));
     }
 
     MainWindow w;
 
     if(ereader) {
+        w.setAnimated(false);
         w.showFullScreen();
         warningsEnabled = true;
     } else if(pc) {

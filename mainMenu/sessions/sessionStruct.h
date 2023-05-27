@@ -51,8 +51,8 @@ struct sessionStr {
 };
 Q_DECLARE_METATYPE(sessionStr)
 
-QString getSmallStatsForSession(sessionStr* session, bool lastUsed);
-QString getStatsForSession(sessionStr* session, bool lastUsed, bool creationTime = true);
+QString getSmallStatsForSession(sessionStr session, bool lastUsed);
+QString getStatsForSession(sessionStr session, bool lastUsed, bool creationTime = true, bool showFullInfo = false);
 
 extern QDebug operator<<(QDebug dbg, const core& c);
 extern QDebug operator<<(QDebug dbg, const times& t);

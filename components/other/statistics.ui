@@ -119,6 +119,9 @@
      <property name="verticalScrollBarPolicy">
       <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAsNeeded</enum>
+     </property>
      <property name="sizeAdjustPolicy">
       <enum>QAbstractScrollArea::AdjustIgnored</enum>
      </property>
@@ -142,9 +145,9 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QLabel" name="textBrowser">
-         <property name="text">
-          <string>TextLabel</string>
+        <widget class="QTextEdit" name="textBrowser">
+         <property name="textInteractionFlags">
+          <set>Qt::NoTextInteraction</set>
          </property>
         </widget>
        </item>

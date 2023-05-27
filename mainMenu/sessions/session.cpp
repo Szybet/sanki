@@ -72,25 +72,35 @@ void session::refreshSessionsSlot() {
 }
 
 void session::showRegularStats() {
-    ui->LabelStats->setText(getSmallStatsForSession(&sessionSaved, true));
+    ui->LabelStats->setText(getSmallStatsForSession(sessionSaved, true));
 }
 
 void session::showFocusedStats() {
-    QString info = getStatsForSession(&sessionSaved, true, false);
+    QString info = getStatsForSession(sessionSaved, true, false, false);
     qDebug() << "Focused info length:" << info.length();
-    if(info.length() > 300) {
-        QToolTip::showText( ui->LabelStats->mapToGlobal( QPoint( 0, 0 ) ), info);
+    // It crashes sometimes if it's too big? ereader specific
+    if(info.length() > 220 && info.length() < 500) {
+        if(QToolTip::isVisible() == false) {
+            QApplication::processEvents();
+            QToolTip::showText( ui->LabelStats->mapToGlobal( QPoint( 0, 0 ) ), info);
+            QApplication::processEvents();
+        } else {
+            QToolTip::hideText();
+        }
     } else {
         ui->LabelStats->setText(info);
     }
-    ui->LabelStats->clearFocus();
 }
 
 void session::statsManager() {
-    if(ui->LabelStats->underMouse() == true || ui->LabelStats->hasFocus() == true) {
-        showFocusedStats();
-        normalStats = false;
+    if(ui->LabelStats->hasFocus() == true) {
+        if(changedFocus == true) {
+            showFocusedStats();
+            normalStats = false;
+            changedFocus = false;
+        }
     } else {
+        changedFocus = true;
         if(normalStats == false) {
             showRegularStats();
             normalStats = true;
@@ -102,7 +112,11 @@ void session::on_sessionName_cursorPositionChanged(int arg1, int arg2)
 {
     Q_UNUSED(arg1);
     Q_UNUSED(arg2);
-    ui->sessionName->setSelection(0, 0);
-    QToolTip::showText( ui->sessionName->mapToGlobal( QPoint( 0, 0 ) ), ui->sessionName->text());
+    if(startBoolIgnoreChanged == false) {
+        ui->sessionName->setSelection(0, 0);
+        QToolTip::showText( ui->sessionName->mapToGlobal( QPoint( 0, 0 ) ), ui->sessionName->text());
+    } else {
+        startBoolIgnoreChanged = false;
+    }
 }
 

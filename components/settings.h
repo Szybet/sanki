@@ -2,6 +2,7 @@
 #define SETTINGS_H
 
 #include <QDialog>
+#include <QSettings>
 
 namespace Ui {
 class Settings;
@@ -27,6 +28,12 @@ private slots:
     void on_buttonSync_clicked();
     void on_checkBox_stateChanged(int arg1);
 
+    void on_ButtonFontChange_clicked();
+
+    void on_buttonEinkInfo_clicked();
+
+    void on_comboBoxEinkMode_currentTextChanged(const QString &arg1);
+
 private:
     Ui::Settings *ui;
     enum Direction{
@@ -37,6 +44,10 @@ private:
     bool overwriteDeck = false;
     QTimer* timer;
     void manageKeyboards();
+    QSettings* settingsGlobal;
+    QFont currentFont;
+    QString waveFormNumbToString(int numb);
+    int waveFormStringToInt(QString name);
 };
 
 #endif // SETTINGS_H

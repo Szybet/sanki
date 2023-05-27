@@ -28,13 +28,14 @@ QDir directories::config = QStandardPaths::writableLocation(QStandardPaths::AppD
 QDir directories::deckStorage = directories::config.path() + QDir::separator() + "decks";
 QDir directories::sessionSaves = directories::config.path() + QDir::separator() + "sessions";
 QDir directories::fileSelect = QDir::homePath();
+QFile directories::globalSettings = directories::config.filePath("sanki.ini");
 QString deckAddedFileName = "creationTime";
 
 QString ereaderVars::model = "";
 bool ereaderVars::inkboxUserApp = false;
+QString ereaderVars::buttonNoFlashStylesheet = "QPushButton:pressed { background: white; color: black } QPushButton:checked { background: white; color: black } QPushButton { background: white; color: black }";
 int ereaderVars::screenX = 1920;
 int ereaderVars::screenY = 1080;
-int ereaderVars::batteryLevel = 100;
 
 bool renameDir(QDir & dir, const QString & newName) {
     // https://stackoverflow.com/questions/39229177/qdirrename-redundant-parameters
@@ -75,42 +76,38 @@ void screenGeometry()
     qDebug() << "Screen size is x:" << ereaderVars::screenX << "y:" << ereaderVars::screenY;
 }
 
-void check_battery_level()
+int checkBatteryLevel()
 {
-    // Copied from inkbox
-    QFile batt_level_file("/sys/devices/platform/pmic_battery.1/power_supply/mc13892_bat/capacity");
-    QString batt_level;
-    if(batt_level_file.exists()) {
-        batt_level_file.open(QIODevice::ReadOnly);
-        batt_level = batt_level_file.readAll();
-        batt_level = batt_level.trimmed();
-
-        //QString message = "Battery level is: ";
-        //message.append(batt_level);
-        //debugLog(message, "globals.h", "check_battery_level");
-
-        ereaderVars::batteryLevel = batt_level.toInt();
-        batt_level_file.close();
-    }
-    else {
-        ereaderVars::batteryLevel = 100;
+    // Only for the nia
+    QFile batteryFile("/sys/devices/platform/pmic_battery.1/power_supply/mc13892_bat/capacity");
+    QString batteryLevel;
+    if(batteryFile.exists()) {
+        batteryFile.open(QIODevice::ReadOnly);
+        batteryLevel = batteryFile.readAll();
+        batteryFile.close();
+        return batteryLevel.trimmed().toInt();
+    } else {
+        return -1;
     }
 }
-void set_brightness(int value) {
-    // doesnt work
-    std::ofstream fhandler;
-    fhandler.open("/var/run/brightness");
-    fhandler << value;
-    fhandler.close();
+
+void setBrightness(int value) {
+    QString path = "/sys/class/backlight/mxc_msp430.0/brightness";
+    QFile file(path);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        stream << value;
+        file.close();
+    }
 }
 
-int get_brightness() {
-    // doesnt work
-    QFile brightness("/var/run/brightness");
-    brightness.open(QIODevice::ReadOnly);
-    QString valuestr = brightness.readAll();
-    int value = valuestr.toInt();
-    brightness.close();
-    return value;
-    return 0;
+int getBrightness() {
+    QFile file2("/sys/class/backlight/mxc_msp430.0/brightness");
+    if (file2.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QString contents = file2.readAll().trimmed();
+        file2.close();
+        return contents.toInt();
+    }
+    file2.close();
+    return -1;
 }

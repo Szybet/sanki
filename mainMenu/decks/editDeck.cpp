@@ -96,6 +96,11 @@ void editDeck::on_ButtonSaveExit_clicked()
             progress.setCancelButton(nullptr); // Um?
             progress.show();
 
+            if(ereader) {
+                progress.setFixedWidth(ereaderVars::screenX);
+                progress.move(0, progress.y());
+            }
+
             foreach(QString file , directories::sessionSaves.entryList(QDir::NoDotAndDotDot | QDir::Files)) {
                 qDebug() << "Session file:" << file;
                 QSettings settings(directories::sessionSaves.filePath(file), QSettings::IniFormat);

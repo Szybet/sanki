@@ -31,6 +31,7 @@ SOURCES += \
     components/files/fileChooser.cpp \
     components/other/askText.cpp \
     components/other/griditemspacer.cpp \
+    components/other/infoDialog.cpp \
     components/other/statistics.cpp \
     components/settings.cpp \
     components/statusBarC.cpp \
@@ -59,6 +60,7 @@ HEADERS += \
     components/files/fileChooser.h \
     components/other/askText.h \
     components/other/griditemspacer.h \
+    components/other/infoDialog.h \
     components/other/statistics.h \
     components/settings.h \
     components/statusBarC.h \
@@ -82,6 +84,7 @@ FORMS += \
     components/files/fileChooser.ui \
     components/other/askText.ui \
     components/other/griditemspacer.ui \
+    components/other/infoDialog.ui \
     components/other/statistics.ui \
     components/settings.ui \
     components/statusBarC.ui \
@@ -122,6 +125,9 @@ if(contains(TARGET_DEVICE, EREADER)) {
     UI_DIR = build/kobo/.ui
     message("Choosed libraries for EREADER")
     DEFINES += EREADER=true
+
+    INCLUDEPATH += $$PWD/libraries/ereader/qt5-kobo-platform-plugin/src
+    DEPENDPATH += $$PWD/libraries/ereader/qt5-kobo-platform-plugin/src
 }
 
 if(contains(TARGET_DEVICE, PC)) {

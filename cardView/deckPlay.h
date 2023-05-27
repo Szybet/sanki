@@ -37,12 +37,16 @@ public:
     QSettings* saveSession;
     void saveSessionData();
     void exitIt();
+    void changeStatusBarTextSlot(QString text); // to be called from modes
 
 public slots:
     void showStats();
+    // When options dialog is closed
+    void reloadSettings();
 
 signals:
     void saveData();
+    void changeStatusBarTextSignal(QString text);
 
 private slots:
     void on_horizontalScrollBar_valueChanged(int value);

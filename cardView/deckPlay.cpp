@@ -20,6 +20,11 @@
 #include <algorithm>
 #include <random>
 
+#ifdef EREADER
+#include "einkenums.h"
+#include "koboplatformfunctions.h"
+#endif
+
 DeckPlay::DeckPlay(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::DeckPlay)
@@ -117,9 +122,12 @@ void DeckPlay::start(sessionStr newSession)
         connect(this, &DeckPlay::saveData, mode, &boxes::saveBox);
         mode->setup(this, ui);
     }
+
+    reloadSettings();
 }
 
 void DeckPlay::cardSizeManage(QTextBrowser *text) {
+    QApplication::processEvents();
     int height = text->document()->size().height();
     QString objectName = text->objectName();
     QScrollBar* scrollbar = ui->horizontalScrollBar;
@@ -289,6 +297,30 @@ void DeckPlay::showStats() {
     }
     saveSessionData();
     statistics* newStats = new statistics(this);
+    newStats->show(); // I said before but calculate things important etc;
     newStats->start(currectSession);
     newStats->exec();
+}
+
+void DeckPlay::reloadSettings() {
+    qDebug() << "Reload settings called";
+
+    QSettings settingsGlobal(directories::globalSettings.fileName(), QSettings::IniFormat);
+    QVariant variant = settingsGlobal.value("playFont");
+    QFont font = variant.value<QFont>();
+
+    ui->textBackCard->setFont(font);
+    ui->textFrontCard->setFont(font);
+
+#ifdef EREADER
+    int waveform = settingsGlobal.value("deckPlayWaveForm").toInt();
+    qDebug() << "Setting waveform mode for deckPlay:" << waveform;
+    // Does this work?
+    WaveForm waveformBetter = static_cast<WaveForm>(waveform);
+    KoboPlatformFunctions::setFullScreenRefreshMode(waveformBetter);
+#endif
+}
+
+void DeckPlay::changeStatusBarTextSlot(QString text) {
+    emit changeStatusBarTextSignal(text);
 }

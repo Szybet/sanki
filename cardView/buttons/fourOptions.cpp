@@ -1,4 +1,5 @@
 #include "fourOptions.h"
+#include "global.h"
 #include "ui_fourOptions.h"
 
 fourOptions::fourOptions(QWidget *parent) :
@@ -6,6 +7,13 @@ fourOptions::fourOptions(QWidget *parent) :
     ui(new Ui::fourOptions)
 {
     ui->setupUi(this);
+    if(ereader) {
+        ui->againButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
+        ui->hardButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
+        ui->goodButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
+        ui->easyButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
+        ui->showButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
+    }
     hideButtons();
 }
 

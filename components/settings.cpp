@@ -11,6 +11,13 @@
 #include <QNetworkReply>
 #include <QProgressDialog>
 #include <QTimer>
+#include <QSettings>
+#include <QFontDialog>
+
+#ifdef EREADER
+#include "einkenums.h"
+#include "koboplatformfunctions.h"
+#endif
 
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
@@ -21,10 +28,6 @@ Settings::Settings(QWidget *parent) :
 
     // This is because the QDialog has borders
     // if(ereader) this->setStyleSheet("QDialog {border: 0px solid black; border-radius: 0px; background: white;}");
-
-    // Set the default page
-    ui->stackedWidget->setCurrentIndex(1);
-    requestMenuPage();
 
     if(ereader) {
         ui->labelPageName->setStyleSheet("font-size: 9pt;");
@@ -46,6 +49,28 @@ Settings::Settings(QWidget *parent) :
         ui->buttonSync->setStyleSheet("border: 3px solid black");
     }
 
+    qDebug() << "Loading global settings";
+    settingsGlobal = new QSettings(directories::globalSettings.fileName(), QSettings::IniFormat);
+    qDebug() << "Keys:" << settingsGlobal->allKeys();
+    settingsGlobal->setParent(this);
+
+    if(ereader) {
+       int waveform = settingsGlobal->value("deckPlayWaveForm").toInt();
+       ui->comboBoxEinkMode->setCurrentText(waveFormNumbToString(waveform));
+    }
+
+    // Set the default page
+    ui->stackedWidget->setCurrentIndex(1);
+    requestMenuPage();
+
+    if(ereader) {
+       this->setFixedWidth(ereaderVars::screenX);
+    }
+
+#ifdef EREADER
+    qDebug() << "Setting waveform mode";
+    KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm_GC16);
+#endif
 }
 
 Settings::~Settings()
@@ -73,13 +98,13 @@ void Settings::requestEreaderPage()
 {
     ui->labelPageName->setText("Device");
 
-    check_battery_level();
+    checkBatteryLevel();
     QString bat_level = "Battery level: ";
-    //bat_level.append(QString::number(ereaderVars::batt_level_int));
+    bat_level.append(QString::number(checkBatteryLevel()));
     bat_level.append("%");
     ui->labelBattery->setText(bat_level);
 
-    int brightness = get_brightness();
+    int brightness = getBrightness();
     ui->ScrollBarBrightness->setSliderPosition(brightness);
 
     QString brightness_string = "Brightness: ";
@@ -90,7 +115,7 @@ void Settings::requestEreaderPage()
 
 void Settings::on_ScrollBarBrightness_valueChanged(int value)
 {
-    set_brightness(value);
+    setBrightness(value);
 
     QString brightness_string = "Brightness: ";
     QString number = QString::number(value);
@@ -138,6 +163,15 @@ void Settings::managePage(int newIndex, Direction fromWhere) {
 
 void Settings::requestMenuPage() {
     ui->labelPageName->setText("Menu");
+
+    settingsGlobal->sync();
+
+    QVariant variant = settingsGlobal->value("playFont");
+    qDebug() << "variant:" << variant;
+    qDebug() << variant.isValid() << variant.isNull();
+    QFont font = variant.value<QFont>();
+    ui->labelFontName->setText(font.family() + ", " + QString::number(font.pointSize()));
+    currentFont = font;
 }
 
 void Settings::requestSyncPage() {
@@ -159,7 +193,6 @@ void Settings::on_buttonSyncInfo_clicked()
 {
     qInfo() << "- Run anki sync on the machine that has anki, and ankiconnect on it<br>- The default port is 8766<br>- After an error, restart the sync server<br>- As of now, your sessions will not be updated from new cards in overwrited decks";
 }
-
 
 void Settings::on_buttonSync_clicked()
 {
@@ -288,4 +321,63 @@ void Settings::manageKeyboards() {
         this->move(this->pos().x(), y);
         return void();
     }
+}
+
+void Settings::on_ButtonFontChange_clicked()
+{
+    QFontDialog* dialog = new QFontDialog(this);
+
+    if(ereader) {
+        dialog->show();
+        dialog->move(0, 0);
+        dialog->setFixedSize(ereaderVars::screenX, ereaderVars::screenY);
+    }
+    dialog->setFont(currentFont);
+    int result = dialog->exec();
+
+    if(result == QDialog::Accepted) {
+        currentFont = dialog->selectedFont();
+        qDebug() << "New current font:" << currentFont;
+        settingsGlobal->setValue("playFont", currentFont);
+        requestMenuPage();
+    }
+}
+
+void Settings::on_buttonEinkInfo_clicked()
+{
+    QString info = "Those are eink screen modes, the set how things are shown:<br>"
+                   "- WaveForm_A2 - Default, fastest, the most ghosting, a lot can damage your screen! ( propably )<br>"
+                   "- WaveForm_GC4 - Fast, refreshes too much of the screen, but never goes white - black - white. Propably safe<br>"
+                   "- WaveForm_GC16 - The default used in all other dialogs - no or a bit ghosting, slow<br>"
+                   "- WaveForm_AUTO - Fast, experimental, ugly :)";
+    qInfo() << info;
+}
+
+void Settings::on_comboBoxEinkMode_currentTextChanged(const QString &arg1) {
+    int newWaveForm = waveFormStringToInt(arg1);
+    settingsGlobal->setValue("deckPlayWaveForm", newWaveForm);
+    settingsGlobal->sync();
+}
+
+QString Settings::waveFormNumbToString(int numb) {
+    switch (numb) {
+        case 4: return "WaveForm_A2";
+        case 2: return "WaveForm_GC16";
+        case 3: return "WaveForm_GC4";
+        case 257: return "WaveForm_AUTO";
+    }
+    return "error";
+}
+
+int Settings::waveFormStringToInt(QString name) {
+    if (name == "WaveForm_A2")
+        return 4;
+    else if (name == "WaveForm_GC16")
+        return 2;
+    else if (name == "WaveForm_GC4")
+        return 3;
+    else if (name == "WaveForm_AUTO")
+        return 257;
+    else
+        return -1;
 }

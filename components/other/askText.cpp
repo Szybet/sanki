@@ -10,6 +10,8 @@ askText::askText(QWidget *parent) :
     ui(new Ui::askText)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
+
     this->setResult(QDialog::Rejected);
 
     timer = new QTimer(this);

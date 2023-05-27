@@ -105,6 +105,15 @@ void boxes::loop() {
 
     card* choosenCard = &parent->currectSession.cardList[theBox.boxes[whichBox][whichCard].index];
 
+    QString deckName = parent->currectSession.core.deckPathList[choosenCard->deckiD];
+    deckName = deckName.split("/").last();
+    qDebug() << "Deck name for card:" << deckName;
+    if(deckName.length() > 20) {
+        deckName = deckName.left(20);
+        deckName.append("...");
+    }
+    parent->changeStatusBarTextSlot(deckName);
+
     qDebug() << "Choosed card:" << choosenCard;
     choosenCard->count += 1;
 

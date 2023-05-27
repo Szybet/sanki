@@ -121,33 +121,47 @@ sessionStr mapToSessionStr(const QMap<QString, QVariant> map)
 }
 */
 
-QString getStatsForSession(sessionStr* session, bool lastUsed, bool creationTime) {
-    QString returnStr = "<p align=\"center\">";
+QString getStatsForSession(sessionStr session, bool lastUsed, bool creationTime, bool showFullInfo) {
+    //QString returnStr = "<p align=\"center\">";
+    QString returnStr;
 
     QString mode;
     // No better no problematic way
-    if(session->core.mode == CompletlyRandomised) {
+    if(session.core.mode == CompletlyRandomised) {
         mode = "Completly Randomised";
-    } else if(session->core.mode == Boxes) {
+    } else if(session.core.mode == Boxes) {
         mode = "Boxes";
     }
 
     returnStr = returnStr + "<b>Mode:</b> " + mode + "<br>";
     QStringList decks;
-    foreach(QString path, session->core.deckPathList) {
+    foreach(QString path, session.core.deckPathList) {
         decks.append(path.split("/").last());
     }
-    returnStr = returnStr + "<b>Decks:</b> " + decks.join(",") + "<br>";
-    if(creationTime == true) {
-        returnStr = returnStr + "<b>Created:</b> " + session->time.created.toString("dd.MM.yyyy - hh:mm") + "<br>";
-    }
-    if(lastUsed) {
-        returnStr = returnStr + "<b>Last used:</b> " + session->time.lastUsed.toString("dd.MM.yyyy - hh:mm") + "<br>";
+    QString decksString = decks.join(", ");
+    if(showFullInfo == false && decksString.length() > 41) {
+        decksString = decksString.left(40);
+        decksString.append("...");
     }
 
-    QString hours = QString::number(session->time.played / (1000 * 60 * 60)); // Calculate hours
-    QString minutes = QString::number(session->time.played / (1000 * 60)); // Calculate minutes
-    QString seconds = QString::number(session->time.played / 1000); // Calculate minutes
+    returnStr = returnStr + "<b>Decks:</b> " + decksString + "<br>";
+    if(creationTime == true) {
+        returnStr = returnStr + "<b>Created:</b> " + session.time.created.toString("dd.MM.yyyy - hh:mm") + "<br>";
+    }
+    if(lastUsed) {
+        returnStr = returnStr + "<b>Last used:</b> " + session.time.lastUsed.toString("dd.MM.yyyy - hh:mm") + "<br>";
+    }
+
+    // Thereotical 24h limit?
+    QTime timeTemp = QTime::fromString("0:0:0", "h:m:s");
+    qDebug() << "session->time.played:" << session.time.played;
+    QTime realTime = timeTemp.addMSecs(session.time.played);
+    qDebug() << "realTime:" << realTime.second();
+    qDebug() << "timeTemp:" << timeTemp.second();
+
+    QString hours = QString::number(realTime.hour());
+    QString minutes = QString::number(realTime.minute());
+    QString seconds = QString::number(realTime.second());
 
     if(hours.count() == 1) {
         hours = "0" + hours;
@@ -159,44 +173,56 @@ QString getStatsForSession(sessionStr* session, bool lastUsed, bool creationTime
         seconds = "0" + seconds;
     }
 
-    qDebug() << "Played time:" << session->time.played << "hours:" << hours << "minutes:" << minutes << "seconds:" << seconds;
+    qDebug() << "Played time:" << session.time.played << "hours:" << hours << "minutes:" << minutes << "seconds:" << seconds;
 
     returnStr = returnStr + "<b>Time spend:</b> " + hours + ":" + minutes + ":" + seconds + "<br>";
 
-    returnStr = returnStr + "<b>How many times used:</b> " + QString::number(session->time.playedCount) + "<br>";
-    if(QString::number(session->cardList.count()) != 0) {
-        returnStr = returnStr + "<b>Total cards:</b> " + QString::number(session->cardList.count()) + "<br>";
+    returnStr = returnStr + "<b>How many times used:</b> " + QString::number(session.time.playedCount) + "<br>";
+    if(QString::number(session.cardList.count()) != 0) {
+        returnStr = returnStr + "<b>Total cards:</b> " + QString::number(session.cardList.count()) + "<br>";
     }
 
-    returnStr.push_back("</p>");
+    //returnStr.push_back("</p>");
     return returnStr;
 }
 
-QString getSmallStatsForSession(sessionStr* session, bool lastUsed) {
+QString getSmallStatsForSession(sessionStr session, bool lastUsed) {
     QString returnStr = "<p align=\"center\">";
 
     QString mode;
     // No better no problematic way
-    if(session->core.mode == CompletlyRandomised) {
+    if(session.core.mode == CompletlyRandomised) {
         mode = "Completly Randomised";
-    } else if(session->core.mode == Boxes) {
+    } else if(session.core.mode == Boxes) {
         mode = "Boxes";
     }
 
     returnStr = returnStr + mode + "<br>";
     QStringList decks;
-    foreach(QString path, session->core.deckPathList) {
+    foreach(QString path, session.core.deckPathList) {
         decks.append(path.split("/").last());
     }
-    returnStr = returnStr + decks.join(",") + "<br>";
+    QString decksString = decks.join(", ");
+    if(decksString.length() > 41) {
+        decksString = decksString.left(40);
+        decksString.append("...");
+    }
+    returnStr = returnStr + decksString + "<br>";
 
     if(lastUsed) {
-        returnStr = returnStr + session->time.lastUsed.toString("dd.MM.yyyy - hh:mm") + "<br>";
+        returnStr = returnStr + session.time.lastUsed.toString("dd.MM.yyyy - hh:mm") + "<br>";
     }
 
-    QString hours = QString::number(session->time.played / (1000 * 60 * 60)); // Calculate hours
-    QString minutes = QString::number(session->time.played / (1000 * 60)); // Calculate minutes
-    QString seconds = QString::number(session->time.played / 1000); // Calculate minutes
+    // Thereotical 24h limit?
+    QTime timeTemp = QTime::fromString("0:0:0", "h:m:s");
+    qDebug() << "session->time.played:" << session.time.played;
+    QTime realTime = timeTemp.addMSecs(session.time.played);
+    qDebug() << "realTime:" << realTime.second();
+    qDebug() << "timeTemp:" << timeTemp.second();
+
+    QString hours = QString::number(realTime.hour());
+    QString minutes = QString::number(realTime.minute());
+    QString seconds = QString::number(realTime.second());
 
     if(hours.count() == 1) {
         hours = "0" + hours;
@@ -208,13 +234,13 @@ QString getSmallStatsForSession(sessionStr* session, bool lastUsed) {
         seconds = "0" + seconds;
     }
 
-    qDebug() << "Played time:" << session->time.played << "hours:" << hours << "minutes:" << minutes << "seconds:" << seconds;
+    qDebug() << "Played time:" << session.time.played << "hours:" << hours << "minutes:" << minutes << "seconds:" << seconds;
 
     returnStr = returnStr + hours + ":" + minutes + ":" + seconds + "<br>";
 
-    returnStr = returnStr + QString::number(session->time.playedCount) + "<br>";
-    if(QString::number(session->cardList.count()) != 0) {
-        returnStr = returnStr + QString::number(session->cardList.count()) + "<br>";
+    returnStr = returnStr + QString::number(session.time.playedCount) + "<br>";
+    if(QString::number(session.cardList.count()) != 0) {
+        returnStr = returnStr + QString::number(session.cardList.count()) + "<br>";
     }
 
     returnStr.push_back("</p>");

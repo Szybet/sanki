@@ -45,6 +45,7 @@ void editSession::on_comboBox_textActivated(const QString &arg1) {
     qDebug() << "Combobox button clicked" << arg1;
     if(arg1 == "Show full statistics") {
         statistics* newStats = new statistics(this);
+        newStats->show(); // To make it calculate document size VERY IMPORTANT https://stackoverflow.com/questions/22457332/why-does-qtextedit-have-sometimes-document-height-0
         newStats->start(sessionSaved);
         newStats->exec();
     } else if(arg1 == "Box mode settings") {

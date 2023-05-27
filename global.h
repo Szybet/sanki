@@ -16,16 +16,16 @@ namespace directories {
     extern QDir deckStorage;
     extern QDir sessionSaves;
     extern QDir fileSelect; // File chooser will open here
+    extern QFile globalSettings;
 }
 extern QString deckAddedFileName;
 
 namespace ereaderVars {
     extern QString model;
     extern bool inkboxUserApp;
-    extern bool running_on_kobo;
+    extern QString buttonNoFlashStylesheet;
     extern int screenX;
     extern int screenY;
-    extern int batteryLevel;
 }
 
 enum DeckModes {
@@ -39,8 +39,8 @@ Q_DECLARE_METATYPE(DeckModes);
 bool renameDir(QDir & dir, const QString & newName);
 void checkEreaderModel();
 void screenGeometry();
-void check_battery_level();
-void set_brightness(int value);
-int get_brightness();
+int checkBatteryLevel();
+void setBrightness(int value);
+int getBrightness();
 
 #endif // GLOBALS_H

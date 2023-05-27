@@ -12,6 +12,11 @@
 #include "sessions/sessionStruct.h"
 #include "components/other/askText.h"
 
+#ifdef EREADER
+#include "einkenums.h"
+#include "koboplatformfunctions.h"
+#endif
+
 #include <QTime>
 #include <QTimer>
 #include <QApplication>
@@ -49,6 +54,24 @@ MainWindow::MainWindow(QWidget *parent)
     playDeck->hide();
 
     showSessions();
+
+    if(directories::globalSettings.exists() == false) {
+        qDebug() << "Global config doesn't exists, creating it";
+        QSettings settings(directories::globalSettings.fileName(), QSettings::IniFormat);
+        settings.setParent(this);
+        QFont defaultFont("DejaVu Sans", 10);
+        settings.setValue("playFont", defaultFont);
+        // Possible values:
+        // WaveForm_A2 - 4 - default that is set - speed
+        // WaveForm_GC16 - 2 - The default that is used everywhere else
+        // WaveForm_GC4 - 3 - less black flashing, better looking
+        // WaveForm_AUTO - 257 - weird
+        settings.setValue("deckPlayWaveForm", 4); // WaveForm_A2
+
+
+
+        settings.sync();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -67,6 +90,11 @@ void MainWindow::resetStatusBar() {
 }
 
 void MainWindow::showSessions() {
+#ifdef EREADER
+    qDebug() << "Setting waveform mode";
+    KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm_GC16);
+#endif
+
     statusBarSessionAdd();
 
     resetGrid();
@@ -152,7 +180,6 @@ void MainWindow::extractDeck()
         directories::deckStorage.mkdir(zipfileInfo.baseName());
 
         // Converting to acceptable string
-        QByteArray ba = zipFilePath.toLocal8Bit();
         const char *char_converted = zipFilePath.toLocal8Bit().data();
         int arg = 2; // why
         zip_extract(char_converted, newDeck.path().toLocal8Bit().data(), 0, &arg);
@@ -194,6 +221,9 @@ void MainWindow::statusBarSessionAdd()
     } else {
         statusBarCWidget->OptionButtonExit(QIcon(), false);
     }
+
+    // For now not needed in statusBarDeckAdd
+    statusBarCWidget->setStatusText("Sanki");
 }
 
 void MainWindow::statusBarDeckAdd() {
@@ -316,6 +346,11 @@ void MainWindow::statusBarPlayAdd() {
 
     statusBarCWidget->OptionButtonExit(QIcon(":/icons/back.svg"), true);
     connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::hardResetDeckPlay);
+
+    // Reload font
+    connect(statusBarCWidget, &statusBarC::closedOptionsDialog, playDeck, &DeckPlay::reloadSettings);
+    // Set status
+    connect(playDeck, &DeckPlay::changeStatusBarTextSignal, statusBarCWidget, &statusBarC::setStatusText);
 }
 
 void MainWindow::playSession(sessionStr sessionPlay) {
@@ -327,8 +362,10 @@ void MainWindow::playSession(sessionStr sessionPlay) {
     grid->reset();
     grid->hide();
 
-    playDeck->start(sessionPlay);
+    // To make it calculate document size VERY IMPORTANT https://stackoverflow.com/questions/22457332/why-does-qtextedit-have-sometimes-document-height-0
+    // It first needs to be shown, then calculate things!
     playDeck->show();
+    playDeck->start(sessionPlay);
     areDecksShown = false;
 }
 

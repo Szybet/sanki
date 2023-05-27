@@ -1,4 +1,5 @@
 #include "cardView/buttons/showCard.h"
+#include "global.h"
 #include "ui_showCard.h"
 
 showCard::showCard(QWidget *parent) :
@@ -6,6 +7,9 @@ showCard::showCard(QWidget *parent) :
     ui(new Ui::showCard)
 {
     ui->setupUi(this);
+    if(ereader) {
+        ui->pushButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
+    }
 }
 
 showCard::~showCard()

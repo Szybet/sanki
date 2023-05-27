@@ -280,7 +280,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="LabelStatus">
+      <widget class="QPushButton" name="ButtonStatus">
        <property name="font">
         <font>
          <pointsize>16</pointsize>

@@ -39,6 +39,15 @@ void CompletlyRandom::loop()
     card* randomCard = &parent->currectSession.cardList[randomValue(0, max)];
     randomCard->count += 1;
 
+    QString deckName = parent->currectSession.core.deckPathList[randomCard->deckiD];
+    deckName = deckName.split("/").last();
+    qDebug() << "Deck name for card:" << deckName;
+    if(deckName.length() > 20) {
+        deckName = deckName.left(20);
+        deckName.append("...");
+    }
+    parent->changeStatusBarTextSlot(deckName);
+
     qDebug() << "random card:" << randomCard;
 
     QString mainCard = cardExtract(randomCard, parent);

@@ -39,6 +39,8 @@ private slots:
 
 private:
     Ui::session *ui;
+    bool startBoolIgnoreChanged = true;
+    bool changedFocus = true;
 };
 
 #endif // SESSION_H

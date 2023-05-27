@@ -28,6 +28,7 @@ statusBarC::statusBarC(QWidget *parent) :
 
     ui->ButtonExit->setStyleSheet("border: none;");
     ui->ButtonSettings->setStyleSheet("border: none;");
+    ui->ButtonStatus->setStyleSheet(ereaderVars::buttonNoFlashStylesheet + "border: none;");
 }
 
 statusBarC::~statusBarC()
@@ -80,6 +81,7 @@ void statusBarC::on_ButtonSettings_clicked()
     Settings* settings_qdialog = new Settings;
     settings_qdialog->exec();
     emit refreshDecksSignal();
+    emit closedOptionsDialog();
 }
 
 void statusBarC::on_ButtonOption_2_clicked()
@@ -107,4 +109,18 @@ void statusBarC::OptionButtonExit(QIcon icon, bool enabled) {
         ui->horizontalSpacerExit_4->changeSize(10,0);
     }
 
+}
+
+void statusBarC::on_ButtonStatus_clicked()
+{
+    if(ui->ButtonStatus->text() == "Sanki") {
+        qInfo() << "Sanki, a small anki app<br>"
+                   "Created by Szybet<br>"
+                   "https://github.com/Szybet/sanki<br>"
+                   "If you appreciate this app, please support the further development";
+    }
+}
+
+void statusBarC::setStatusText(QString text) {
+    ui->ButtonStatus->setText(text);
 }

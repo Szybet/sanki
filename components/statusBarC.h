@@ -18,6 +18,9 @@ public:
     void OptionButtonSet2(QString text, QIcon icon, bool enabled);
     void OptionButtonExit(QIcon icon, bool enabled);
 
+public slots:
+    void setStatusText(QString text);
+
 private slots:
     void showTime();
 
@@ -29,11 +32,14 @@ private slots:
 
     void on_ButtonOption_2_clicked();
 
+    void on_ButtonStatus_clicked();
+
 signals:
     void optionButtonSignal();
     void closeButtonSignal();
     void option2ButtonSignal();
     void refreshDecksSignal();
+    void closedOptionsDialog();
 
 private:
     Ui::statusBarC *ui;

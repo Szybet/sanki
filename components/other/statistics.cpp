@@ -2,6 +2,12 @@
 #include "ui_statistics.h"
 #include "cardView/modes/boxes/boxes.h"
 
+#ifdef EREADER
+#include "einkenums.h"
+#include "koboplatformfunctions.h"
+#endif
+#include <QTextEdit>
+
 statistics::statistics(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::statistics)
@@ -14,6 +20,10 @@ statistics::statistics(QWidget *parent) :
 
     setUpChart(ui->cardUsedChart, "How many times cards were shown");
 
+#ifdef EREADER
+    qDebug() << "Setting waveform mode";
+    KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm_GC16);
+#endif
     if(ereader) {
         this->move(0, 0);
         this->setFixedSize(ereaderVars::screenX, ereaderVars::screenY);
@@ -22,10 +32,9 @@ statistics::statistics(QWidget *parent) :
 
         // QTextBrowser has here some wierd problems
         //ui->cardBoxesChart->setFixedSize(600, 600);
-        //ui->textBrowser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        //ui->textBrowser->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         //ui->textBrowser->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
         ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
         this->adjustSize();
     }
@@ -33,6 +42,15 @@ statistics::statistics(QWidget *parent) :
     if(pc) {
         ui->exitButton->setVisible(true);
     }
+
+    ui->textBrowser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->textBrowser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->textBrowser->setLineWrapMode(QTextEdit::WidgetWidth);
+    ui->textBrowser->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+
+    ui->scrollArea->verticalScrollBar()->setStyleSheet(
+        "QScrollBar:vertical { width: 50px; }");
+
 }
 
 statistics::~statistics()
@@ -58,12 +76,18 @@ void statistics::start(sessionStr session) {
 
     qDebug() << "Statistics for session:" << session;
 
-    QString stats = getStatsForSession(&session, false);
+    QString stats = getStatsForSession(session, true, true, true);
 
     qDebug() << "The stats are:" << stats;
 
     ui->textBrowser->setText(stats);
-
+    QApplication::processEvents();
+    // To make it fit...
+    qDebug() << "ui->textBrowser->height()" << ui->textBrowser->height();
+    qDebug() << "ui->textBrowser->document()->size().height()" << ui->textBrowser->document()->size().height();
+    if(ui->textBrowser->height() < ui->textBrowser->document()->size().height()) {
+        ui->textBrowser->setFixedHeight(ui->textBrowser->document()->size().height() + 20);
+    }
 
     // https://stackoverflow.com/questions/48362864/how-to-insert-qchartview-in-form-with-qt-designer
 
