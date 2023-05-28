@@ -296,6 +296,7 @@ void MainWindow::createSession() {
     if(ereader) {
         askText* askTextDialog = new askText(this);
         askTextDialog->textToSet = &text;
+        askTextDialog->setTittle("Name for the new session");
         int code = askTextDialog->exec();
         if(code != QDialog::Accepted) {
             return void();

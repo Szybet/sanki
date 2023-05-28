@@ -121,7 +121,12 @@ void fileChooserCustom::on_ButtonCancel_clicked()
 
 void fileChooserCustom::enterDirectory()
 {
-    startPath = startPath + choosedFile;
+    if(startPath == "/") {
+        startPath = startPath + choosedFile;
+    } else {
+        startPath = startPath + QDir::separator() + choosedFile;
+    }
+
     updateFiles();
 }
 

@@ -19,6 +19,8 @@ askText::askText(QWidget *parent) :
     timer->start(800);
 
     this->setFixedWidth(ereaderVars::screenX);
+
+    ui->labelTitle->setVisible(false);
 }
 
 askText::~askText()
@@ -51,4 +53,9 @@ void askText::manageKeyboards() {
 
         return void();
     }
+}
+
+void askText::setTittle(QString text) {
+    ui->labelTitle->setVisible(true);
+    ui->labelTitle->setText(text);
 }

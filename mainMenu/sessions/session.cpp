@@ -113,9 +113,16 @@ void session::on_sessionName_cursorPositionChanged(int arg1, int arg2)
 {
     Q_UNUSED(arg1);
     Q_UNUSED(arg2);
+    ui->sessionName->setSelection(0, 0);
     if(startBoolIgnoreChanged == false) {
         ui->sessionName->setSelection(0, 0);
-        QToolTip::showText( ui->sessionName->mapToGlobal( QPoint( 0, 0 ) ), ui->sessionName->text());
+        if(QToolTip::isVisible() == false) {
+            QApplication::processEvents();
+            QToolTip::showText( ui->sessionName->mapToGlobal( QPoint( 0, 0 ) ), ui->sessionName->text());
+            QApplication::processEvents();
+        } else {
+            QToolTip::hideText();
+        }
     } else {
         startBoolIgnoreChanged = false;
     }

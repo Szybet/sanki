@@ -16,10 +16,10 @@ public:
     explicit askText(QWidget *parent = nullptr);
     ~askText();
     QString* textToSet;
+    void setTittle(QString text);
 
 private slots:
     void on_buttonBox_accepted();
-
     void on_buttonBox_rejected();
 
 private:
