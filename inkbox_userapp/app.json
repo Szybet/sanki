@@ -4,10 +4,10 @@
     "AuthorContact": "https://github.com/Szybet/sanki",
     "Enabled": true,
     "ExecPath": "/app-bin/sanki.sh",
-    "IconPath": "/app-misc/sanki.png",
+    "IconPath": "/app-misc/sanki.svg",
     "Name": "sanki",
-    "SupportedDevices": [ "all" ],
-    "RequiredFeatures": [ ] ,
-    "Version": "0.1"
+    "SupportedDevices": [ "n306" ],
+    "RequiredFeatures": [ 3, 4 ] ,
+    "Version": "0.2"
   }
 }
