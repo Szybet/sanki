@@ -24,11 +24,17 @@ statusBarC::statusBarC(QWidget *parent) :
     if(pc) {
         ui->horizontalSpacerTime_5->changeSize(0,0);
         ui->horizontalSpacerTime_6->changeSize(0,0);
+
+        ui->labelTime->setVisible(false);
+        ui->LineTime->setVisible(false);
     }
 
-    ui->ButtonExit->setStyleSheet("border: none;");
-    ui->ButtonSettings->setStyleSheet("border: none;");
-    ui->ButtonStatus->setStyleSheet(ereaderVars::buttonNoFlashStylesheet + "border: none;");
+
+    if(ereader) {
+        ui->ButtonExit->setStyleSheet("border: none;");
+        ui->ButtonSettings->setStyleSheet("border: none;");
+        ui->ButtonStatus->setStyleSheet(ereaderVars::buttonNoFlashStylesheet + " QPushButton { border: none; }");
+    }
 }
 
 statusBarC::~statusBarC()

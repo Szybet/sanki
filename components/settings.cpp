@@ -229,15 +229,17 @@ void Settings::on_buttonSync_clicked()
         progress.setMaximum(data.count() + 1);
         progress.setValue(1);
         foreach(QString file, data) {
-            QString name = file.split(".").first();
+            QString name = file;
+            name = name.remove(".apkg");
             QString fullPath = directories::deckStorage.filePath(name);
 
-            if(QFile{fullPath}.exists() == true) {
+            if(QDir{fullPath}.exists() == true) {
                 if(overwriteDeck == true) {
                     qDebug() << "Removing deck because overwrite:" << name;
                     bool result = QDir{fullPath}.removeRecursively();
                     if(result == false) {
                         qWarning() << "Failed to remove deck to overwrite it:" << name;
+                        return void();
                     }
                 } else {
                     qDebug() << "Deck exists and skipping it:" << name;
@@ -246,8 +248,8 @@ void Settings::on_buttonSync_clicked()
                 }
             }
             progress.setLabelText("Downloading file: " + file);
-            QUrl theUrl = QUrl("http://" + address.toUtf8() +  "/" + file);
-            qDebug() << "theUrl";
+            QUrl theUrl = QUrl("http://" + address.toUtf8() +  "/" + file.replace(" ", "%20")); // spaces problem
+            qDebug() << "theUrl" << theUrl;
             QNetworkRequest request(theUrl);
             QNetworkReply *reply = manager.get(request);
             QEventLoop loop(this);
@@ -277,6 +279,11 @@ void Settings::on_buttonSync_clicked()
             if(result == true) {
                 progress.close();
                 qWarning() << "Failed to extract deck" << name;
+                return void();
+            }
+
+            if(QDir(fullPath).exists() == false) {
+                qWarning() << "Failed create deck?:" << name;
                 return void();
             }
 

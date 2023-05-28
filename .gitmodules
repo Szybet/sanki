@@ -4,3 +4,6 @@
 [submodule "libraries/zip_libraries/zlib"]
 	path = libraries/zip_libraries/zlib
 	url = https://github.com/madler/zlib
+[submodule "libraries/ereader/qt5-kobo-platform-plugin"]
+	path = libraries/ereader/qt5-kobo-platform-plugin
+	url = https://github.com/Kobo-InkBox/qt5-kobo-platform-plugin

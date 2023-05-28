@@ -122,8 +122,8 @@ sessionStr mapToSessionStr(const QMap<QString, QVariant> map)
 */
 
 QString getStatsForSession(sessionStr session, bool lastUsed, bool creationTime, bool showFullInfo) {
-    //QString returnStr = "<p align=\"center\">";
-    QString returnStr;
+    QString returnStr = "<p align=\"center\">";
+    //QString returnStr;
 
     QString mode;
     // No better no problematic way
@@ -182,7 +182,7 @@ QString getStatsForSession(sessionStr session, bool lastUsed, bool creationTime,
         returnStr = returnStr + "<b>Total cards:</b> " + QString::number(session.cardList.count()) + "<br>";
     }
 
-    //returnStr.push_back("</p>");
+    returnStr.push_back("</p>");
     return returnStr;
 }
 

@@ -137,7 +137,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </widget>
           </item>
           <item>
-           <widget class="Line" name="line">
+           <widget class="Line" name="lineMiddleText">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>

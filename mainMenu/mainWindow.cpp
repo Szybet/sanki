@@ -103,6 +103,10 @@ void MainWindow::showSessions() {
 
     foreach(QString file , directories::sessionSaves.entryList(QDir::NoDotAndDotDot | QDir::Files)) {
         qDebug() << "Session file:" << file;
+        // Idk, those files get created only in inkbox user app, just ignore them...
+        if(file.endsWith(".lock") == true) {
+            continue;
+        }
 
         session* newSession = new session(grid);
         newSession->start(file);

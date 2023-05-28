@@ -64,6 +64,9 @@ void boxes::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
 }
 
 void boxes::loop() {
+    // Disable the line for better eink
+    parentUi->lineMiddleText->setVisible(false);
+
     // Looking for the next card
     // i - box
     // ii - card
@@ -151,6 +154,7 @@ void boxes::easyClicked() {
 
 void boxes::showBack() {
     qDebug() << "Clicked show button";
+    parentUi->lineMiddleText->setVisible(true);
     backText->show();
     parent->setText(backText, backCard);
 }

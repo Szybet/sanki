@@ -33,6 +33,7 @@ session::~session()
 void session::start(QString path) {
     qDebug() << "Called start to session with path:" << directories::sessionSaves.filePath(path);
     QSettings settings(directories::sessionSaves.filePath(path), QSettings::IniFormat);
+    settings.setParent(this);
     settings.sync();
 
     qDebug() << "Settings session valid:" << settings.value("session").isValid();

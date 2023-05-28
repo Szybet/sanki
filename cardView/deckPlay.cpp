@@ -297,9 +297,13 @@ void DeckPlay::showStats() {
     }
     saveSessionData();
     statistics* newStats = new statistics(this);
-    newStats->show(); // I said before but calculate things important etc;
+    if(ereader) {
+        newStats->show(); // I said before but calculate things important etc;
+    }
     newStats->start(currectSession);
     newStats->exec();
+    // Important - eink change
+    reloadSettings();
 }
 
 void DeckPlay::reloadSettings() {
@@ -319,6 +323,9 @@ void DeckPlay::reloadSettings() {
     WaveForm waveformBetter = static_cast<WaveForm>(waveform);
     KoboPlatformFunctions::setFullScreenRefreshMode(waveformBetter);
 #endif
+    this->repaint();
+    this->repaint();
+    this->repaint();
 }
 
 void DeckPlay::changeStatusBarTextSlot(QString text) {

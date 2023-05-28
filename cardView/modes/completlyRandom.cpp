@@ -36,6 +36,7 @@ void CompletlyRandom::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
 // nextCardCall
 void CompletlyRandom::loop()
 {
+    parentUi->lineMiddleText->setVisible(false);
     card* randomCard = &parent->currectSession.cardList[randomValue(0, max)];
     randomCard->count += 1;
 
@@ -71,6 +72,7 @@ void CompletlyRandom::buttonClicked()
     if (showedBack == false)
     {
         qDebug() << "showedBack = false";
+        parentUi->lineMiddleText->setVisible(true);
         showedBack = true;
         backText->show();
         parent->setText(backText, backCard);

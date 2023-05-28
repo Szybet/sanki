@@ -1,9 +1,10 @@
 #include "mainMenu/fancyGrid.h"
-#include "qdebug.h"
+#include "global.h"
 #include "ui_fancyGrid.h"
 #include "components/other/griditemspacer.h"
 
 #include <QScrollBar>
+#include <QDebug>
 
 fancyGrid::fancyGrid(QWidget *parent) :
     QWidget(parent),
@@ -12,9 +13,10 @@ fancyGrid::fancyGrid(QWidget *parent) :
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
 
-    // This could be editable in settings
-    ui->DeckScrollArea->verticalScrollBar()->setStyleSheet(
+    if(ereader) {
+        ui->DeckScrollArea->verticalScrollBar()->setStyleSheet(
         "QScrollBar:vertical { width: 50px; }");
+    }
 }
 
 fancyGrid::~fancyGrid()
