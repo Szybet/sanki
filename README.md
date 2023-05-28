@@ -2,6 +2,7 @@
 **s**mall [**anki**](https://apps.ankiweb.net) app rewritten for e-readers, with focus on [InkBox](https://github.com/Kobo-InkBox/inkbox) support
 
 ### 0.2 version demo:
+https://github.com/Szybet/sanki/raw/master/sanki-demo.mkv
 
 ### Supported, tested devices:
 - Kobo nia
