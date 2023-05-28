@@ -62,12 +62,15 @@ void editSession::on_comboBox_textActivated(const QString &arg1) {
     }
 }
 
-void editSession::on_lineEdit_editingFinished() {
-    rename = true;
-}
-
 void editSession::on_saveButton_clicked() {
-    if((rename == true || boxSettingsChanged == true) && deleteSession == false) {
+    bool rename = false;
+    qDebug() << "sessionSaved.core.name" << sessionSaved.core.name;
+    qDebug() << "ui->lineEdit->text()" << ui->lineEdit->text();
+    if(sessionSaved.core.name != ui->lineEdit->text()) {
+        rename = true;
+    }
+
+    if((rename == true || boxSettingsChanged == true) && deleteSession == true) {
         qWarning() << "Renamed and deleted, aborting";
         this->close();
     }

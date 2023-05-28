@@ -30,15 +30,12 @@ private slots:
 
     void on_comboBox_textActivated(const QString &arg1);
 
-    void on_lineEdit_editingFinished();
-
     void on_saveButton_clicked();
 
     void on_removeSession_toggled(bool checked);
 
 private:
     Ui::editSession *ui;
-    bool rename = false;
     bool deleteSession = false;
     bool boxSettingsChanged = false;
     box boxesSettings;
