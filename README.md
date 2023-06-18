@@ -19,3 +19,6 @@ Everything really is welcome.
 - NiLuJe for providing the toolchain for kobo devices, and helping with some bugs
 - tux-linux for developing inkbox and helping with qt magic
 - Rain92 for developing the qt5-kobo-platform-plugin
+
+### Donations
+If you want to support the project, or request a feature I'm not interested in implementing, please contact ;)
