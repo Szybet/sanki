@@ -98,3 +98,8 @@ inkbox_userapp/sanki/app-bin/*.bin
 # anki-sync
 target/
 sanki-sync/decks/
+
+# Nickel app
+nickel_app/sanki.zip
+nickel_app/sanki/.adds/sanki/lib/*
+nickel_app/sanki/.adds/sanki/sanki.bin

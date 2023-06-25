@@ -104,7 +104,7 @@ void Settings::requestEreaderPage()
     bat_level.append("%");
     ui->labelBattery->setText(bat_level);
 
-    int brightness = getBrightness();
+    int brightness = getWhiteBrightnessAlias();
     ui->ScrollBarBrightness->setSliderPosition(brightness);
 
     QString brightness_string = "Brightness: ";
@@ -115,7 +115,7 @@ void Settings::requestEreaderPage()
 
 void Settings::on_ScrollBarBrightness_valueChanged(int value)
 {
-    setBrightness(value);
+    setWhiteBrightnessAlias(value);
 
     QString brightness_string = "Brightness: ";
     QString number = QString::number(value);

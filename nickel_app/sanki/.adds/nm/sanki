@@ -1,0 +1,2 @@
+# Launch Sanki directly via NM
+menu_item : main : Sanki : cmd_spawn : quiet : exec /mnt/onboard/.adds/sanki/sanki.sh

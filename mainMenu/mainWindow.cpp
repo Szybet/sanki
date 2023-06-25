@@ -67,9 +67,6 @@ MainWindow::MainWindow(QWidget *parent)
         // WaveForm_GC4 - 3 - less black flashing, better looking
         // WaveForm_AUTO - 257 - weird
         settings.setValue("deckPlayWaveForm", 4); // WaveForm_A2
-
-
-
         settings.sync();
     }
 }

@@ -17,6 +17,12 @@
 // https://stackoverflow.com/questions/1057287/ofstream-error-in-c
 #include <fstream>
 
+#ifdef EREADER
+#include "devicedescriptor.h"
+#include "devbattery.h"
+#include "devbrightness.h"
+#endif
+
 // Default values
 bool debugEnabled = false;
 bool warningsEnabled = true;
@@ -24,18 +30,27 @@ bool warningsEnabled = true;
 bool pc = false;
 bool ereader = false;
 
-QDir directories::config = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QDir::separator() + "sanki";
-QDir directories::deckStorage = directories::config.path() + QDir::separator() + "decks";
-QDir directories::sessionSaves = directories::config.path() + QDir::separator() + "sessions";
-QDir directories::fileSelect = QDir::homePath();
-QFile directories::globalSettings = directories::config.filePath("sanki.ini");
 QString deckAddedFileName = "creationTime";
 
-QString ereaderVars::model = "";
-bool ereaderVars::inkboxUserApp = false;
-QString ereaderVars::buttonNoFlashStylesheet = "QPushButton:pressed { background: white; color: black } QPushButton:checked { background: white; color: black } QPushButton { background: white; color: black }";
-int ereaderVars::screenX = 1920;
-int ereaderVars::screenY = 1080;
+namespace directories {
+QDir config = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QDir::separator() + "sanki";
+QDir deckStorage = directories::config.path() + QDir::separator() + "decks";
+QDir sessionSaves = directories::config.path() + QDir::separator() + "sessions";
+QDir fileSelect = QDir::homePath();
+QFile globalSettings = directories::config.filePath("sanki.ini");
+}
+
+namespace ereaderVars {
+bool inkboxUserApp = false;
+bool nickelApp = false;
+QString buttonNoFlashStylesheet = "QPushButton:pressed { background: white; color: black } QPushButton:checked { background: white; color: black } QPushButton { background: white; color: black }";
+int screenX = 1920;
+int screenY = 1080;
+#ifdef EREADER
+ereaderdev::device ereaderDevice;
+#endif
+}
+
 
 bool renameDir(QDir & dir, const QString & newName) {
     // https://stackoverflow.com/questions/39229177/qdirrename-redundant-parameters
@@ -49,23 +64,22 @@ bool renameDir(QDir & dir, const QString & newName) {
 
 void checkEreaderModel()
 {
+#ifdef EREADER
+    ereaderVars::ereaderDevice = ereaderdev::determineDevice();
+    qDebug() << "Device model detected:" << ereaderdev::logDevice(&ereaderVars::ereaderDevice);
+#endif
     QFile versionFile = QFile{"/mnt/onboard/.kobo/version"};
     if(versionFile.exists() == false) {
         qDebug() << "Unknown ereader device or in debug mode";
         return void();
     }
     versionFile.open(QIODevice::ReadOnly);
-    ereaderVars::model = versionFile.readAll().replace("\n", "");
+    QString version = versionFile.readAll().replace("\n", "");
     versionFile.close();
-    qDebug() << "Sanki is running on a kobo:" << ereaderVars::model;
 
-    if(ereaderVars::model.length() > 6) {
-        ereaderVars::inkboxUserApp = false;
-    } else {
-        ereaderVars::inkboxUserApp = true;
-    }
+    ereaderVars::nickelApp = QDir("/mnt/onboard/.adds/kfmon/").exists();
+    ereaderVars::inkboxUserApp = QDir("/app-data").exists();
 }
-
 
 // Ereader mainly
 void screenGeometry()
@@ -78,36 +92,38 @@ void screenGeometry()
 
 int checkBatteryLevel()
 {
-    // Only for the nia
-    QFile batteryFile("/sys/devices/platform/pmic_battery.1/power_supply/mc13892_bat/capacity");
-    QString batteryLevel;
-    if(batteryFile.exists()) {
-        batteryFile.open(QIODevice::ReadOnly);
-        batteryLevel = batteryFile.readAll();
-        batteryFile.close();
-        return batteryLevel.trimmed().toInt();
-    } else {
-        return -1;
-    }
-}
-
-void setBrightness(int value) {
-    QString path = "/sys/class/backlight/mxc_msp430.0/brightness";
-    QFile file(path);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QTextStream stream(&file);
-        stream << value;
-        file.close();
-    }
-}
-
-int getBrightness() {
-    QFile file2("/sys/class/backlight/mxc_msp430.0/brightness");
-    if (file2.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QString contents = file2.readAll().trimmed();
-        file2.close();
-        return contents.toInt();
-    }
-    file2.close();
+#ifdef EREADER
+    return getBatteryLevel(&ereaderVars::ereaderDevice);
+#endif
     return -1;
+}
+
+void setWhiteBrightnessAlias(int value) {
+#ifdef EREADER
+    setWhiteBrightness(&ereaderVars::ereaderDevice, value);
+#endif
+}
+
+int getWhiteBrightnessAlias() {
+#ifdef EREADER
+    return getWhiteBrightness(&ereaderVars::ereaderDevice);
+#endif
+    return -1;
+}
+
+// Coppied from platform plugin
+QString exec(const char *cmd)
+{
+    std::array<char, 128> buffer;
+    QString result;
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+    if (!pipe)
+    {
+        throw std::runtime_error("popen() failed!");
+    }
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+    {
+        result += buffer.data();
+    }
+    return result.trimmed();
 }

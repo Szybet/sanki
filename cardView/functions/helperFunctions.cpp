@@ -129,7 +129,7 @@ QString cardExtract(card* acard, DeckPlay* parent) {
     } else {
         qWarning() << "Failed to find card content:" << &acard;
     }
-
+    return "";
 }
 
 uint randomValue(uint min, uint max) {

@@ -4,6 +4,10 @@
 #include <QDir>
 #include <QString>
 
+#ifdef EREADER
+#include "devicedescriptor.h"
+#endif
+
 extern bool debugEnabled;
 extern bool warningsEnabled;
 
@@ -21,11 +25,14 @@ namespace directories {
 extern QString deckAddedFileName;
 
 namespace ereaderVars {
-    extern QString model;
     extern bool inkboxUserApp;
+    extern bool nickelApp;
     extern QString buttonNoFlashStylesheet;
     extern int screenX;
     extern int screenY;
+#ifdef EREADER
+    extern ereaderdev::device ereaderDevice;
+#endif
 }
 
 enum DeckModes {
@@ -40,7 +47,8 @@ bool renameDir(QDir & dir, const QString & newName);
 void checkEreaderModel();
 void screenGeometry();
 int checkBatteryLevel();
-void setBrightness(int value);
-int getBrightness();
+void setWhiteBrightnessAlias(int value);
+int getWhiteBrightnessAlias();
+QString exec(const char *cmd);
 
 #endif // GLOBALS_H

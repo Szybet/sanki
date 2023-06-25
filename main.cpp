@@ -113,16 +113,23 @@ int main(int argc, char *argv[])
                                          "qt.xkb.*=false");
     }
 
+    // NOTE: won't work in 100% in release mode
     if(qgetenv("CUSTOM_DEBUG_FORMAT") != "false") {
+        qDebug() << "Installing custom message handler";
         qInstallMessageHandler(myMessageOutput);
     }
 
     qDebug() << "Sanki started";
+    // Warning: "QGuiApplication::platformFunction(): Must construct a QGuiApplication before accessing a platform function" (:0, )
+    // because of that, disable warnings:
+    warningsEnabled = false;
+    QApplication a(argc, argv);
 
     // Detect platform
 #ifdef PC
     pc = true;
     qDebug() << "Running platform: PC";
+    warningsEnabled = true;
 #endif
 
 #ifdef EREADER
@@ -131,8 +138,6 @@ int main(int argc, char *argv[])
     checkEreaderModel();
     warningsEnabled = false; // fb plugin
 #endif
-
-    QApplication a(argc, argv);
 
     // For QSettings
     // Very important: After QApplication and before MainWindow
@@ -174,11 +179,21 @@ int main(int argc, char *argv[])
 
         a.setCursorFlashTime(0);
 
+        if(ereaderVars::inkboxUserApp == true && ereaderVars::nickelApp == true) {
+            qCritical() << "Can't determine ereader OS";
+        }
+
         if(ereaderVars::inkboxUserApp == true) {
+            qDebug() << "App is a InkBox user app";
             directories::config = QDir("/app-data");
             directories::fileSelect = QDir("/app-data");
+        } else if(ereaderVars::nickelApp == true) {
+            qDebug() << "App is a Nickel app";
+            directories::config = QDir("/mnt/onboard/.adds/sanki/");
+            directories::fileSelect = QDir("/mnt/onboard/");
         } else {
             // Debug
+            qDebug() << "App is in debug mode";
             directories::config = QDir("/sanki_debug_dir");
             directories::fileSelect = QDir("/"); // For now
         }

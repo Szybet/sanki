@@ -6,12 +6,9 @@ QT += \
     charts \
     network
 
-QTPLUGIN += qtvirtualkeyboardplugin
-
 CONFIG += \
     c++11 \
-    c++17 \
-    disable-desktop
+    c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -117,17 +114,23 @@ TARGET_DEVICE = $$(TARGET_DEVICE) # You need to set TARGET_DEVICE in your qtcrea
 # https://stackoverflow.com/questions/60898385/if-else-if-equivalent-for-qmake-pro-qt-file
 
 if(contains(TARGET_DEVICE, EREADER)) {
-    LIBS += -L$$PWD/libraries/zip_libraries/lib-build/KOBO -lzip
-    DESTDIR = build/kobo/
-    OBJECTS_DIR = build/kobo/.obj
-    MOC_DIR = build/kobo/.moc
-    RCC_DIR = build/kobo/.rcc
-    UI_DIR = build/kobo/.ui
+    LIBS += -L$$PWD/libraries/zip_libraries/lib-build/EREADER -lzip
+    DESTDIR = build/ereader/
+    OBJECTS_DIR = build/ereader/.obj
+    MOC_DIR = build/ereader/.moc
+    RCC_DIR = build/ereader/.rcc
+    UI_DIR = build/ereader/.ui
     message("Choosed libraries for EREADER")
     DEFINES += EREADER=true
 
+    # Add the eink platform plugin
     INCLUDEPATH += $$PWD/libraries/ereader/qt5-kobo-platform-plugin/src
     DEPENDPATH += $$PWD/libraries/ereader/qt5-kobo-platform-plugin/src
+
+    # ereaderdev library
+    LIBS += -L$$PWD/libraries/ereader/ereaderdev-lib/ereaderdev/build -lereaderdev
+    INCLUDEPATH += $$PWD/libraries/ereader/ereaderdev-lib/ereaderdev/
+    DEPENDPATH += $$PWD/libraries/ereader/ereaderdev-lib/ereaderdev/
 }
 
 if(contains(TARGET_DEVICE, PC)) {
