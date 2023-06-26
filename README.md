@@ -9,8 +9,13 @@ https://github.com/Szybet/sanki/raw/master/sanki-demo.mkv
 
 Should work on all devices, if not, please export debug info in device settings and send me it.
 
-### Building
-instruction can be found [here](https://github.com/Szybet/kobo-nia-audio/tree/main/apps-on-kobo)
+### Sync
+To sync sanki with anki ( On Linux host ):
+1. Setup anki connect on anki
+2. Install rust ( The programming language )
+3. Clone the repo, enter sanki-sync repo
+4. run `cargo run --release -- --help`
+5. adjust your command 
 
 ### Installation
 - For Nickel, just extract the zip to the main folder when connecting via usb - You also need Nickel Menu and Kfmon installed
@@ -18,6 +23,9 @@ instruction can be found [here](https://github.com/Szybet/kobo-nia-audio/tree/ma
 
 ### Contribute
 Everything really is welcome. 
+
+### Building
+instruction can be found [here](https://github.com/Szybet/kobo-nia-audio/tree/main/apps-on-kobo)
 
 ### Thanks to
 - NiLuJe for providing the toolchain for kobo devices, and helping with some bugs
