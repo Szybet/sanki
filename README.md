@@ -7,7 +7,7 @@ https://github.com/Szybet/sanki/raw/master/sanki-demo.mkv
 ### Supported, tested devices:
 - Kobo nia
 
-Should work on all devices, but without device specific options
+Should work on all devices, if not, please export debug info in device settings and send me it.
 
 ### Building
 instruction can be found [here](https://github.com/Szybet/kobo-nia-audio/tree/main/apps-on-kobo)
