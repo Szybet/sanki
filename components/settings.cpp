@@ -17,6 +17,7 @@
 #ifdef EREADER
 #include "einkenums.h"
 #include "koboplatformfunctions.h"
+#include "generalfunctions.h"
 #endif
 
 Settings::Settings(QWidget *parent) :
@@ -65,6 +66,10 @@ Settings::Settings(QWidget *parent) :
 
     if(ereader) {
        this->setFixedWidth(ereaderVars::screenX);
+    }
+
+    if(!ereaderVars::nickelApp) {
+        ui->buttonDebuggingData->setDisabled(true);
     }
 
 #ifdef EREADER
@@ -388,3 +393,18 @@ int Settings::waveFormStringToInt(QString name) {
     else
         return -1;
 }
+
+void Settings::on_buttonDebuggingData_clicked()
+{
+    if(ereaderVars::nickelApp) {
+#ifdef EREADER
+        execShell("find /sys > /mnt/onboard/sanki_debug_export.txt");
+        execShell("printf \"\n\n\nDevice code:\n\" >> /mnt/onboard/sanki_debug_export.txt");
+        execShell("/bin/kobo_config.sh >> /mnt/onboard/sanki_debug_export.txt");
+        execShell("printf \"\n\n\nDevice version:\n\" >> /mnt/onboard/sanki_debug_export.txt");
+        execShell("cat /mnt/onboard/.kobo/version >> /mnt/onboard/sanki_debug_export.txt");
+        qInfo() << "Finished exporting debug informations. The file is named: sanki_debug_export.txt";
+#endif
+    }
+}
+

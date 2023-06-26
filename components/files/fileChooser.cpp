@@ -42,6 +42,9 @@ fileChooserCustom::~fileChooserCustom()
 void fileChooserCustom::start(QString fileExtensionProvided) {
     fileExtension = fileExtensionProvided;
     startPath = directories::fileSelect.path();
+    if(startPath.endsWith(QDir::separator()) == false) {
+        startPath = startPath + "/";
+    }
     ui->lineEditPath->setText(startPath);
     this->setFixedSize(ereaderVars::screenX, ereaderVars::screenY);
     this->move(0, 0);
@@ -101,7 +104,7 @@ void fileChooserCustom::on_ButtonConfirm_clicked()
     if(choosedFile.contains(fileExtension) == true)
     {
         // Because if startPath is "/" it will be "//"
-        if(startPath.end() != QString("/"))
+        if(startPath.endsWith(QDir::separator()) == false)
         {
             emit provideFile(startPath + choosedFile);
         } else {

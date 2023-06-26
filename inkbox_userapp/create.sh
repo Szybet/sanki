@@ -1,8 +1,11 @@
-#!/bin/bash
+#!/bin/bash -x
 
-cd ../../
+cd ../
 
-cp build/kobo/sanki inkbox_userapp/sanki/app-bin/sanki.bin
+cp build/ereader/sanki inkbox_userapp/sanki/app-bin/sanki.bin
+
+cp libraries/ereader/ereaderdev-lib/ereaderdev/build/* inkbox_userapp/sanki/app-lib/
+cp libraries/zip_libraries/lib-build/EREADER/libzip.so inkbox_userapp/sanki/app-lib/
 
 # Very important
 rm -f inkbox_userapp/sanki.isa.dgst
@@ -12,6 +15,19 @@ mksquashfs inkbox_userapp/sanki/* inkbox_userapp/sanki.isa
 
 # Yes, here are my private keys. Is providing this info a security threat? no.
 openssl dgst -sha256 -sign /home/szybet/inkbox-keys/userapps.pem -out inkbox_userapp/sanki.isa.dgst inkbox_userapp/sanki.isa
+
+# Create the zip
+cd inkbox_userapp/
+rm -rf sanki.zip
+mkdir -p tmp_sanki_dir/sanki/
+cp app.json tmp_sanki_dir/sanki/
+cp sanki.isa tmp_sanki_dir/sanki/
+cp sanki.isa.dgst tmp_sanki_dir/sanki/
+cd tmp_sanki_dir
+zip -r sanki.zip sanki/
+mv sanki.zip ../
+cd ..
+rm -rf tmp_sanki_dir
 
 servername="root@10.42.0.28"
 passwd="root"

@@ -72,13 +72,11 @@ void deck::on_ButtoneditDeck_clicked()
 void deck::on_deck_selectionChanged()
 {
     // This shows the full name when clicked
-    ui->deck->setSelection(0, 0);
+    ui->deck->deselect();
     if(QToolTip::isVisible() == false) {
         QApplication::processEvents();
         QToolTip::showText( ui->deck->mapToGlobal( QPoint( 0, 0 ) ), mainPath.split(QDir::separator()).last() );
         QApplication::processEvents();
-    } else {
-        QToolTip::hideText();
     }
 }
 

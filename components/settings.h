@@ -34,6 +34,8 @@ private slots:
 
     void on_comboBoxEinkMode_currentTextChanged(const QString &arg1);
 
+    void on_buttonDebuggingData_clicked();
+
 private:
     Ui::Settings *ui;
     enum Direction{

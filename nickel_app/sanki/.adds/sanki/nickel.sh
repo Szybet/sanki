@@ -15,7 +15,7 @@ export QT_GSTREAMER_PLAYBIN_AUDIOSINK_DEVICE_PARAMETER=bluealsa:DEV=00:00:00:00:
 [ -e /dev/mmcblk1p1 ] && umount /mnt/sd
 
 # Nickel wants the WiFi to be down when it starts
-./scripts/wifi-disable.sh
+./wifi-disable.sh
 
 # Reset PWD to a sane value, outside of onboard, so that USBMS behaves properly
 cd /

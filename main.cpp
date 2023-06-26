@@ -189,8 +189,8 @@ int main(int argc, char *argv[])
             directories::fileSelect = QDir("/app-data");
         } else if(ereaderVars::nickelApp == true) {
             qDebug() << "App is a Nickel app";
-            directories::config = QDir("/mnt/onboard/.adds/sanki/");
-            directories::fileSelect = QDir("/mnt/onboard/");
+            directories::config = QDir("/mnt/onboard/.adds/sanki");
+            directories::fileSelect = QDir("/mnt/onboard");
         } else {
             // Debug
             qDebug() << "App is in debug mode";

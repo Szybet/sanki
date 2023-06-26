@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
-    <number>10</number>
+    <number>15</number>
    </property>
    <property name="leftMargin">
     <number>4</number>
@@ -273,6 +273,24 @@
            <property name="icon">
             <iconset resource="../Resources/sanki.qrc">
              <normaloff>:/icons/info.svg</normaloff>:/icons/info.svg</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Export debugging data</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="buttonDebuggingData">
+           <property name="text">
+            <string>Export</string>
            </property>
           </widget>
          </item>

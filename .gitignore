@@ -91,6 +91,8 @@ build/*
 *.isa
 *.isa.dgst
 inkbox_userapp/sanki/app-bin/*.bin
+inkbox_userapp/sanki/app-lib/*
+inkbox_userapp/sanki.zip
 
 # just to be sure...
 *.pem
