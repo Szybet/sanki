@@ -12,6 +12,10 @@ Should work on all devices, if not, please export debug info in device settings 
 ### Building
 instruction can be found [here](https://github.com/Szybet/kobo-nia-audio/tree/main/apps-on-kobo)
 
+### Installation
+- For Nickel, just extract the zip to the main folder when connecting via usb - You also need Nickel Menu and Kfmon installed
+- For InkBox, extract it to `.apps` folder
+
 ### Contribute
 Everything really is welcome. 
 
