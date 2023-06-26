@@ -104,7 +104,7 @@ void fileChooserCustom::on_ButtonConfirm_clicked()
     if(choosedFile.contains(fileExtension) == true)
     {
         // Because if startPath is "/" it will be "//"
-        if(startPath.endsWith(QDir::separator()) == false)
+        if(startPath.endsWith(QDir::separator()) == true)
         {
             emit provideFile(startPath + choosedFile);
         } else {

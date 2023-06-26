@@ -196,7 +196,7 @@ void Settings::requestSyncPage() {
 
 void Settings::on_buttonSyncInfo_clicked()
 {
-    qInfo() << "- Run anki sync on the machine that has anki, and ankiconnect on it<br>- The default port is 8766<br>- After an error, restart the sync server<br>- As of now, your sessions will not be updated from new cards in overwrited decks";
+    qInfo() << "- Run anki-sync on the machine that has anki, and ankiconnect on it<br>- The default port is 8766<br>- After an error, restart the sync server<br>- As of now, your sessions will not be updated from new cards in overwrited decks<br>- For more informations, check the project github page README file";
 }
 
 void Settings::on_buttonSync_clicked()
