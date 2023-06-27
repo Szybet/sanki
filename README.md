@@ -15,7 +15,7 @@ To sync sanki with anki ( On Linux host ):
 2. Install rust ( The programming language )
 3. Clone the repo, enter sanki-sync repo
 4. Run `cargo run --release -- --help`
-5. Adjust your command line options, then run the server, wait for it to finish getting all decks
+5. Adjust your command line options, then run the server, wait for it to finish getting all the decks
 6. On the ereader, input your host IP address and port like that: <ip_address>:<port> for example 192.168.1.1:8766
 7. Sync :)
 
@@ -27,7 +27,7 @@ To sync sanki with anki ( On Linux host ):
 Everything really is welcome. 
 
 ### Building
-instruction can be found [here](https://github.com/Szybet/kobo-nia-audio/tree/main/apps-on-kobo)
+Instructions can be found [here](https://github.com/Szybet/kobo-nia-audio/tree/main/apps-on-kobo)
 
 ### Thanks to
 - NiLuJe for providing the toolchain for kobo devices, and helping with some bugs
