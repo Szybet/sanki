@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
             directories::fileSelect = QDir("/mnt/onboard");
         } else {
             // Debug
-            qDebug() << "App is in debug mode";
+            qWarning() << "App is in debug mode. If you are running on Nickel, you most propably forgot to install Nickel Menu, Kfmon and Koreader installed ( from the one click package )";
             directories::config = QDir("/sanki_debug_dir");
             directories::fileSelect = QDir("/");
         }
