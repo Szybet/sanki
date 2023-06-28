@@ -108,7 +108,7 @@
       <number>0</number>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="Page0Ereader">
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -391,7 +391,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>devices IP address:</string>
+            <string>Current IP Addresses</string>
            </property>
           </widget>
          </item>

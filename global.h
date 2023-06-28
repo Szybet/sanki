@@ -50,5 +50,6 @@ int checkBatteryLevel();
 void setWhiteBrightnessAlias(int value);
 int getWhiteBrightnessAlias();
 QString exec(const char *cmd);
+bool createDir(QString absolutePath);
 
 #endif // GLOBALS_H

@@ -195,38 +195,27 @@ int main(int argc, char *argv[])
             // Debug
             qDebug() << "App is in debug mode";
             directories::config = QDir("/sanki_debug_dir");
-            directories::fileSelect = QDir("/"); // For now
+            directories::fileSelect = QDir("/");
         }
         directories::deckStorage = directories::config.path() + QDir::separator() + "decks";
         directories::sessionSaves = directories::config.path() + QDir::separator() + "sessions";
         directories::globalSettings.setFileName(directories::config.filePath("sanki.ini"));
     }
 
-    MainWindow w;
+    qDebug() << "Main config path is" << directories::config;
+    createDir(directories::config.absolutePath());
+    qDebug() << "Deck storage path is" << directories::deckStorage;
+    createDir(directories::deckStorage.absolutePath());
+    qDebug() << "Session saves path is" << directories::sessionSaves;
+    createDir(directories::sessionSaves.absolutePath());
 
+    MainWindow w;
     if(ereader) {
         w.setAnimated(false);
         w.showFullScreen();
         warningsEnabled = true;
     } else if(pc) {
         w.show();
-    }
-
-    if(directories::config.exists() == false) {
-        QDir newDir; // Why variable is needed
-        newDir.mkpath(directories::config.path());
-    }
-
-    qDebug() << "Deck storage path is" << directories::deckStorage;
-    if(directories::deckStorage.exists() == false) {
-        QDir newDir;
-        newDir.mkpath(directories::deckStorage.path());
-    }
-
-    qDebug() << "Session saves path is" << directories::sessionSaves;
-    if(directories::sessionSaves.exists() == false) {
-        QDir newDir;
-        newDir.mkpath(directories::sessionSaves.path());
     }
 
     return a.exec();

@@ -73,9 +73,6 @@ void checkEreaderModel()
         qDebug() << "Unknown ereader device or in debug mode";
         return void();
     }
-    versionFile.open(QIODevice::ReadOnly);
-    QString version = versionFile.readAll().replace("\n", "");
-    versionFile.close();
 
     ereaderVars::nickelApp = QDir("/mnt/onboard/.adds/kfmon/").exists();
     ereaderVars::inkboxUserApp = QDir("/app-data").exists();
@@ -126,4 +123,18 @@ QString exec(const char *cmd)
         result += buffer.data();
     }
     return result.trimmed();
+}
+
+bool createDir(QString absolutePath) {
+    if(QDir(absolutePath).exists() == false) {
+        bool status = QDir::root().mkpath(absolutePath);
+        if(status == false) {
+            qWarning() << "Failed to create directory:" << absolutePath;
+        } else {
+            qDebug() << "Created directory at path:" << absolutePath;
+        }
+        return status;
+    }
+    qDebug() << "Directory" << absolutePath << "Already exists";
+    return true;
 }
