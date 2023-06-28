@@ -20,7 +20,7 @@ To sync sanki with anki ( On Linux host ):
 7. Sync :)
 
 ### Installation
-- For Nickel, just extract the zip to the main folder when connecting via usb - You also need Nickel Menu and Kfmon installed
+- For Nickel, just extract the zip to the main folder when connecting via usb - **You also need Nickel Menu, Kfmon and Koreader installed ( from the one click package )**
 - For InkBox, extract it to `.apps` folder
 
 ### Contribute
