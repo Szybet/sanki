@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Part coppied from Plato
+# Partially coppied from Plato & Koreader
 sync
 killall -TERM nickel hindenburg sickel fickel adobehost foxitpdf iink dhcpcd-dbus dhcpcd fmon > /dev/null 2>&1
 ORIG_BPP=$(./bin/utils/fbdepth -g)
