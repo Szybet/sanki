@@ -5,7 +5,7 @@
 https://github.com/Szybet/sanki/raw/master/sanki-demo.mkv
 
 ### Supported, tested devices:
-- Kobo nia
+- Kobo Nia
 - Kobo Clara 2E - Thanks Rumpelstilzli
 - Kobo Clara HD - Thanks elinkser 
 
