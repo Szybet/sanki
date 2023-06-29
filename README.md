@@ -6,6 +6,7 @@ https://github.com/Szybet/sanki/raw/master/sanki-demo.mkv
 
 ### Supported, tested devices:
 - Kobo nia
+- Kobo Clara 2E - Thanks Rumpelstilzli
 
 Should work on all devices, if not, please export debug info in device settings and send me it.
 
