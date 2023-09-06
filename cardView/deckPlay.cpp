@@ -317,6 +317,15 @@ void DeckPlay::reloadSettings() {
     ui->textFrontCard->setFont(font);
 
 #ifdef EREADER
+    // To flush settings window...
+    KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm_GC16);
+    QApplication::processEvents();
+    KoboPlatformFunctions::doManualRefresh(QRect(0, 0, ereaderVars::screenX, ereaderVars::screenY));
+    KoboPlatformFunctions::doManualRefresh(QRect(0, 0, ereaderVars::screenX, ereaderVars::screenY));
+    QApplication::processEvents();
+#endif
+
+#ifdef EREADER
     int waveform = settingsGlobal.value("deckPlayWaveForm").toInt();
     qDebug() << "Setting waveform mode for deckPlay:" << waveform;
     // Does this work?

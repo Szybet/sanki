@@ -39,7 +39,7 @@ sshpass -p $passwd ssh $servername "bash -c \"rm  /data/onboard/.apps/sanki/sank
 sshpass -p $passwd ssh $servername "bash -c \"rm  /data/onboard/.apps/sanki/sanki.isa.dgst\""
 sshpass -p $passwd ssh $servername "bash -c \"rm  /data/onboard/.apps/sanki/app.json\""
 
-
+cd ../
 sshpass -p $passwd scp inkbox_userapp/app.json $servername:/data/onboard/.apps/sanki/
 sshpass -p $passwd scp inkbox_userapp/sanki.isa.dgst $servername:/data/onboard/.apps/sanki/
 sshpass -p $passwd scp inkbox_userapp/sanki.isa $servername:/data/onboard/.apps/sanki/

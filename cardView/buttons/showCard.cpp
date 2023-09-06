@@ -9,6 +9,7 @@ showCard::showCard(QWidget *parent) :
     ui->setupUi(this);
     if(ereader) {
         ui->pushButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
+        this->setFixedHeight(125);
     }
 }
 

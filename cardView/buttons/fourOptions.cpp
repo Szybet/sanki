@@ -13,6 +13,7 @@ fourOptions::fourOptions(QWidget *parent) :
         ui->goodButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
         ui->easyButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
         ui->showButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
+        this->setFixedHeight(125);
     }
     hideButtons();
 }

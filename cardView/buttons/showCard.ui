@@ -38,7 +38,7 @@
    <item row="0" column="0">
     <widget class="QPushButton" name="pushButton">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>

@@ -20,6 +20,21 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item row="0" column="2">
     <widget class="QStackedWidget" name="stackedWidget">
      <widget class="QWidget" name="page">
@@ -30,10 +45,22 @@
        </sizepolicy>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QPushButton" name="againButton">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -46,7 +73,7 @@
        <item>
         <widget class="QPushButton" name="hardButton">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -59,7 +86,7 @@
        <item>
         <widget class="QPushButton" name="goodButton">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -72,7 +99,7 @@
        <item>
         <widget class="QPushButton" name="easyButton">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -92,10 +119,25 @@
        </sizepolicy>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QPushButton" name="showButton">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
