@@ -16,7 +16,7 @@ To sync sanki with anki ( On Linux host ):
 1. Setup anki connect on anki
 2. Install rust ( The programming language )
 3. Clone the repo, enter sanki-sync repo
-4. Run `cargo run --release -- --help`
+4. Run `cargo run --release -- --help` ( Make sure it's running a stable toolchain, nightly doesn't work )
 5. Adjust your command line options, then run the server, wait for it to finish getting all the decks
 6. On the ereader, input your host IP address and port like that: <ip_address>:\<port> for example 192.168.1.1:8766
 7. Sync :)
