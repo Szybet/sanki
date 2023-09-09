@@ -101,6 +101,8 @@ void DeckPlay::start(sessionStr newSession)
         qDebug() << "Finished shuffling cards:" << currectSession.cardList;
     }
 
+    timeStartedPlaying = currectSession.time.played;
+
     saveSession = new QSettings(directories::sessionSaves.filePath(currectSession.core.name), QSettings::IniFormat);
     saveSession->setParent(this);
 
@@ -243,10 +245,6 @@ void DeckPlay::saveSessionData() {
         return void();
     }
     qint64 timerElapsed = elapsedTimer->restart();
-    if(timerElapsed > 120000 && already2Minutes == false) {
-        currectSession.time.playedCount += 1;
-        already2Minutes = true;
-    }
 
     emit saveData();
     QApplication::processEvents();
@@ -255,6 +253,11 @@ void DeckPlay::saveSessionData() {
 
     currectSession.time.lastUsed = QDateTime::currentDateTime();
     currectSession.time.played += timerElapsed;
+
+    if(timeStartedPlaying + 120000 < currectSession.time.played && already2Minutes == false) {
+        currectSession.time.playedCount += 1;
+        already2Minutes = true;
+    }
 
     QVariant variant = QVariant::fromValue(currectSession);
 

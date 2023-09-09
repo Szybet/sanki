@@ -58,6 +58,7 @@ private:
     bool already2Minutes = false;
     QTimer* timer;
     bool working = true;
+    quint64 timeStartedPlaying;
 };
 
 #endif // DECKPLAY_H

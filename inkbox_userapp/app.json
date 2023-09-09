@@ -7,7 +7,7 @@
     "IconPath": "/app-misc/sanki.svg",
     "Name": "sanki",
     "SupportedDevices": [ "n306" ],
-    "RequiredFeatures": [ 3, 4 ] ,
+    "RequiredFeatures": [ 3, 4, 7 ] ,
     "Version": "0.2"
   }
 }

@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
         if(ereaderVars::inkboxUserApp == true) {
             qDebug() << "App is a InkBox user app";
             directories::config = QDir("/app-data");
-            directories::fileSelect = QDir("/app-data");
+            directories::fileSelect = QDir("/system-onboard");
         } else if(ereaderVars::nickelApp == true) {
             qDebug() << "App is a Nickel app";
             directories::config = QDir("/mnt/onboard/.adds/sanki");

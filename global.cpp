@@ -97,6 +97,7 @@ int checkBatteryLevel()
 
 void setWhiteBrightnessAlias(int value) {
 #ifdef EREADER
+    qDebug() << "Setting brightness...";
     setWhiteBrightness(&ereaderVars::ereaderDevice, value);
 #endif
 }
