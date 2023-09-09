@@ -7,6 +7,7 @@ cp build/ereader/sanki inkbox_userapp/sanki/app-bin/sanki.bin
 rm -rf inkbox_userapp/sanki/app-lib/*
 cp libraries/ereader/ereaderdev-lib/ereaderdev/build/* inkbox_userapp/sanki/app-lib/
 cp libraries/zip_libraries/lib-build/EREADER/libzip.so inkbox_userapp/sanki/app-lib/
+cp libraries/ereader/inkbox/libs/prebuilt/libsndfile* inkbox_userapp/sanki/app-lib/
 
 # Very important
 rm -f inkbox_userapp/sanki.isa.dgst

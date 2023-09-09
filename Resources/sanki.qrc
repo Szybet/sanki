@@ -17,6 +17,19 @@
         <file>apkgFile.png</file>
         <file>folderZip.svg</file>
         <file>folder.svg</file>
+        <file>music-note.png</file>
+        <file>resources/refresh-small.png</file>
+        <file>resources/previous.png</file>
+        <file>resources/plus.png</file>
+        <file>resources/play.png</file>
+        <file>resources/pause.png</file>
+        <file>resources/next.png</file>
+        <file>resources/music-queue.png</file>
+        <file>resources/music-note.png</file>
+        <file>resources/music-library.png</file>
+        <file>resources/close.png</file>
+        <file>resources/clean.png</file>
+        <file>resources/chevron-right.png</file>
     </qresource>
     <qresource prefix="/other">
         <file>eink.qss</file>
@@ -35,5 +48,18 @@
         <file>eink/radioButtonUnchecked.svg</file>
         <file>eink/down-arrow.png</file>
         <file>eink/up-arrow.png</file>
+        <file>resources/refresh-small.png</file>
+        <file>resources/previous.png</file>
+        <file>resources/plus.png</file>
+        <file>resources/play.png</file>
+        <file>resources/pause.png</file>
+        <file>resources/next.png</file>
+        <file>resources/music-queue.png</file>
+        <file>resources/music-note.png</file>
+        <file>resources/music-library.png</file>
+        <file>resources/close.png</file>
+        <file>resources/clean.png</file>
+        <file>resources/chevron-right.png</file>
+        <file>resources/minus.png</file>
     </qresource>
 </RCC>

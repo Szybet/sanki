@@ -4,11 +4,16 @@
 #include "cardView/modes/boxes/boxes.h"
 #include "components/other/infoDialog.h"
 
+#ifdef EREADER
+#include "audiothread.h"
+#endif
+
 #include <QApplication>
 #include <QDebug>
 #include <QTextCodec>
 #include <QLoggingCategory>
 #include <QMessageBox>
+#include <QThread>
 
 bool enableDebug = false;
 
@@ -208,6 +213,16 @@ int main(int argc, char *argv[])
     createDir(directories::deckStorage.absolutePath());
     qDebug() << "Session saves path is" << directories::sessionSaves;
     createDir(directories::sessionSaves.absolutePath());
+
+#ifdef EREADER
+    if(ereaderVars::inkboxUserApp) {
+        QThread * audioThread = new QThread();
+        audiothread * audioObject = new audiothread();
+        audioObject->moveToThread(audioThread);
+        QObject::connect(audioThread, &QThread::started, audioObject, &audiothread::start);
+        audioThread->start();
+    }
+#endif
 
     MainWindow w;
     if(ereader) {

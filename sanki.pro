@@ -32,7 +32,7 @@ SOURCES += \
     components/other/statistics.cpp \
     components/settings.cpp \
     components/statusBarC.cpp \
-    global.cpp \
+    all/global.cpp \
     mainMenu/decks/deck.cpp \
     components/other/keyboard.cpp \
     main.cpp \
@@ -61,7 +61,7 @@ HEADERS += \
     components/other/statistics.h \
     components/settings.h \
     components/statusBarC.h \
-    global.h \
+    all/global.h \
     mainMenu/decks/deck.h \
     components/other/keyboard.h \
     cardView/buttons/showCard.h \
@@ -131,6 +131,37 @@ if(contains(TARGET_DEVICE, EREADER)) {
     LIBS += -L$$PWD/libraries/ereader/ereaderdev-lib/ereaderdev/build -lereaderdev
     INCLUDEPATH += $$PWD/libraries/ereader/ereaderdev-lib/ereaderdev/
     DEPENDPATH += $$PWD/libraries/ereader/ereaderdev-lib/ereaderdev/
+
+    # Inkbox - audio and other things
+    # Functions for compability
+    INCLUDEPATH += all
+    DEPENDPATH += all
+    HEADERS += all/functions.h
+    SOURCES += all/functions.cpp
+
+    # Audio
+    INCLUDEPATH += $$PWD/libraries/ereader/inkbox/src/audio/ \
+        $$PWD/libraries/ereader/inkbox/src/widgets/dialogs/audio/ \
+        $$PWD/libraries/ereader/inkbox/libs/libsndfile/include
+    DEPENDPATH += $$PWD/libraries/ereader/inkbox/src/audio/ \
+        $$PWD/libraries/ereader/inkbox/src/widgets/dialogs/audio/ \
+        $$PWD/libraries/ereader/inkbox/libs/libsndfile/include
+
+    HEADERS += $$PWD/libraries/ereader/inkbox/src/audio/audiothread.h \
+        $$PWD/libraries/ereader/inkbox/src/widgets/dialogs/audio/audiodialog.h \
+        $$PWD/libraries/ereader/inkbox/src/widgets/dialogs/audio/audiofile.h \
+        $$PWD/libraries/ereader/inkbox/src/widgets/dialogs/audio/audiofilequeue.h
+
+    SOURCES += $$PWD/libraries/ereader/inkbox/src/audio/audiothread.cpp \
+        $$PWD/libraries/ereader/inkbox/src/widgets/dialogs/audio/audiodialog.cpp \
+        $$PWD/libraries/ereader/inkbox/src/widgets/dialogs/audio/audiofile.cpp \
+        $$PWD/libraries/ereader/inkbox/src/widgets/dialogs/audio/audiofilequeue.cpp\
+
+    FORMS += $$PWD/libraries/ereader/inkbox/src/widgets/dialogs/audio/audiodialog.ui \
+        $$PWD/libraries/ereader/inkbox/src/widgets/dialogs/audio/audiofile.ui \
+        $$PWD/libraries/ereader/inkbox/src/widgets/dialogs/audio/audiofilequeue.ui
+
+    LIBS += -L$$PWD/libraries/ereader/inkbox/libs/prebuilt -lsndfile
 }
 
 if(contains(TARGET_DEVICE, PC)) {

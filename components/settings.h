@@ -36,6 +36,8 @@ private slots:
 
     void on_buttonDebuggingData_clicked();
 
+    void on_audioButton_clicked();
+
 private:
     Ui::Settings *ui;
     enum Direction{

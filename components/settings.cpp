@@ -18,6 +18,7 @@
 #include "einkenums.h"
 #include "koboplatformfunctions.h"
 #include "generalfunctions.h"
+#include "audiodialog.h"
 #endif
 
 Settings::Settings(QWidget *parent) :
@@ -70,6 +71,9 @@ Settings::Settings(QWidget *parent) :
 
     if(!ereaderVars::nickelApp) {
         ui->buttonDebuggingData->setDisabled(true);
+    }
+    if(!ereaderVars::inkboxUserApp) {
+        ui->audioButton->setDisabled(true);
     }
 
 #ifdef EREADER
@@ -406,5 +410,13 @@ void Settings::on_buttonDebuggingData_clicked()
         qInfo() << "Finished exporting debug informations. The file is named: sanki_debug_export.txt";
 #endif
     }
+}
+
+void Settings::on_audioButton_clicked()
+{
+#ifdef EREADER
+    QDialog* newAudioDialog = new audioDialog(this);
+    newAudioDialog->exec();
+#endif
 }
 

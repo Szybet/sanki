@@ -10,3 +10,6 @@
 [submodule "libraries/ereader/ereaderdev-lib"]
 	path = libraries/ereader/ereaderdev-lib
 	url = git@github.com:Kobo-InkBox/ereaderdev-lib.git
+[submodule "libraries/ereader/inkbox"]
+	path = libraries/ereader/inkbox
+	url = https://github.com/Kobo-InkBox/inkbox.git
