@@ -20,14 +20,14 @@ openssl dgst -sha256 -sign /home/szybet/inkbox-keys/userapps.pem -out inkbox_use
 
 # Create the zip
 cd inkbox_userapp/
-rm -rf sanki.zip
+rm -rf sanki_inkbox.zip
 mkdir -p tmp_sanki_dir/sanki/
 cp app.json tmp_sanki_dir/sanki/
 cp sanki.isa tmp_sanki_dir/sanki/
 cp sanki.isa.dgst tmp_sanki_dir/sanki/
 cd tmp_sanki_dir
-zip -r sanki.zip sanki/
-mv sanki.zip ../
+zip -r sanki_inkbox.zip sanki/
+mv sanki_inkbox.zip ../
 cd ..
 rm -rf tmp_sanki_dir
 

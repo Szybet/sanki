@@ -154,10 +154,13 @@
        <item>
         <widget class="QChartView" name="cardUsedChart">
          <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
+          <enum>QFrame::Box</enum>
          </property>
          <property name="frameShadow">
           <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
          </property>
          <property name="verticalScrollBarPolicy">
           <enum>Qt::ScrollBarAsNeeded</enum>
@@ -165,12 +168,24 @@
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
+         </property>
         </widget>
        </item>
        <item>
         <widget class="QChartView" name="cardBoxesChart">
          <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
          </property>
         </widget>
        </item>

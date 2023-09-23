@@ -7,8 +7,8 @@ cp libraries/ereader/ereaderdev-lib/ereaderdev/build/libereaderdev.so* nickel_ap
 cp libraries/ereader/inkbox/libs/prebuilt/libsndfile* nickel_app/sanki/.adds/sanki/lib/
 
 cd nickel_app
-rm -rf sanki.zip
+rm -rf sanki_nickel.zip
 cd sanki/
-zip -r sanki.zip .adds
-mv sanki.zip ../
+zip -r sanki_nickel.zip .adds
+mv sanki_nickel.zip ../
 cd ../

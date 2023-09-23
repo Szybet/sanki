@@ -120,6 +120,13 @@ void Settings::requestEreaderPage()
     brightness_string.append(QString::number(brightness));
     brightness_string.append("%");
     ui->labelBrightness->setText(brightness_string);
+
+    int spinBoxValue = 10;
+    if(settingsGlobal->contains("refreshCard")) {
+        spinBoxValue = settingsGlobal->value("refreshCard").toInt();
+    }
+    qDebug() << "New refresh rate set:" << spinBoxValue;
+    ui->refreshSpinBox->setValue(spinBoxValue);
 }
 
 void Settings::on_ScrollBarBrightness_valueChanged(int value)
@@ -420,3 +427,8 @@ void Settings::on_audioButton_clicked()
 #endif
 }
 
+void Settings::on_refreshSpinBox_valueChanged(int arg1)
+{
+    qDebug() << "New refresh rate set:" << arg1;
+    settingsGlobal->setValue("refreshCard", arg1);
+}

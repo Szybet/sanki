@@ -38,6 +38,8 @@ private slots:
 
     void on_audioButton_clicked();
 
+    void on_refreshSpinBox_valueChanged(int arg1);
+
 private:
     Ui::Settings *ui;
     enum Direction{

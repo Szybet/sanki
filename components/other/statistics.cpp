@@ -50,7 +50,6 @@ statistics::statistics(QWidget *parent) :
 
     ui->scrollArea->verticalScrollBar()->setStyleSheet(
         "QScrollBar:vertical { width: 50px; }");
-
 }
 
 statistics::~statistics()
@@ -61,6 +60,11 @@ statistics::~statistics()
 void statistics::setUpChart(QtCharts::QChartView* chart, QString title) {
     chart->chart()->setBackgroundVisible(false);
     chart->chart()->setTitle(title);
+
+    QFont font = chart->chart()->font();
+    font.setPointSize(font.pointSize() - 5);
+    chart->chart()->setTitleFont(font); // smaller
+
     chart->setRenderHint(QPainter::Antialiasing);
     chart->rubberBand().setFlag(QChartView::RectangleRubberBand);
     chart->chart()->setAnimationOptions(QChart::NoAnimation);
@@ -109,12 +113,13 @@ void statistics::start(sessionStr session) {
     while (i.hasNext()) {
         i.next();
         QPieSlice *slice = series->append(QString::number(i.key()), i.value());
-        slice->setLabelBrush(whiteBrush);
+        // slice->setLabelBrush(whiteBrush);
         slice->setLabel(QString::number(i.key()));
+        slice->setLabelVisible(true);
     }
-    series->setLabelsVisible(false);
-
+    series->setLabelsVisible(true); // was false but too much labels made it invisible...
     ui->cardUsedChart->chart()->addSeries(series);
+    ui->cardUsedChart->chart()->legend()->setVisible(false); // with too many diffrent values, they begin showing ... for all for whatever reason...
 
     if(session.core.mode != Boxes) {
         ui->cardBoxesChart->hide();

@@ -231,13 +231,20 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
 
     cardSizeManage(area);
 
-    if(firstLaunch == true) {
-        // TODO: at launch frontcard is too big
-    }
-
     // This fixes the issue that after adding text it is cutted in half
     // Doesn't work ui->textFrontCard->verticalScrollBar()->setSliderPosition(0);
     area->verticalScrollBar()->setValue(0);
+
+    refreshCard();
+
+    if(firstLaunch == true) {
+        firstLaunch = false;
+        // TODO: at launch frontcard is too big
+        QApplication::processEvents();
+        QTimer::singleShot(300, this, [this, area, text]() {
+            setText(area, text);
+        });
+    }
 }
 
 void DeckPlay::saveSessionData() {
@@ -319,27 +326,56 @@ void DeckPlay::reloadSettings() {
     ui->textBackCard->setFont(font);
     ui->textFrontCard->setFont(font);
 
-#ifdef EREADER
-    // To flush settings window...
-    KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm_GC16);
-    QApplication::processEvents();
-    KoboPlatformFunctions::doManualRefresh(QRect(0, 0, ereaderVars::screenX, ereaderVars::screenY));
-    KoboPlatformFunctions::doManualRefresh(QRect(0, 0, ereaderVars::screenX, ereaderVars::screenY));
-    QApplication::processEvents();
-#endif
+    if(settingsGlobal.contains("refreshCard")) {
+        refreshCardRate = settingsGlobal.value("refreshCard").toInt() * 2;
+    }
+    qDebug() << "refreshCardRate is (doubled):" << refreshCardRate;
 
+    refreshRect(QRect(0, 0, ereaderVars::screenX, ereaderVars::screenY));
+    loadWaveFormSetting();
+
+    this->repaint();
+    this->repaint();
+    this->repaint();
+
+    settingsGlobal.deleteLater(); // Idk if needed
+}
+
+void DeckPlay::changeStatusBarTextSlot(QString text) {
+    emit changeStatusBarTextSignal(text);
+}
+
+void DeckPlay::loadWaveFormSetting() {
 #ifdef EREADER
+    QSettings settingsGlobal(directories::globalSettings.fileName(), QSettings::IniFormat);
     int waveform = settingsGlobal.value("deckPlayWaveForm").toInt();
     qDebug() << "Setting waveform mode for deckPlay:" << waveform;
     // Does this work?
     WaveForm waveformBetter = static_cast<WaveForm>(waveform);
     KoboPlatformFunctions::setFullScreenRefreshMode(waveformBetter);
+    settingsGlobal.deleteLater();  // Idk if needed
 #endif
-    this->repaint();
-    this->repaint();
-    this->repaint();
 }
 
-void DeckPlay::changeStatusBarTextSlot(QString text) {
-    emit changeStatusBarTextSignal(text);
+void DeckPlay::refreshRect(QRect rect) {
+#ifdef EREADER
+    // To flush settings window...
+    KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm_GC16);
+    QApplication::processEvents();
+    KoboPlatformFunctions::doManualRefresh(rect);
+    QApplication::processEvents();
+#endif
+}
+
+void DeckPlay::refreshCard() {
+    if(refreshCardRate > 0) {
+        if(refreshCardCount >= refreshCardRate) {
+            refreshCardCount = 1;
+            refreshRect(ui->gridCard->contentsRect());
+            refreshRect(ui->gridManageCard->contentsRect());
+            loadWaveFormSetting();
+        } else {
+            refreshCardCount += 1;
+        }
+    }
 }
