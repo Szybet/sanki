@@ -36,6 +36,7 @@ struct box {
     int goodValue = 1;
     int easyValue = 2;
     uint defaultSkipValue = 10;
+    uint startingBox = 2; // middle -1 should be good - this starts from 0 but is 1 in the gui
 };
 Q_DECLARE_METATYPE(box)
 

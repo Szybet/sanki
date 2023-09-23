@@ -36,6 +36,8 @@ private slots:
 
     void on_skipSpinBox_valueChanged(int arg1);
 
+    void on_startingBoxSpixBox_valueChanged(int arg1);
+
 private:
     Ui::askForBoxesOptions *ui;
 };

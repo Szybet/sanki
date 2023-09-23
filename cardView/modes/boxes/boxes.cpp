@@ -45,7 +45,8 @@ void boxes::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
             cardIndex newIndex = cardIndex();
             newIndex.index = i;
 
-            theBox.boxes[0].append(newIndex);
+            // Start box value
+            theBox.boxes[theBox.startingBox - 1].append(newIndex);
         }
 
         qDebug() << "New settings from box:" << theBox;
@@ -197,7 +198,7 @@ void boxes::saveBox() {
 }
 
 QDataStream& operator<<(QDataStream& out, const box& v) {
-    out << v.howMuchBoxes << v.boxes << v.againValue << v.hardValue << v.goodValue << v.easyValue << v.defaultSkipValue;
+    out << v.howMuchBoxes << v.boxes << v.againValue << v.hardValue << v.goodValue << v.easyValue << v.defaultSkipValue << v.startingBox;
     return out;
 }
 QDataStream& operator>>(QDataStream& in, box& v) {
@@ -208,11 +209,12 @@ QDataStream& operator>>(QDataStream& in, box& v) {
     in >> v.goodValue;
     in >> v.easyValue;
     in >> v.defaultSkipValue;
+    in >> v.startingBox;
     return in;
 }
 
 QDebug operator<<(QDebug dbg, const box& c) {
-    dbg.nospace() << "box(howMuchBoxes=" << c.howMuchBoxes << ", boxes=" << c.boxes << ", againValue=" << c.againValue << ", hardValue=" << c.hardValue << ", goodValue=" << c.goodValue << ", easyValue=" << c.easyValue << ", defaultSkipValue=" << c.defaultSkipValue << ")";
+    dbg.nospace() << "box(howMuchBoxes=" << c.howMuchBoxes << ", boxes=" << c.boxes << ", againValue=" << c.againValue << ", hardValue=" << c.hardValue << ", goodValue=" << c.goodValue << ", easyValue=" << c.easyValue << ", defaultSkipValue=" << c.defaultSkipValue << ", startingBox=" << c.startingBox << ")";
     return dbg.space();
 }
 

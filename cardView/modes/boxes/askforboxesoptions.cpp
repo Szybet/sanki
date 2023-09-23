@@ -22,6 +22,7 @@ askForBoxesOptions::askForBoxesOptions(QWidget *parent) :
         ui->easySpinBox_4->setSuffix(spaces);
         ui->boxesSpinBox->setSuffix(spaces);
         ui->skipSpinBox->setSuffix(spaces);
+        ui->startingBoxSpixBox->setSuffix(spaces);
     }
 }
 
@@ -38,6 +39,7 @@ void askForBoxesOptions::start(box* parentArg) {
     ui->easySpinBox_4->setValue(boxEdit->easyValue);
     ui->boxesSpinBox->setValue(boxEdit->howMuchBoxes);
     ui->skipSpinBox->setValue(boxEdit->defaultSkipValue);
+    ui->startingBoxSpixBox->setValue(boxEdit->startingBox);
 }
 
 void askForBoxesOptions::on_acceptButton_clicked()
@@ -80,3 +82,11 @@ void askForBoxesOptions::on_skipSpinBox_valueChanged(int arg1)
     boxEdit->defaultSkipValue = arg1;
 }
 
+void askForBoxesOptions::on_startingBoxSpixBox_valueChanged(int arg1)
+{
+    if(arg1 <= ui->boxesSpinBox->value()) {
+        boxEdit->startingBox = arg1;
+    } else {
+        ui->startingBoxSpixBox->setValue(arg1 - 1);
+    }
+}
