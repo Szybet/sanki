@@ -98,6 +98,10 @@ FORMS += \
 unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+# global.h is there, and PC also needs that
+INCLUDEPATH += all
+DEPENDPATH += all
+
 DISTFILES += \
     Resources/eink.qss
 
@@ -134,8 +138,6 @@ if(contains(TARGET_DEVICE, EREADER)) {
 
     # Inkbox - audio and other things
     # Functions for compability
-    INCLUDEPATH += all
-    DEPENDPATH += all
     HEADERS += all/functions.h
     SOURCES += all/functions.cpp
 
