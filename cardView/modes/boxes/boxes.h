@@ -73,7 +73,7 @@ private:
     bool readyToSave = false;
 
     // Tmp values pointing to current card, indexes
-    int whichBox;
+    int whichBox; // int because there is a - operation
     int whichCard;
 };
 

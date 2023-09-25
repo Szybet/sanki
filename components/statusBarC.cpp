@@ -123,7 +123,7 @@ void statusBarC::on_ButtonStatus_clicked()
         qInfo() << "Sanki, a small anki app<br>"
                    "Created by Szybet<br>"
                    "https://github.com/Szybet/sanki<br>"
-                   "If you appreciate this app, please support the further development";
+                   "If you appreciate this app, consider supporting it in any way";
     }
 }
 

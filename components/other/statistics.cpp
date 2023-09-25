@@ -131,13 +131,13 @@ void statistics::start(sessionStr session) {
         qDebug() << "Count boxes:" << abox.howMuchBoxes;
 
         QBarSeries* seriesBar = new QBarSeries(this);
-        for(int i = 0; i < abox.boxes.count() - 1; i++) {
-            if(abox.boxes[i].count() != 0) {
-                QBarSet *set = new QBarSet(QString::number(i));
+        for(int i = 0; i < abox.boxes.count(); i++) {
+            //if(abox.boxes[i].count() != 0) {
+                QBarSet *set = new QBarSet(QString::number(i + 1)); // + 1 to show starting from 1
                 *set << abox.boxes[i].count();
                 seriesBar->append(set);
                 //set->setLabel(QString::number(abox.boxes[i].count()));
-            }
+            //}
         }
         seriesBar->setLabelsVisible(true);
         seriesBar->setLabelsPosition(QAbstractBarSeries::LabelsOutsideEnd);
