@@ -2,6 +2,7 @@
 #include "ui_statusBarC.h"
 #include "settings.h"
 #include "global.h"
+#include "settings/settingsMenu.h"
 
 #include <QTimer>
 #include <QTime>
@@ -84,10 +85,31 @@ void statusBarC::on_ButtonOption_clicked()
 
 void statusBarC::on_ButtonSettings_clicked()
 {
+    settingsMenu* menu = new settingsMenu();
+    menu->setWindowModality(Qt::ApplicationModal);
+    QPoint menuLoc = ui->ButtonSettings->pos();
+    menuLoc.setY(menuLoc.y() + ui->ButtonSettings->size().height());
+    qDebug() << "settingsMenu size is:" << menu->size();
+
+    int menuMaxX = (menuLoc.x() + menu->size().width());
+    qDebug() << "menuMaxX:" << menuMaxX;
+    int x = menuMaxX - ereaderVars::screenX;
+    if(x < 0) {
+        x = x * -1;
+    }
+    qDebug() << "X above is:" << x;
+    x = x + 50;
+    menuLoc.setX(menuLoc.x() - x);
+
+    menu->move(menuLoc);
+    menu->show();
+    /*
     Settings* settings_qdialog = new Settings;
     settings_qdialog->exec();
     emit refreshDecksSignal();
     emit closedOptionsDialog();
+    */
+
 }
 
 void statusBarC::on_ButtonOption_2_clicked()

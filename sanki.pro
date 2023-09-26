@@ -24,6 +24,7 @@ SOURCES += \
     cardView/modes/boxes/boxes.cpp \
     cardView/modes/completlyRandom.cpp \
     cardView/modes/randomNoRepeat.cpp \
+    components/settings/settingsMenu.cpp \
     components/files/file.cpp \
     components/files/fileChooser.cpp \
     components/other/askText.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     cardView/modes/boxes/boxes.h \
     cardView/modes/completlyRandom.h \
     cardView/modes/randomNoRepeat.h \
+    components/settings/settingsMenu.h \
     components/files/file.h \
     components/files/fileChooser.h \
     components/other/askText.h \
@@ -77,6 +79,7 @@ FORMS += \
     cardView/deckPlay.ui \
     cardView/modeOptions.ui \
     cardView/modes/boxes/askforboxesoptions.ui \
+    components/settings/settingsMenu.ui \
     components/files/file.ui \
     components/files/fileChooser.ui \
     components/other/askText.ui \
