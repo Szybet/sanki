@@ -62,7 +62,6 @@ private:
     int refreshCardRate = 20; // setText is called 2 times every card, so this is 2x then it is in reality to work
     int refreshCardCount = 1;
     void refreshCard();
-    void refreshRect(QRect rect);
     void loadWaveFormSetting();
 };
 

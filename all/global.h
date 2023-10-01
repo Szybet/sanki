@@ -41,7 +41,7 @@ enum DeckModes {
     RandomisedNoRepeating,
     Boxes,
 };
-Q_DECLARE_METATYPE(DeckModes);
+Q_DECLARE_METATYPE(DeckModes)
 
 bool renameDir(QDir & dir, const QString & newName);
 void checkEreaderModel();
@@ -51,5 +51,6 @@ void setWhiteBrightnessAlias(int value);
 int getWhiteBrightnessAlias();
 QString exec(const char *cmd);
 bool createDir(QString absolutePath);
+void refreshRect(QRect rect);
 
 #endif // GLOBALS_H

@@ -82,9 +82,14 @@ void statusBarC::on_ButtonOption_clicked()
     emit optionButtonSignal();
 }
 
-
+bool pomodoroCreated = false;
 void statusBarC::on_ButtonSettings_clicked()
 {
+    if(pomodoroCreated == false) {
+        pomodoroWidget = new pomodoro(this); // parent issue with showing?
+        pomodoroCreated = true;
+    }
+
     settingsMenu* menu = new settingsMenu();
     menu->setWindowModality(Qt::ApplicationModal);
     QPoint menuLoc = ui->ButtonSettings->pos();
@@ -98,18 +103,20 @@ void statusBarC::on_ButtonSettings_clicked()
         x = x * -1;
     }
     qDebug() << "X above is:" << x;
-    x = x + 50;
+    x = x + 15;
     menuLoc.setX(menuLoc.x() - x);
 
     menu->move(menuLoc);
+    menu->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint); // this closes the window, awesome
+    menu->start(pomodoroWidget, this);
     menu->show();
-    /*
+}
+
+void statusBarC::openSettings() {
     Settings* settings_qdialog = new Settings;
     settings_qdialog->exec();
     emit refreshDecksSignal();
     emit closedOptionsDialog();
-    */
-
 }
 
 void statusBarC::on_ButtonOption_2_clicked()

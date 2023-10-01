@@ -107,7 +107,6 @@ void Settings::requestEreaderPage()
 {
     ui->labelPageName->setText("Device");
 
-    checkBatteryLevel();
     QString bat_level = "Battery level: ";
     bat_level.append(QString::number(checkBatteryLevel()));
     bat_level.append("%");

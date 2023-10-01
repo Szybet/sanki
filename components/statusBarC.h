@@ -2,6 +2,7 @@
 #define statusBarC_H
 
 #include <QWidget>
+#include "components/other/pomodoro.h"
 
 namespace Ui {
 class statusBarC;
@@ -17,6 +18,8 @@ public:
     void OptionButtonSet(QString text, QIcon icon, bool enabled);
     void OptionButtonSet2(QString text, QIcon icon, bool enabled);
     void OptionButtonExit(QIcon icon, bool enabled);
+    pomodoro* pomodoroWidget;
+    void openSettings();
 
 public slots:
     void setStatusText(QString text);

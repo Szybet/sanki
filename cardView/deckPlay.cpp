@@ -357,16 +357,6 @@ void DeckPlay::loadWaveFormSetting() {
 #endif
 }
 
-void DeckPlay::refreshRect(QRect rect) {
-#ifdef EREADER
-    // To flush settings window...
-    KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm_GC16);
-    QApplication::processEvents();
-    KoboPlatformFunctions::doManualRefresh(rect);
-    QApplication::processEvents();
-#endif
-}
-
 void DeckPlay::refreshCard() {
     if(refreshCardRate > 0) {
         if(refreshCardCount >= refreshCardRate) {

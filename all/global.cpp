@@ -7,6 +7,7 @@
 #include <QScreen>
 #include <QTextCodec>
 #include <QStandardPaths>
+#include <QApplication>
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -21,6 +22,8 @@
 #include "devicedescriptor.h"
 #include "devbattery.h"
 #include "devbrightness.h"
+#include "einkenums.h"
+#include "koboplatformfunctions.h"
 #endif
 
 // Default values
@@ -138,4 +141,14 @@ bool createDir(QString absolutePath) {
     }
     qDebug() << "Directory" << absolutePath << "Already exists";
     return true;
+}
+
+void refreshRect(QRect rect) {
+#ifdef EREADER
+    qDebug() << "Refreshing rect:" << rect;
+    KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm_GC16);
+    QApplication::processEvents();
+    KoboPlatformFunctions::doManualRefresh(rect);
+    QApplication::processEvents();
+#endif
 }
