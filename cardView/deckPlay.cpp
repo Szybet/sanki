@@ -41,6 +41,8 @@ DeckPlay::DeckPlay(QWidget *parent) :
     }
 
     ui->horizontalScrollBar->setHidden(true);
+
+    ui->cardStatsLabel->setStyleSheet("font-size: 6pt;");
 }
 
 DeckPlay::~DeckPlay()
@@ -123,6 +125,10 @@ void DeckPlay::start(sessionStr newSession)
         boxes* mode = new boxes(this);
         connect(this, &DeckPlay::saveData, mode, &boxes::saveBox);
         mode->setup(this, ui);
+    }
+
+    if(currectSession.core.mode != Boxes) {
+        ui->cardStatsLabel->hide();
     }
 
     reloadSettings();
@@ -245,6 +251,23 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
             setText(area, text);
         });
     }
+
+#ifdef EREADER
+    // Trying to fix some ghosting when in A2
+    WaveForm currentWaveFormConverted = static_cast<WaveForm>(currentWaveForm);
+    if(currentWaveFormConverted == WaveForm_A2) {
+        qDebug() << "Trying to fix ghosting";
+        if(text.count() > 50) {
+            QTimer::singleShot(500, this, [this, area, text]() {
+                if(area->horizontalScrollBar()->isVisible() || area->verticalScrollBar()->isVisible()) {
+                    qDebug() << "Requesting special refresh for ghosting";
+                    QApplication::processEvents();
+                    refreshCard(true);
+                }
+            });
+        }
+    }
+#endif
 }
 
 void DeckPlay::saveSessionData() {
@@ -332,7 +355,7 @@ void DeckPlay::reloadSettings() {
     qDebug() << "refreshCardRate is (doubled):" << refreshCardRate;
 
     refreshRect(QRect(0, 0, ereaderVars::screenX, ereaderVars::screenY));
-    loadWaveFormSetting();
+    currentWaveForm = loadWaveFormSetting();
 
     this->repaint();
     this->repaint();
@@ -345,25 +368,13 @@ void DeckPlay::changeStatusBarTextSlot(QString text) {
     emit changeStatusBarTextSignal(text);
 }
 
-void DeckPlay::loadWaveFormSetting() {
-#ifdef EREADER
-    QSettings settingsGlobal(directories::globalSettings.fileName(), QSettings::IniFormat);
-    int waveform = settingsGlobal.value("deckPlayWaveForm").toInt();
-    qDebug() << "Setting waveform mode for deckPlay:" << waveform;
-    // Does this work?
-    WaveForm waveformBetter = static_cast<WaveForm>(waveform);
-    KoboPlatformFunctions::setFullScreenRefreshMode(waveformBetter);
-    settingsGlobal.deleteLater();  // Idk if needed
-#endif
-}
-
-void DeckPlay::refreshCard() {
-    if(refreshCardRate > 0) {
-        if(refreshCardCount >= refreshCardRate) {
+void DeckPlay::refreshCard(bool force) {
+    if(refreshCardRate > 0 || force == true) {
+        if(refreshCardCount >= refreshCardRate || force == true) {
             refreshCardCount = 1;
             refreshRect(ui->gridCard->contentsRect());
             refreshRect(ui->gridManageCard->contentsRect());
-            loadWaveFormSetting();
+            currentWaveForm = loadWaveFormSetting();
         } else {
             refreshCardCount += 1;
         }

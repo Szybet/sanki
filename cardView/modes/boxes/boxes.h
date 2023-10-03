@@ -2,10 +2,11 @@
 #define BOXES_H
 
 #include "cardView/deckPlay.h"
-#include "cardView/deckPlay.h"
 #include "cardView/buttons/fourOptions.h"
 
+#include <ui_deckPlay.h>
 #include <QObject>
+#include <QTextBrowser>
 
 /*
 
@@ -53,6 +54,8 @@ public:
     fourOptions* buttons;
     uint currentCardIndex;
     void moveCard(int moveValue);
+    QList<int> boxesCardCount;
+    void cardStatUpdate(int inWhichBox, int moveCard); // Launch from boxes mode when new card is selected, otherwise hide the widget. moveCard 0 does nothing
 
 public slots:
     void againClicked();

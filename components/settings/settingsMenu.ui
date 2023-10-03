@@ -175,6 +175,17 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="refreshButton">
+        <property name="text">
+         <string>Refresh</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../Resources/sanki.qrc">
+          <normaloff>:/icons/refresh_window.png</normaloff>:/icons/refresh_window.png</iconset>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

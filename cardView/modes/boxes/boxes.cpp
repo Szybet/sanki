@@ -61,6 +61,7 @@ void boxes::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
     }
     readyToSave = true;
 
+    cardStatUpdate(theBox.startingBox - 1, 0);
     loop();
 }
 
@@ -134,6 +135,12 @@ void boxes::loop() {
 
     backText->hide();
     parent->setText(frontText, frontCard);
+
+    // Before changing anything
+    int whichBoxTmp = whichBox;
+    QTimer::singleShot(300, this, [this, whichBoxTmp]() {
+        cardStatUpdate(whichBoxTmp, 0);
+    });
 }
 
 void boxes::againClicked() {
@@ -165,12 +172,19 @@ void boxes::moveCard(int moveValue) {
     // Removing the card from current position
     theBox.boxes[whichBox].removeAt(whichCard);
 
+    // Before changing anything
+    int whichBoxTmp = whichBox;
+    QTimer::singleShot(300, this, [this, whichBoxTmp, moveValue]() {
+        cardStatUpdate(whichBoxTmp, moveValue);
+    });
+
+
     // Choosing the new box
     whichBox = whichBox + moveValue;
     if(whichBox < 0) {
         qDebug() << "The box choosed is less than 0";
         whichBox = 0;
-    } else if(whichBox > theBox.howMuchBoxes - 1) {
+    } else if((uint)whichBox > theBox.howMuchBoxes - 1) {
         qDebug() << "The box is more than allowed";
         whichBox = theBox.howMuchBoxes - 1;
     }
@@ -196,6 +210,43 @@ void boxes::saveBox() {
         parent->saveSession->setValue("boxMode/box", variant);
     }
 }
+
+void boxes::cardStatUpdate(int inWhichBox, int moveCard) {
+    // Fill it up
+    if(boxesCardCount.isEmpty()) {
+        qDebug() << "Filling up boxesCardCount:" << theBox.boxes.count();
+        for(int i = 0; i < theBox.boxes.count(); i++) {
+            boxesCardCount.append(theBox.boxes[i].count());
+        }
+    }
+
+    int newBox = inWhichBox + moveCard;
+
+    // Coppied from move Card
+    if(newBox < 0) {
+        newBox = 0;
+    } else if((uint)newBox > theBox.howMuchBoxes - 1) {
+        newBox = theBox.howMuchBoxes - 1;
+    }
+
+    if(moveCard != 0) {
+        boxesCardCount[inWhichBox] = boxesCardCount[inWhichBox] - 1;
+        boxesCardCount[newBox] = boxesCardCount[newBox] + 1;
+    }
+
+    QString htmlCodeForLabel;
+    for(int i = 0; i < boxesCardCount.count(); i++) {
+        QString boxCount = QString::number(boxesCardCount[i]);
+        if(newBox == i) {
+            htmlCodeForLabel.push_back("<u>" + boxCount + "</u> ");
+        } else {
+            htmlCodeForLabel.push_back(boxCount + " ");
+        }
+    }
+
+    parentUi->cardStatsLabel->setText(htmlCodeForLabel);
+}
+
 
 QDataStream& operator<<(QDataStream& out, const box& v) {
     out << v.howMuchBoxes << v.boxes << v.againValue << v.hardValue << v.goodValue << v.easyValue << v.defaultSkipValue << v.startingBox;
@@ -232,3 +283,4 @@ QDebug operator<<(QDebug dbg, const cardIndex& c) {
     dbg.nospace() << "cardIndex(index=" << c.index << ", skip=" << c.skip << ")";
     return dbg.space();
 }
+

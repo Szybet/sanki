@@ -16,6 +16,7 @@ settingsMenu::settingsMenu(QWidget *parent) :
 
     ui->pomodoroButton->setStyleSheet("Text-align: left");
     ui->settingsButton->setStyleSheet("Text-align: left");
+    ui->refreshButton->setStyleSheet("Text-align: left");
 }
 
 settingsMenu::~settingsMenu()
@@ -84,5 +85,14 @@ void settingsMenu::on_pomodoroButton_clicked()
 {
     statusBar->pomodoroWidget->setModal(true);
     statusBar->pomodoroWidget->show();
+    this->close();
+}
+
+void settingsMenu::on_refreshButton_clicked()
+{
+    QTimer::singleShot(300, statusBar, []() {
+        refreshRect(QRect(0, 0, ereaderVars::screenX, ereaderVars::screenY));
+        loadWaveFormSetting();
+    });
     this->close();
 }

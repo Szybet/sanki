@@ -152,3 +152,17 @@ void refreshRect(QRect rect) {
     QApplication::processEvents();
 #endif
 }
+
+int loadWaveFormSetting() {
+#ifdef EREADER
+    QSettings settingsGlobal(directories::globalSettings.fileName(), QSettings::IniFormat);
+    int waveform = settingsGlobal.value("deckPlayWaveForm").toInt();
+    qDebug() << "Setting waveform mode for deckPlay:" << waveform;
+    // Does this work?
+    WaveForm waveformBetter = static_cast<WaveForm>(waveform);
+    KoboPlatformFunctions::setFullScreenRefreshMode(waveformBetter);
+    settingsGlobal.deleteLater();  // Idk if needed
+    return waveform;
+#endif
+    return 0;
+}

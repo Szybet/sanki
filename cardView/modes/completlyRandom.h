@@ -4,6 +4,7 @@
 #include "cardView/deckPlay.h"
 #include "cardView/buttons/showCard.h"
 #include "cardView/deckPlay.h"
+#include "cardView/modes/boxes/boxes.h"
 #include "ui_deckPlay.h"
 
 #include <QRandomGenerator>

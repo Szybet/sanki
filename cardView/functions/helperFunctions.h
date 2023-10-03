@@ -3,6 +3,7 @@
 
 #include "mainMenu/sessions/sessionStruct.h"
 #include "cardView/deckPlay.h"
+#include "cardView/modes/boxes/boxes.h"
 
 #include <QString>
 #include <QDebug>

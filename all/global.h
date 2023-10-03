@@ -52,5 +52,6 @@ int getWhiteBrightnessAlias();
 QString exec(const char *cmd);
 bool createDir(QString absolutePath);
 void refreshRect(QRect rect);
+int loadWaveFormSetting();
 
 #endif // GLOBALS_H

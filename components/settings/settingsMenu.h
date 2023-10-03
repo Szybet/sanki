@@ -24,6 +24,8 @@ private slots:
 
     void on_pomodoroButton_clicked();
 
+    void on_refreshButton_clicked();
+
 private:
     Ui::settingsMenu *ui;
     pomodoro* pomodoroWidget;

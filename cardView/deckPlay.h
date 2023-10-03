@@ -11,6 +11,14 @@
 #include <QSettings>
 #include <QElapsedTimer>
 
+#ifdef EREADER
+#include "devicedescriptor.h"
+#include "devbattery.h"
+#include "devbrightness.h"
+#include "einkenums.h"
+#include "koboplatformfunctions.h"
+#endif
+
 namespace Ui {
 class DeckPlay;
 }
@@ -61,8 +69,8 @@ private:
     quint64 timeStartedPlaying;
     int refreshCardRate = 20; // setText is called 2 times every card, so this is 2x then it is in reality to work
     int refreshCardCount = 1;
-    void refreshCard();
-    void loadWaveFormSetting();
+    void refreshCard(bool force = false);
+    int currentWaveForm; // Convert with WaveForm waveformBetter = static_cast<WaveForm>(waveform);
 };
 
 #endif // DECKPLAY_H
