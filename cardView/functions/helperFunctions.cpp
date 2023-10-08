@@ -1,5 +1,7 @@
 #include "cardView/functions/helperFunctions.h"
 
+#include <QRegularExpression>
+
 void splitMainCard(QString mainCard, QString* frontCard, QString* backCard) {
     // mainCard is:
     // frontCard + this character https://unicode-table.com/en/001F/ + backCard
@@ -134,4 +136,28 @@ QString cardExtract(card* acard, DeckPlay* parent) {
 
 uint randomValue(uint min, uint max) {
     return QRandomGenerator::global()->generate() % (max - min + 1) + min;
+}
+
+// Regex magician needed
+QString adjustImgSize(uint width, QString text) {
+    qDebug() << "Original text:" << text << "provided width:" << width;
+
+    // Remove width and height tags at all
+    // \b(?:width|height)\s*=\s*"\d+"\s*
+    static QRegularExpression pattern("\\b(?:width|height)\\s*=\\s*\"\\d+\"\\s*");
+    QRegularExpressionMatchIterator matchIterator = pattern.globalMatch(text);
+
+    text = text.remove(pattern);
+
+    // Output the result
+    qDebug() << "Removed tags: " << text;
+
+    //QString sizes = "<img height=\"" + QString::number(height) + "\" width=\"" + QString::number(width) + "\"";
+    QString sizes = "<img width=\"" + QString::number(width) + "\"";
+    qDebug() << "Sizes:" << sizes;
+    text = text.replace("<img", sizes);
+
+    qDebug() << "Modified sizes:" << text;
+
+    return text;
 }

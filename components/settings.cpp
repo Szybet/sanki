@@ -383,6 +383,7 @@ void Settings::on_comboBoxEinkMode_currentTextChanged(const QString &arg1) {
 
 QString Settings::waveFormNumbToString(int numb) {
     switch (numb) {
+        case 1: return "WaveForm_DU";
         case 4: return "WaveForm_A2";
         case 2: return "WaveForm_GC16";
         case 3: return "WaveForm_GC4";
@@ -392,7 +393,9 @@ QString Settings::waveFormNumbToString(int numb) {
 }
 
 int Settings::waveFormStringToInt(QString name) {
-    if (name == "WaveForm_A2")
+    if (name == "WaveForm_DU")
+        return 1;
+    else if (name == "WaveForm_A2")
         return 4;
     else if (name == "WaveForm_GC16")
         return 2;
@@ -431,3 +434,9 @@ void Settings::on_refreshSpinBox_valueChanged(int arg1)
     qDebug() << "New refresh rate set:" << arg1;
     settingsGlobal->setValue("refreshCard", arg1);
 }
+
+void Settings::on_gesturesButton_clicked()
+{
+    qInfo() << "- Pinch in and out to zoom in and out.<br>- Press and hold for screen refresh.";
+}
+

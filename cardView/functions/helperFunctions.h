@@ -22,5 +22,6 @@ QString findDatabaseFile(QDir deckPath);
 QString findMediaFile(card *acard, sessionStr *session);
 QString cardExtract(card* acard, DeckPlay* parent); // Gets the actuall card content
 uint randomValue(uint min, uint max);
+QString adjustImgSize(uint width, QString text);
 
 #endif // HELPERFUNCTIONS_H

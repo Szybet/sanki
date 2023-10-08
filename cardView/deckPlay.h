@@ -46,6 +46,13 @@ public:
     void saveSessionData();
     void exitIt();
     void changeStatusBarTextSlot(QString text); // to be called from modes
+    void manageGestures();
+    void zoomIn();
+    void zoomOut();
+    void zoomUpdate();
+
+protected:
+    bool event(QEvent *event) override;
 
 public slots:
     void showStats();
@@ -71,6 +78,10 @@ private:
     int refreshCardCount = 1;
     void refreshCard(bool force = false);
     int currentWaveForm; // Convert with WaveForm waveformBetter = static_cast<WaveForm>(waveform);
+    float zoomFactor = 1.0;
+    QElapsedTimer* gestureTimer;
+    QString previousFrontText;
+    QString previousBackText;
 };
 
 #endif // DECKPLAY_H

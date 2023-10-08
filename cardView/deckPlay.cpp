@@ -17,6 +17,9 @@
 #include <QTimer>
 #include <QElapsedTimer>
 
+#include <QGestureEvent>
+#include <QGestureRecognizer>
+
 #include <algorithm>
 #include <random>
 
@@ -43,6 +46,9 @@ DeckPlay::DeckPlay(QWidget *parent) :
     ui->horizontalScrollBar->setHidden(true);
 
     ui->cardStatsLabel->setStyleSheet("font-size: 6pt;");
+    ui->zoomLabel->setStyleSheet("font-size: 6pt;");
+
+    manageGestures();
 }
 
 DeckPlay::~DeckPlay()
@@ -187,7 +193,6 @@ void DeckPlay::resetScrollState() {
     manageFrontScrollBar = false;
 }
 
-
 void DeckPlay::on_horizontalScrollBar_valueChanged(int value)
 {
     // qDebug() << "Main horizontal scroll bar value:" << value;
@@ -228,6 +233,21 @@ void DeckPlay::scrollBarClone(QScrollBar* scrollbar, QTextBrowser* text) {
 }
 
 void DeckPlay::setText(QTextBrowser* area, QString text) {
+    if(area == ui->textBackCard) {
+        previousBackText = text;
+    } else if(area == ui->textFrontCard) {
+        previousFrontText = text;
+    }
+
+    int finalWidth = area->width();
+    if(zoomFactor == 1.0) {
+        finalWidth = finalWidth - 50;
+    } else {
+        finalWidth = finalWidth * zoomFactor;
+    }
+
+    text = adjustImgSize(finalWidth, text);
+
     area->setHtml(text);
 
     // Very important
@@ -312,6 +332,11 @@ void DeckPlay::exitIt() {
     timer->disconnect();
     elapsedTimer->invalidate();
     delete elapsedTimer;
+    gestureTimer->invalidate();
+    delete gestureTimer;
+    this->ungrabGesture(Qt::PinchGesture);
+    this->ungrabGesture(Qt::TapAndHoldGesture);
+
     qDebug() << "Count of connections:" << realSqlDatabases.count();
     // Is there a cleaner way?
     warningsEnabled = false;
@@ -346,6 +371,8 @@ void DeckPlay::reloadSettings() {
     QVariant variant = settingsGlobal.value("playFont");
     QFont font = variant.value<QFont>();
 
+    font.setPointSize(font.pointSize() * zoomFactor);
+
     ui->textBackCard->setFont(font);
     ui->textFrontCard->setFont(font);
 
@@ -374,9 +401,101 @@ void DeckPlay::refreshCard(bool force) {
             refreshCardCount = 1;
             refreshRect(ui->gridCard->contentsRect());
             refreshRect(ui->gridManageCard->contentsRect());
+
+            QApplication::processEvents();
+            this->repaint();
+            this->repaint();
+            this->repaint();
+            QApplication::processEvents();
+
             currentWaveForm = loadWaveFormSetting();
         } else {
             refreshCardCount += 1;
         }
     }
+}
+
+void DeckPlay::zoomIn() {
+    zoomFactor = zoomFactor + 0.25;
+    zoomUpdate();
+    qDebug() << "Called zoom in. factor now is:" << zoomFactor;
+}
+
+void DeckPlay::zoomOut() {
+    if(zoomFactor > 0.25) {
+        zoomFactor = zoomFactor - 0.25;
+    }
+    qDebug() << "Called zoom out. factor now is:" << zoomFactor;
+    zoomUpdate();
+}
+
+void DeckPlay::zoomUpdate() {
+    if(zoomFactor == 1.0) {
+        ui->zoomLabel->setText("");
+    } else {
+        ui->zoomLabel->setText(QString::number(zoomFactor) + "%");
+    }
+
+    QSettings settingsGlobal(directories::globalSettings.fileName(), QSettings::IniFormat);
+    QVariant variant = settingsGlobal.value("playFont");
+    QFont font = variant.value<QFont>();
+
+    font.setPointSize(font.pointSize() * zoomFactor);
+
+    ui->textBackCard->setFont(font);
+    ui->textFrontCard->setFont(font);
+    settingsGlobal.deleteLater();
+
+    setText(ui->textBackCard, previousBackText);
+    setText(ui->textFrontCard, previousFrontText);
+}
+
+// https://doc.qt.io/qt-6/qtwidgets-gestures-imagegestures-example.html
+void DeckPlay::manageGestures() {
+    grabGesture(Qt::TapAndHoldGesture);
+    grabGesture(Qt::PinchGesture);
+    gestureTimer = new QElapsedTimer();
+    gestureTimer->start();
+}
+
+bool DeckPlay::event(QEvent *event)
+{
+    //qDebug() << "Captured event:" << event;
+    if (event->type() == QEvent::Gesture) {
+        QGestureEvent* gEvent = static_cast<QGestureEvent*>(event);
+        //qDebug() << "Captured gesture:" << gEvent;
+        if (QGesture* gesture = gEvent->gesture(Qt::PinchGesture)) {
+            //qDebug() << "Pinch gesture:" << gesture;
+            int state = gesture->state();
+            if(state == Qt::GestureFinished) { //  || state == Qt::GestureUpdated
+               qDebug() << "Gesture is in good state";
+               //qDebug() << "Pinch gesture:" << gesture;
+               // isValid for delete in exit
+               int elapsed = gestureTimer->elapsed();
+               qDebug() << "gestureTimer->isValid()" << gestureTimer->isValid() << "gestureTimer->elapsed()" << elapsed;
+               if(gestureTimer->isValid() == true && elapsed > 800) {
+                   gestureTimer->restart();
+                   qDebug() << "Timer is good";
+                   if(QPinchGesture* pinch = static_cast<QPinchGesture *>(gesture)) {
+                       qDebug() << "pinch fine" << "pinch->scaleFactor()" << pinch->scaleFactor() << "pinch->lastScaleFactor()" << pinch->lastScaleFactor();
+                       if(pinch->scaleFactor() >= 1.0 && pinch->lastScaleFactor() >= 1.0) {
+                           zoomIn();
+                       } else if(pinch->scaleFactor() <= 1.0 && pinch->lastScaleFactor() <= 1.0) {
+                           zoomOut();
+                       }
+                   }
+               }
+            }
+        } else if(QGesture* gesture = gEvent->gesture(Qt::TapAndHoldGesture)) {
+            Q_UNUSED(gesture);
+            qDebug() << "TapAndHoldGesture gesture";
+            int elapsed = gestureTimer->elapsed();
+            if(gestureTimer->isValid() == true && elapsed > 700) {
+               gestureTimer->restart();
+               refreshCard(true);
+            }
+        }
+        return true; // Not sure
+    }
+    return QWidget::event(event);
 }

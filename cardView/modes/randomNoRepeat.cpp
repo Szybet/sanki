@@ -5,7 +5,7 @@
 
 randomNoRepeat::randomNoRepeat(QObject *parent)
 {
-
+    Q_UNUSED(parent);
 }
 
 void randomNoRepeat::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg, QSqlDatabase *dbArg) {
