@@ -3,6 +3,7 @@
 #include "ui_deckPlay.h"
 #include "cardView/functions/helperFunctions.h"
 #include "cardView/modes/boxes/askforboxesoptions.h"
+#include "cardView/buttons/fourOptionsNFlashy.h"
 
 #include <QObject>
 #include <QDebug>
@@ -21,15 +22,24 @@ void boxes::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
     frontText = parentUi->textFrontCard;
     backText = parentUi->textBackCard;
 
-    buttons = new fourOptions(parent);
-
-    connect(buttons, &fourOptions::again, this, &boxes::againClicked);
-    connect(buttons, &fourOptions::hard, this, &boxes::hardClicked);
-    connect(buttons, &fourOptions::good, this, &boxes::goodClicked);
-    connect(buttons, &fourOptions::easy, this, &boxes::easyClicked);
-    connect(buttons, &fourOptions::show, this, &boxes::showBack);
-
-    parentUi->gridManageCard->addWidget(buttons);
+    if(parent->enabledTapGesture == false) {
+        fourOptions* buttons = new fourOptions(parent);
+        connect(buttons, &fourOptions::again, this, &boxes::againClicked);
+        connect(buttons, &fourOptions::hard, this, &boxes::hardClicked);
+        connect(buttons, &fourOptions::good, this, &boxes::goodClicked);
+        connect(buttons, &fourOptions::easy, this, &boxes::easyClicked);
+        connect(buttons, &fourOptions::show, this, &boxes::showBack);
+        parentUi->gridManageCard->addWidget(buttons);
+    } else {
+        fourOptionsNFlashy* buttons = new fourOptionsNFlashy(parent);
+        connect(buttons, &fourOptionsNFlashy::again, this, &boxes::againClicked);
+        connect(buttons, &fourOptionsNFlashy::hard, this, &boxes::hardClicked);
+        connect(buttons, &fourOptionsNFlashy::good, this, &boxes::goodClicked);
+        connect(buttons, &fourOptionsNFlashy::easy, this, &boxes::easyClicked);
+        connect(parent, &DeckPlay::tapGesture, this, &boxes::showBack);
+        connect(parent, &DeckPlay::tapGesture, buttons, &fourOptionsNFlashy::enableButtons); // enable buttons with tap
+        parentUi->gridManageCard->addWidget(buttons);
+    }
 
     if(parent->saveSession->value("boxMode/box").isNull() == true && parent->saveSession->value("boxMode/box").isValid() == false) {
         qDebug() << "There is no saved config for box mode, asking things";
@@ -165,9 +175,12 @@ void boxes::easyClicked() {
 
 void boxes::showBack() {
     qDebug() << "Clicked show button";
-    parentUi->lineMiddleText->setVisible(true);
-    backText->show();
-    parent->setText(backText, backCard);
+    // simple checker ;)
+    if(parentUi->lineMiddleText->isVisible() == false) {
+        parentUi->lineMiddleText->setVisible(true);
+        backText->show();
+        parent->setText(backText, backCard);
+    }
 }
 
 void boxes::moveCard(int moveValue) {

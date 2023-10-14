@@ -122,6 +122,11 @@ void DeckPlay::start(sessionStr newSession)
     elapsedTimer = new QElapsedTimer;
     elapsedTimer->start();
 
+    // Load this before loading modes
+    QSettings settingsGlobal(directories::globalSettings.fileName(), QSettings::IniFormat);
+    enabledTapGesture = settingsGlobal.value("tapGesture").toBool();
+    settingsGlobal.deleteLater();
+
     saveSessionData();
 
     if(currectSession.core.mode == CompletlyRandomised) {
@@ -236,6 +241,9 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
     if(area == ui->textBackCard) {
         previousBackText = text;
     } else if(area == ui->textFrontCard) {
+        QTimer::singleShot(500, this, [this]() {
+            enabledTapGestureTmp = true;
+        });
         previousFrontText = text;
     }
 
@@ -338,6 +346,7 @@ void DeckPlay::exitIt() {
     delete gestureTimer;
     this->ungrabGesture(Qt::PinchGesture);
     this->ungrabGesture(Qt::TapAndHoldGesture);
+    this->ungrabGesture(Qt::TapGesture);
 
     qDebug() << "Count of connections:" << realSqlDatabases.count();
     // Is there a cleaner way?
@@ -456,6 +465,8 @@ void DeckPlay::zoomUpdate() {
 void DeckPlay::manageGestures() {
     grabGesture(Qt::TapAndHoldGesture);
     grabGesture(Qt::PinchGesture);
+    grabGesture(Qt::TapGesture);
+    QTapAndHoldGesture::setTimeout(1500);
     gestureTimer = new QElapsedTimer();
     gestureTimer->start();
 }
@@ -495,6 +506,27 @@ bool DeckPlay::event(QEvent *event)
             if(gestureTimer->isValid() == true && elapsed > 700) {
                gestureTimer->restart();
                refreshCard(true);
+            }
+        } else if(QGesture* gesture = gEvent->gesture(Qt::TapGesture)) {
+            Q_UNUSED(gesture);
+            if(enabledTapGesture == true) {
+               qDebug() << "Tap gesture detected";
+               int elapsed = gestureTimer->elapsed();
+               if(gestureTimer->isValid() == true && elapsed > 850) {
+                   // doesnt work with qpoint, idk it gives relative point to the widget?...
+                   //if(QTapGesture* tap = static_cast<QTapGesture *>(gesture)) {
+                       //QPoint point = tap->position().toPoint();
+                       //qDebug() << "Tap point:" << point << "Card geometry:" << ui->gridManageCard->geometry();
+                       //if(ui->gridManageCard->geometry().contains(point, false) == false) {
+                       if(enabledTapGestureTmp == true) {
+                           enabledTapGestureTmp = false;
+                           qDebug() << "Tap gesture actually registered";
+                           gestureTimer->restart();
+                           emit tapGesture();
+                       }
+                       //}
+                  //}
+               }
             }
         }
         return true; // Not sure

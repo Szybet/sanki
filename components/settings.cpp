@@ -187,6 +187,9 @@ void Settings::requestMenuPage() {
     QFont font = variant.value<QFont>();
     ui->labelFontName->setText(font.family() + ", " + QString::number(font.pointSize()));
     currentFont = font;
+
+    bool tapGesture = settingsGlobal->value("tapGesture").toBool();
+    ui->tapGestoreCheckBox->setChecked(tapGesture);
 }
 
 void Settings::requestSyncPage() {
@@ -440,3 +443,8 @@ void Settings::on_gesturesButton_clicked()
     qInfo() << "- Pinch in and out to zoom in and out.<br>- Press and hold for screen refresh.";
 }
 
+void Settings::on_tapGestoreCheckBox_stateChanged(int arg1)
+{
+    qDebug() << "tapGestoreCheckBox:" << arg1;
+    settingsGlobal->setValue("tapGesture", arg1);
+}

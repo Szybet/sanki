@@ -16,6 +16,7 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs depr
 
 SOURCES += \
     cardView/buttons/fourOptions.cpp \
+    cardView/buttons/fourOptionsNFlashy.cpp \
     cardView/deckPlay.cpp \
     cardView/functions/helperFunctions.cpp \
     cardView/modeOptions.cpp \
@@ -47,6 +48,7 @@ SOURCES += \
 
 HEADERS += \
     cardView/buttons/fourOptions.h \
+    cardView/buttons/fourOptionsNFlashy.h \
     cardView/deckPlay.h \
     cardView/functions/helperFunctions.h \
     cardView/modeOptions.h \
@@ -77,6 +79,7 @@ HEADERS += \
 
 FORMS += \
     cardView/buttons/fourOptions.ui \
+    cardView/buttons/fourOptionsNFlashy.ui \
     cardView/deckPlay.ui \
     cardView/modeOptions.ui \
     cardView/modes/boxes/askforboxesoptions.ui \

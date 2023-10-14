@@ -50,6 +50,8 @@ public:
     void zoomIn();
     void zoomOut();
     void zoomUpdate();
+    bool enabledTapGesture = false;
+    bool enabledTapGestureTmp = false; // to ignore tap gestures when they are not needed
 
 protected:
     bool event(QEvent *event) override;
@@ -62,6 +64,7 @@ public slots:
 signals:
     void saveData();
     void changeStatusBarTextSignal(QString text);
+    void tapGesture();
 
 private slots:
     void on_horizontalScrollBar_valueChanged(int value);

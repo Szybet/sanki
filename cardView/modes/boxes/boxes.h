@@ -51,7 +51,6 @@ public:
     QString frontCard;
     QString backCard;
     box theBox;
-    fourOptions* buttons;
     uint currentCardIndex;
     void moveCard(int moveValue);
     QList<int> boxesCardCount;

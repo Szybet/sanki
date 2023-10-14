@@ -55,7 +55,7 @@ void fourOptions::on_showButton_clicked()
     emit show();
 }
 
-#define BUTTON_DELAY 650
+#define BUTTON_DELAY 750
 
 void fourOptions::showButtons() {
     QTimer::singleShot(BUTTON_DELAY, this, [this]() {
