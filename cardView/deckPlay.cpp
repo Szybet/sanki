@@ -239,14 +239,16 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
         previousFrontText = text;
     }
 
-    int finalWidth = area->width();
-    if(zoomFactor == 1.0) {
-        finalWidth = finalWidth - 50;
-    } else {
-        finalWidth = finalWidth * zoomFactor;
-    }
+    if(text.contains("<img") == true) {
+        int finalWidth = area->width();
+        if(zoomFactor == 1.0) {
+            finalWidth = finalWidth - 50;
+        } else {
+            finalWidth = finalWidth * zoomFactor;
+        }
 
-    text = adjustImgSize(finalWidth, text);
+        text = adjustImgSize(finalWidth, text);
+    }
 
     area->setHtml(text);
 
@@ -276,7 +278,7 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
     // Trying to fix some ghosting when in A2
     WaveForm currentWaveFormConverted = static_cast<WaveForm>(currentWaveForm);
     if(currentWaveFormConverted == WaveForm_A2) {
-        qDebug() << "Trying to fix ghosting";
+        qDebug() << "Check if ghost fix is needed";
         if(text.count() > 50) {
             QTimer::singleShot(500, this, [this, area, text]() {
                 if(area->horizontalScrollBar()->isVisible() || area->verticalScrollBar()->isVisible()) {

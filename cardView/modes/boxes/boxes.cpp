@@ -6,6 +6,9 @@
 
 #include <QObject>
 #include <QDebug>
+
+#define SMALL_STATS_UPDATE_DELAY 2000
+
 boxes::boxes(QObject *parent)
     : QObject{parent}
 {
@@ -138,7 +141,7 @@ void boxes::loop() {
 
     // Before changing anything
     int whichBoxTmp = whichBox;
-    QTimer::singleShot(300, this, [this, whichBoxTmp]() {
+    QTimer::singleShot(SMALL_STATS_UPDATE_DELAY, this, [this, whichBoxTmp]() {
         cardStatUpdate(whichBoxTmp, 0);
     });
 }
@@ -174,7 +177,7 @@ void boxes::moveCard(int moveValue) {
 
     // Before changing anything
     int whichBoxTmp = whichBox;
-    QTimer::singleShot(300, this, [this, whichBoxTmp, moveValue]() {
+    QTimer::singleShot(SMALL_STATS_UPDATE_DELAY, this, [this, whichBoxTmp, moveValue]() {
         cardStatUpdate(whichBoxTmp, moveValue);
     });
 

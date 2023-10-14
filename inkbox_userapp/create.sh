@@ -53,8 +53,8 @@ sshpass -p $passwd ssh $servername "bash -c \"sync\""
 sshpass -p $passwd ssh $servername "bash -c \"killall -9 sanki-debug.sh\"" || EXIT_CODE=0
 sshpass -p $passwd ssh $servername "bash -c \"killall -9 sanki.sh\"" || EXIT_CODE=0
 
-sshpass -p $passwd ssh $servername "bash -c \"rc-service inkbox_gui restart\"" # to get logs
-# sshpass -p $passwd ssh $servername "bash -c \"rc-service gui_apps restart\""
+# sshpass -p $passwd ssh $servername "bash -c \"rc-service inkbox_gui restart\"" # to get logs
+sshpass -p $passwd ssh $servername "bash -c \"rc-service gui_apps restart\""
 
 # To update main json
 # sshpass -p $passwd ssh $servername "bash -c \"touch /kobo/tmp/rescan_userapps\"" # This gets deleted by service restart

@@ -2,6 +2,8 @@
 #include "global.h"
 #include "ui_fourOptions.h"
 
+#include <QTimer>
+
 fourOptions::fourOptions(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::fourOptions)
@@ -53,10 +55,18 @@ void fourOptions::on_showButton_clicked()
     emit show();
 }
 
+#define BUTTON_DELAY 650
+
 void fourOptions::showButtons() {
-    ui->stackedWidget->setCurrentIndex(0);
+    QTimer::singleShot(BUTTON_DELAY, this, [this]() {
+        QApplication::processEvents();
+        ui->stackedWidget->setCurrentIndex(0);
+    });
 }
 
 void fourOptions::hideButtons() {
-    ui->stackedWidget->setCurrentIndex(1);
+    QTimer::singleShot(BUTTON_DELAY, this, [this]() {
+        QApplication::processEvents();
+        ui->stackedWidget->setCurrentIndex(1);
+    });
 }
