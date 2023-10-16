@@ -8,6 +8,14 @@
 #include <QTime>
 #include <QDebug>
 
+#ifdef EREADER
+#include "devicedescriptor.h"
+#include "devbattery.h"
+#include "devbrightness.h"
+#include "einkenums.h"
+#include "koboplatformfunctions.h"
+#endif
+
 statusBarC::statusBarC(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::statusBarC)
@@ -85,6 +93,10 @@ void statusBarC::on_ButtonOption_clicked()
 bool pomodoroCreated = false;
 void statusBarC::on_ButtonSettings_clicked()
 {
+    if(grender) {
+        KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm::WaveForm_A2);
+    }
+
     if(pomodoroCreated == false) {
         pomodoroWidget = new pomodoro(this); // parent issue with showing?
         pomodoroCreated = true;
@@ -110,6 +122,12 @@ void statusBarC::on_ButtonSettings_clicked()
     menu->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint); // this closes the window, awesome
     menu->start(pomodoroWidget, this);
     menu->show();
+
+    QApplication::processEvents();
+
+    if(grender) {
+        loadWaveFormSetting();
+    }
 }
 
 void statusBarC::openSettings() {

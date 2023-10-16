@@ -7,6 +7,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QTimer>
 
 #define SMALL_STATS_UPDATE_DELAY 2000
 

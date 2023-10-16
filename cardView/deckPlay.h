@@ -5,7 +5,6 @@
 #include "mainMenu/sessions/sessionStruct.h"
 
 #include <QTextBrowser>
-#include <QMainWindow>
 #include <QDir>
 #include <QSqlDatabase>
 #include <QSettings>
@@ -23,7 +22,7 @@ namespace Ui {
 class DeckPlay;
 }
 
-class DeckPlay : public QMainWindow
+class DeckPlay : public QWidget
 {
     Q_OBJECT
 
@@ -54,12 +53,13 @@ public:
     bool enabledTapGestureTmp = false; // to ignore tap gestures when they are not needed
 
 protected:
-    bool event(QEvent *event) override;
+    bool event(QEvent* event) override;
 
 public slots:
     void showStats();
     // When options dialog is closed
     void reloadSettings();
+    void eventSlot(QEvent* eventItem);
 
 signals:
     void saveData();

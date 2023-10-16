@@ -68,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
         // WaveForm_AUTO - 257 - weird
         settings.setValue("deckPlayWaveForm", 4); // WaveForm_A2
         settings.sync();
+        settings.deleteLater();
     }
 }
 
@@ -368,6 +369,8 @@ void MainWindow::playSession(sessionStr sessionPlay) {
     // It first needs to be shown, then calculate things!
     playDeck->show();
     playDeck->start(sessionPlay);
+    // for graphics render
+    connect(this, &MainWindow::gestureSignal, playDeck, &DeckPlay::eventSlot); // what happens when we destroy playdeck
     areDecksShown = false;
 }
 
@@ -375,8 +378,8 @@ void MainWindow::hardResetDeckPlay() {
     playDeck->exitIt();
     delete playDeck;
     playDeck = new DeckPlay(this);
-    ui->gridMain->addWidget(playDeck);
     playDeck->hide();
+    ui->gridMain->addWidget(playDeck);
 
     grid->show();
     showSessions();
@@ -388,4 +391,8 @@ void MainWindow::updateGrid() {
     if(areDecksShown == true) {
         showDecks();
     }
+}
+
+void MainWindow::gestureSlot(QEvent* event) {
+    emit gestureSignal(event);
 }

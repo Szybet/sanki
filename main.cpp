@@ -15,6 +15,15 @@
 #include <QMessageBox>
 #include <QThread>
 
+#include <QMainWindow>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsProxyWidget>
+#include <QGesture>
+
+#include "components/other/reImplementations/qGraphicsViewEvents.h"
+#include "components/other/reImplementations/QGraphicsSceneEvents.h"
+
 bool enableDebug = false;
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -224,14 +233,88 @@ int main(int argc, char *argv[])
     }
 #endif
 
-    MainWindow w;
-    if(ereader) {
-        w.setAnimated(false);
-        w.showFullScreen();
-        warningsEnabled = true;
-    } else if(pc) {
-        w.show();
+
+    QSettings settingsGlobal(directories::globalSettings.fileName(), QSettings::IniFormat);
+    grender = settingsGlobal.value("renderLayer").toBool();
+    qDebug() << "Render layer according to settings:" << grender;
+
+    if(qgetenv("USE_NATIVE_RENDER") == "true") {
+        qDebug() << "Disabling graphics render";
+        grender = false;
+    } else {
+        qDebug() << "Using graphics render";
     }
+
+    MainWindow w;
+
+// Here were some weird issues with it crashing because of if else? so i used defines
+#ifdef EREADER
+    w.setAnimated(false);
+    w.setFixedSize(ereaderVars::screenX, ereaderVars::screenY);
+
+        warningsEnabled = true;
+
+        // if i add here any if statement about including QGraphicsScene, it crashes... thats why below its so weird and splitted - yes it wastes memory, whatever
+
+        // This is awesome
+        // https://www.mobileread.com/forums/showthread.php?t=356673
+        // Video 2 is the one using this
+        // It uses QGraphicsView MinimalViewportUpdate to adjust it even more for eink render;
+        // It has some issues:
+        // Mainwindow cannot be added to a layout anymore, it refuses: Just use qwidget
+        // QDialogs aren't using this render, they cause even more flashing by using full screen flashing?
+        qGraphicsSceneEvents scene;
+        if(grender == true) {
+            qDebug() << "Applying graphics layer for ereader";
+            scene.addWidget(&w);
+        } else {
+            qDebug() << "Not graphics layer for ereader";
+        }
+
+        qGraphicsViewEvents customView;
+
+        customView.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        customView.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+        if(grender == true) {
+            customView.setBaseSize(ereaderVars::screenX, ereaderVars::screenY);
+            customView.setFixedSize(ereaderVars::screenX, ereaderVars::screenY);
+            customView.setMinimumSize(ereaderVars::screenX, ereaderVars::screenY);
+
+            customView.setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
+            customView.setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing);
+            customView.setCacheMode(QGraphicsView::CacheNone);
+            customView.setScene(&scene);
+
+            // Madness to get gestures to work ;/
+            // Children don't receive them, so i need to send them manually anyway
+            //customView.setTabletTracking(true);
+            //customView.viewport()->setTabletTracking(true);
+            customView.viewport()->grabGesture(Qt::TapAndHoldGesture);
+            customView.viewport()->grabGesture(Qt::PinchGesture);
+            customView.viewport()->grabGesture(Qt::TapGesture);
+            customView.grabGesture(Qt::TapAndHoldGesture);
+            customView.grabGesture(Qt::PinchGesture);
+            customView.grabGesture(Qt::TapGesture);
+            QTapAndHoldGesture::setTimeout(2250);
+
+            //customView.setAttribute(Qt::WA_AcceptTouchEvents);
+            //customView.viewport()->setAttribute(Qt::WA_AcceptTouchEvents);
+            //w.setAttribute(Qt::WA_AcceptTouchEvents);
+            QObject::connect(&customView, &qGraphicsViewEvents::eventSignal, &w, &MainWindow::gestureSlot);
+            QObject::connect(&scene, &qGraphicsSceneEvents::eventSignal, &w, &MainWindow::gestureSlot);
+        }
+
+        if(grender == true) {
+            graphic = &customView;
+            customView.showFullScreen(); // VERY important for gestures - it needs to be full screen
+        } else {
+            w.showFullScreen();
+        }
+#else
+    grender = false;
+    w.show();
+#endif
 
     return a.exec();
 }

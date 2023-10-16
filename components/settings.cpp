@@ -126,6 +126,10 @@ void Settings::requestEreaderPage()
     }
     qDebug() << "New refresh rate set:" << spinBoxValue;
     ui->refreshSpinBox->setValue(spinBoxValue);
+
+
+    bool renderLayerBool = settingsGlobal->value("renderLayer").toBool();
+    ui->renderCheckBox->setChecked(renderLayerBool);
 }
 
 void Settings::on_ScrollBarBrightness_valueChanged(int value)
@@ -447,4 +451,11 @@ void Settings::on_tapGestoreCheckBox_stateChanged(int arg1)
 {
     qDebug() << "tapGestoreCheckBox:" << arg1;
     settingsGlobal->setValue("tapGesture", arg1);
+}
+
+void Settings::on_renderCheckBox_stateChanged(int arg1)
+{
+    qDebug() << "renderCheckBox:" << arg1;
+    settingsGlobal->setValue("renderLayer", arg1);
+    qInfo() << "Restart is needed for this setting to apply";
 }

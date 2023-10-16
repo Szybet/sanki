@@ -22,6 +22,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void gestureSignal(QEvent* event);
+
 public slots:
     void getFile(QString file); // File chooser uses this
     void getMode(DeckModes mode);
@@ -33,6 +36,8 @@ public slots:
     void updateGrid();
 
     void playSession(sessionStr sessionPlay);
+
+    void gestureSlot(QEvent* event);
 
 private slots:
     void extractDeck();

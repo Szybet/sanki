@@ -8,12 +8,17 @@
 #include "devicedescriptor.h"
 #endif
 
+#include "components/other/reImplementations/qGraphicsViewEvents.h"
+
 extern bool debugEnabled;
 extern bool warningsEnabled;
 
 // Those variables check if it's running on this device
 extern bool pc;
 extern bool ereader;
+
+extern bool grender; // graphics render
+extern qGraphicsViewEvents* graphic;
 
 namespace directories {
     extern QDir config;

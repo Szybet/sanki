@@ -25,6 +25,8 @@ SOURCES += \
     cardView/modes/completlyRandom.cpp \
     cardView/modes/randomNoRepeat.cpp \
     components/other/pomodoro.cpp \
+    components/other/reImplementations/QGraphicsSceneEvents.cpp \
+    components/other/reImplementations/qGraphicsViewEvents.cpp \
     components/settings/settingsMenu.cpp \
     components/files/file.cpp \
     components/files/fileChooser.cpp \
@@ -57,6 +59,8 @@ HEADERS += \
     cardView/modes/completlyRandom.h \
     cardView/modes/randomNoRepeat.h \
     components/other/pomodoro.h \
+    components/other/reImplementations/QGraphicsSceneEvents.h \
+    components/other/reImplementations/qGraphicsViewEvents.h \
     components/settings/settingsMenu.h \
     components/files/file.h \
     components/files/fileChooser.h \

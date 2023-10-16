@@ -29,7 +29,7 @@
 #endif
 
 DeckPlay::DeckPlay(QWidget *parent) :
-    QMainWindow(parent),
+    QWidget(parent),
     ui(new Ui::DeckPlay)
 {
     ui->setupUi(this);
@@ -258,6 +258,9 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
         text = adjustImgSize(finalWidth, text);
     }
 
+    // Making this avoids showing for half a second the first word of the qtextedit
+    area->setUpdatesEnabled(false);
+
     area->setHtml(text);
 
     // Very important
@@ -287,17 +290,17 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
     WaveForm currentWaveFormConverted = static_cast<WaveForm>(currentWaveForm);
     if(currentWaveFormConverted == WaveForm_A2) {
         qDebug() << "Check if ghost fix is needed";
-        if(text.count() > 50) {
+        if(text.count() > 50 == true || text.contains("<img") == true || area->horizontalScrollBar()->isVisible() == true || area->verticalScrollBar()->isVisible() == true) {
             QTimer::singleShot(500, this, [this, area, text]() {
-                if(area->horizontalScrollBar()->isVisible() || area->verticalScrollBar()->isVisible()) {
-                    qDebug() << "Requesting special refresh for ghosting";
-                    QApplication::processEvents();
-                    refreshCard(true);
-                }
+                qDebug() << "Requesting special refresh for ghosting";
+                QApplication::processEvents();
+                refreshCard(true);
             });
         }
     }
 #endif
+
+    area->setUpdatesEnabled(true);
 }
 
 void DeckPlay::saveSessionData() {
@@ -410,14 +413,26 @@ void DeckPlay::refreshCard(bool force) {
     if(refreshCardRate > 0 || force == true) {
         if(refreshCardCount >= refreshCardRate || force == true) {
             refreshCardCount = 1;
-            refreshRect(ui->gridCard->contentsRect());
-            refreshRect(ui->gridManageCard->contentsRect());
+            if(grender == false) {
+               refreshRect(ui->gridCard->contentsRect());
+               refreshRect(ui->gridManageCard->contentsRect());
 
-            QApplication::processEvents();
-            this->repaint();
-            this->repaint();
-            this->repaint();
-            QApplication::processEvents();
+               QApplication::processEvents();
+               this->repaint();
+               this->repaint();
+               this->repaint();
+               QApplication::processEvents();
+            } else {
+#ifdef EREADER
+               KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm_GC16);
+#endif
+               qDebug() << "Using graphic repaint";
+               QApplication::processEvents();
+               graphic->repaint();
+               graphic->repaint();
+               graphic->repaint();
+               QApplication::processEvents();
+            }
 
             currentWaveForm = loadWaveFormSetting();
         } else {
@@ -463,10 +478,11 @@ void DeckPlay::zoomUpdate() {
 
 // https://doc.qt.io/qt-6/qtwidgets-gestures-imagegestures-example.html
 void DeckPlay::manageGestures() {
+    this->setAttribute(Qt::WA_AcceptTouchEvents);
     grabGesture(Qt::TapAndHoldGesture);
     grabGesture(Qt::PinchGesture);
     grabGesture(Qt::TapGesture);
-    QTapAndHoldGesture::setTimeout(1500);
+    QTapAndHoldGesture::setTimeout(2250);
     gestureTimer = new QElapsedTimer();
     gestureTimer->start();
 }
@@ -474,7 +490,7 @@ void DeckPlay::manageGestures() {
 bool DeckPlay::event(QEvent *event)
 {
     //qDebug() << "Captured event:" << event;
-    if (event->type() == QEvent::Gesture) {
+    if (event->type() == QEvent::Gesture || event->type() == QEvent::GestureOverride) {
         QGestureEvent* gEvent = static_cast<QGestureEvent*>(event);
         //qDebug() << "Captured gesture:" << gEvent;
         if (QGesture* gesture = gEvent->gesture(Qt::PinchGesture)) {
@@ -529,7 +545,12 @@ bool DeckPlay::event(QEvent *event)
                }
             }
         }
-        return true; // Not sure
+        return true; // needed to track further gesture
     }
     return QWidget::event(event);
+}
+
+void DeckPlay::eventSlot(QEvent* eventItem) {
+    //qDebug() << "Received event for graphics render";
+    this->event(eventItem);
 }

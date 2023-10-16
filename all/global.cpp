@@ -33,6 +33,9 @@ bool warningsEnabled = true;
 bool pc = false;
 bool ereader = false;
 
+bool grender = true;
+qGraphicsViewEvents* graphic = NULL;
+
 QString deckAddedFileName = "creationTime";
 
 namespace directories {

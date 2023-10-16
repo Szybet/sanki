@@ -42,7 +42,7 @@ void session::start(QString path) {
 
     qDebug() << "Settings status:" << settings.status();
 
-    qDebug() << "Readed session from path:" << path << "it is:" << sessionSaved;
+    //qDebug() << "Readed session from path:" << path << "it is:" << sessionSaved;
 
     ui->sessionName->setText(sessionSaved.core.name);
 

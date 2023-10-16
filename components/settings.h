@@ -44,6 +44,8 @@ private slots:
 
     void on_tapGestoreCheckBox_stateChanged(int arg1);
 
+    void on_renderCheckBox_stateChanged(int arg1);
+
 private:
     Ui::Settings *ui;
     enum Direction{

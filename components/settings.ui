@@ -108,7 +108,7 @@
       <number>0</number>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Page0Ereader">
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -371,6 +371,13 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="renderCheckBox">
+         <property name="text">
+          <string>Use additionall graphic render layer for eink</string>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer">
