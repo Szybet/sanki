@@ -13,6 +13,7 @@ editSession::editSession(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
+    this->setModal(true);
 
     if(ereader) {
         timer = new QTimer(this);
@@ -105,7 +106,7 @@ void editSession::on_removeSession_toggled(bool checked) {
 void editSession::manageKeyboards() {
     QLineEdit* textEditToCheck = ui->lineEdit;
     if(textEditToCheck->underMouse() == true && textEditToCheck->hasFocus() == true) {
-        keyboard* ereaderKeyboard = new keyboard(this);
+        keyboard* ereaderKeyboard = new keyboard();
         ereaderKeyboard->start(textEditToCheck);
         int y = this->pos().y();
         this->move(this->pos().x(), 0);

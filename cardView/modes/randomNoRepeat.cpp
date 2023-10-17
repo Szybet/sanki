@@ -14,7 +14,7 @@ void randomNoRepeat::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg, QSqlD
     db = dbArg;
 
     // Setup show/next card button
-    showCard* showCardWidget = new showCard(parentArg);
+    showCard* showCardWidget = new showCard();
 
     connect(showCardWidget, &showCard::clicked, this, &randomNoRepeat::buttonClicked); // Button slot
     connect(this, &randomNoRepeat::setText, showCardWidget, &showCard::setText);

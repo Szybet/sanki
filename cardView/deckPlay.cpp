@@ -290,7 +290,7 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
     WaveForm currentWaveFormConverted = static_cast<WaveForm>(currentWaveForm);
     if(currentWaveFormConverted == WaveForm_A2) {
         qDebug() << "Check if ghost fix is needed";
-        if(text.count() > 50 == true || text.contains("<img") == true || area->horizontalScrollBar()->isVisible() == true || area->verticalScrollBar()->isVisible() == true) {
+        if(text.count() > 200 == true || text.contains("<img") == true || area->horizontalScrollBar()->isVisible() == true || area->verticalScrollBar()->isVisible() == true) {
             QTimer::singleShot(500, this, [this, area, text]() {
                 qDebug() << "Requesting special refresh for ghosting";
                 QApplication::processEvents();
@@ -517,11 +517,13 @@ bool DeckPlay::event(QEvent *event)
             }
         } else if(QGesture* gesture = gEvent->gesture(Qt::TapAndHoldGesture)) {
             Q_UNUSED(gesture);
-            qDebug() << "TapAndHoldGesture gesture";
-            int elapsed = gestureTimer->elapsed();
-            if(gestureTimer->isValid() == true && elapsed > 700) {
-               gestureTimer->restart();
-               refreshCard(true);
+            if(grender == false) { // doesn't work at all
+               qDebug() << "TapAndHoldGesture gesture";
+               int elapsed = gestureTimer->elapsed();
+               if(gestureTimer->isValid() == true && elapsed > 700) {
+                   gestureTimer->restart();
+                   refreshCard(true);
+               }
             }
         } else if(QGesture* gesture = gEvent->gesture(Qt::TapGesture)) {
             Q_UNUSED(gesture);

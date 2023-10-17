@@ -263,6 +263,8 @@ int main(int argc, char *argv[])
         // It has some issues:
         // Mainwindow cannot be added to a layout anymore, it refuses: Just use qwidget
         // QDialogs aren't using this render, they cause even more flashing by using full screen flashing?
+        // Actually maybe? when dialogs have a parent in this mode, they have a window frame with an X button. Idk i cant delete it
+        // Sometimes *** Error in `/sanki': double free or corruption (out): 0x7ebebbf0 *** appears? idk if im closing it right
         qGraphicsSceneEvents scene;
         if(grender == true) {
             qDebug() << "Applying graphics layer for ereader";
@@ -316,5 +318,8 @@ int main(int argc, char *argv[])
     w.show();
 #endif
 
-    return a.exec();
+    a.exec();
+
+    qDebug() << "App exited... Goodbye";
+    exit(0);
 }

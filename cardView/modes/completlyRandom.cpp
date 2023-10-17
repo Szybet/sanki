@@ -20,7 +20,7 @@ void CompletlyRandom::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
     backText = parentUi->textBackCard;
 
     // Setup show/next card button
-    showCard* showCardWidget = new showCard(parentArg);
+    showCard* showCardWidget = new showCard();
 
     connect(showCardWidget, &showCard::clicked, this, &CompletlyRandom::buttonClicked); // Button slot
     connect(this, &CompletlyRandom::setText, showCardWidget, &showCard::setText);

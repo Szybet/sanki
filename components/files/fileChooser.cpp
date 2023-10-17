@@ -69,7 +69,7 @@ void fileChooserCustom::updateFiles()
             continue;
         }
 
-        file* fileButton = new file(this);
+        file* fileButton = new file();
         QIcon icon;
         if(fileInfo.isDir() == true) {
             icon = QIcon(":/icons/folder.svg");
@@ -148,7 +148,7 @@ void fileChooserCustom::manageKeyboards() {
     if(textEditToCheck->underMouse() == true && textEditToCheck->hasFocus() == true) {
         QString old = textEditToCheck->text();
 
-        keyboard* ereaderKeyboard = new keyboard(this);
+        keyboard* ereaderKeyboard = new keyboard();
         ereaderKeyboard->start(textEditToCheck);
         ereaderKeyboard->exec();
         textEditToCheck->clearFocus();

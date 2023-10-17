@@ -9,6 +9,7 @@ fourOptions::fourOptions(QWidget *parent) :
     ui(new Ui::fourOptions)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
     if(ereader) {
         ui->againButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
         ui->hardButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);

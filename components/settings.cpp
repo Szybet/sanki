@@ -341,7 +341,7 @@ void Settings::on_checkBox_stateChanged(int arg1)
 void Settings::manageKeyboards() {
     QLineEdit* textEditToCheck = ui->textIP;
     if(textEditToCheck->underMouse() == true && textEditToCheck->hasFocus() == true) {
-        keyboard* ereaderKeyboard = new keyboard(this);
+        keyboard* ereaderKeyboard = new keyboard();
         ereaderKeyboard->start(textEditToCheck);
         int y = this->pos().y();
         this->move(this->pos().x(), 0);
@@ -354,7 +354,8 @@ void Settings::manageKeyboards() {
 
 void Settings::on_ButtonFontChange_clicked()
 {
-    QFontDialog* dialog = new QFontDialog(this);
+    QFontDialog* dialog = new QFontDialog();
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
 
     if(ereader) {
         dialog->show();
@@ -431,7 +432,8 @@ void Settings::on_buttonDebuggingData_clicked()
 void Settings::on_audioButton_clicked()
 {
 #ifdef EREADER
-    QDialog* newAudioDialog = new audioDialog(this);
+    QDialog* newAudioDialog = new audioDialog();
+    newAudioDialog->setAttribute(Qt::WA_DeleteOnClose);
     newAudioDialog->exec();
 #endif
 }

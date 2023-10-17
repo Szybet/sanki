@@ -62,7 +62,7 @@ void session::on_ButtonDeckPlay_clicked()
 
 void session::on_ButtonOptions_clicked()
 {
-    editSession* editSessionDialog = new editSession(this);
+    editSession* editSessionDialog = new editSession();
     connect(editSessionDialog, &editSession::refreshSessionsSignal, this, &session::refreshSessionsSlot);
     editSessionDialog->start(sessionSaved);
     editSessionDialog->exec();

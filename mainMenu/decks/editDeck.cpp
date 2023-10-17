@@ -161,7 +161,7 @@ void editDeck::on_lineeditDeckName_textChanged(const QString &arg1)
 void editDeck::manageKeyboards() {
     QLineEdit* textEditToCheck = ui->lineeditDeckName;
     if(textEditToCheck->underMouse() == true && textEditToCheck->hasFocus() == true) {
-        keyboard* ereaderKeyboard = new keyboard(this);
+        keyboard* ereaderKeyboard = new keyboard();
         ereaderKeyboard->start(textEditToCheck);
         int y = this->pos().y();
         this->move(this->pos().x(), 0);

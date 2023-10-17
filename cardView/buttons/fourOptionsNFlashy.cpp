@@ -10,6 +10,7 @@ fourOptionsNFlashy::fourOptionsNFlashy(QWidget *parent) :
     ui(new Ui::fourOptionsNFlashy)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
     if(ereader) {
         ui->againButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);
         ui->hardButton->setStyleSheet(ereaderVars::buttonNoFlashStylesheet);

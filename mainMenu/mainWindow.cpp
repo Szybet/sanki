@@ -219,7 +219,7 @@ void MainWindow::statusBarSessionAdd()
 
     if(ereader) {
         statusBarCWidget->OptionButtonExit(QIcon(":/icons/close.png"), true);
-        connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::close);
+        connect(statusBarCWidget, &statusBarC::closeButtonSignal, this, &MainWindow::exitApp);
     } else {
         statusBarCWidget->OptionButtonExit(QIcon(), false);
     }
@@ -292,7 +292,7 @@ void MainWindow::createSession() {
                                              "", &continueCreating);
     }
     if(ereader) {
-        askText* askTextDialog = new askText(this);
+        askText* askTextDialog = new askText();
         askTextDialog->textToSet = &text;
         askTextDialog->setTittle("Name for the new session");
         int code = askTextDialog->exec();
@@ -395,4 +395,12 @@ void MainWindow::updateGrid() {
 
 void MainWindow::gestureSlot(QEvent* event) {
     emit gestureSignal(event);
+}
+
+void MainWindow::exitApp() {
+    qDebug() << "Exiting app...";
+    if(grender == true) {
+        graphic->close();
+    }
+
 }

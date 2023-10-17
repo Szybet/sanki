@@ -98,7 +98,7 @@ void statusBarC::on_ButtonSettings_clicked()
     }
 
     if(pomodoroCreated == false) {
-        pomodoroWidget = new pomodoro(this); // parent issue with showing?
+        pomodoroWidget = new pomodoro(); // parent issue with showing?
         pomodoroCreated = true;
     }
 

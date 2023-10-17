@@ -24,7 +24,7 @@ void boxes::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
     backText = parentUi->textBackCard;
 
     if(parent->enabledTapGesture == false) {
-        fourOptions* buttons = new fourOptions(parent);
+        fourOptions* buttons = new fourOptions();
         connect(buttons, &fourOptions::again, this, &boxes::againClicked);
         connect(buttons, &fourOptions::hard, this, &boxes::hardClicked);
         connect(buttons, &fourOptions::good, this, &boxes::goodClicked);
@@ -32,7 +32,7 @@ void boxes::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
         connect(buttons, &fourOptions::show, this, &boxes::showBack);
         parentUi->gridManageCard->addWidget(buttons);
     } else {
-        fourOptionsNFlashy* buttons = new fourOptionsNFlashy(parent);
+        fourOptionsNFlashy* buttons = new fourOptionsNFlashy();
         connect(buttons, &fourOptionsNFlashy::again, this, &boxes::againClicked);
         connect(buttons, &fourOptionsNFlashy::hard, this, &boxes::hardClicked);
         connect(buttons, &fourOptionsNFlashy::good, this, &boxes::goodClicked);

@@ -38,6 +38,7 @@ public slots:
     void playSession(sessionStr sessionPlay);
 
     void gestureSlot(QEvent* event);
+    void exitApp();
 
 private slots:
     void extractDeck();

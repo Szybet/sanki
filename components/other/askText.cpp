@@ -45,7 +45,7 @@ void askText::manageKeyboards() {
     QLineEdit* textEditToCheck = ui->lineEdit;
     if((textEditToCheck->underMouse() == true && textEditToCheck->hasFocus() == true) || overwrite == true) {
         overwrite = false;
-        keyboard* ereaderKeyboard = new keyboard(this);
+        keyboard* ereaderKeyboard = new keyboard();
         ereaderKeyboard->start(textEditToCheck);
         ereaderKeyboard->exec();
         textEditToCheck->clearFocus();
