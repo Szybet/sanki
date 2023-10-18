@@ -36,6 +36,9 @@ bool ereader = false;
 bool grender = true;
 qGraphicsViewEvents* graphic = NULL;
 
+bool disableFlashingEverywhere = false;
+bool flashing = true;
+
 QString deckAddedFileName = "creationTime";
 
 namespace directories {
@@ -149,10 +152,12 @@ bool createDir(QString absolutePath) {
 void refreshRect(QRect rect) {
 #ifdef EREADER
     qDebug() << "Refreshing rect:" << rect;
+    KoboPlatformFunctions::setFlashing(true);
     KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm_GC16);
     QApplication::processEvents();
     KoboPlatformFunctions::doManualRefresh(rect);
     QApplication::processEvents();
+    KoboPlatformFunctions::setFlashing(flashing);
 #endif
 }
 

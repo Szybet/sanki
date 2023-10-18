@@ -129,7 +129,12 @@ void Settings::requestEreaderPage()
 
 
     bool renderLayerBool = settingsGlobal->value("renderLayer").toBool();
+    bool flashing = settingsGlobal->value("disableFlashingEverywhere").toBool();
+
+    ignoreCheck = true;
     ui->renderCheckBox->setChecked(renderLayerBool);
+    ui->flashingCheckBox->setChecked(flashing);
+    ignoreCheck = false;
 }
 
 void Settings::on_ScrollBarBrightness_valueChanged(int value)
@@ -354,8 +359,8 @@ void Settings::manageKeyboards() {
 
 void Settings::on_ButtonFontChange_clicked()
 {
-    QFontDialog* dialog = new QFontDialog();
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    QFontDialog* dialog = new QFontDialog(this); // Needs parent or touch is not working?
+    //dialog->setAttribute(Qt::WA_DeleteOnClose); this causes *** Error in `./sanki': corrupted double-linked list: 0x008992d8 ***
 
     if(ereader) {
         dialog->show();
@@ -375,11 +380,9 @@ void Settings::on_ButtonFontChange_clicked()
 
 void Settings::on_buttonEinkInfo_clicked()
 {
-    QString info = "Those are eink screen modes, the set how things are shown:<br>"
-                   "- WaveForm_A2 - Default, fastest, the most ghosting, a lot can damage your screen! ( propably )<br>"
-                   "- WaveForm_GC4 - Fast, refreshes too much of the screen, but never goes white - black - white. Propably safe<br>"
-                   "- WaveForm_GC16 - The default used in all other dialogs - no or a bit ghosting, slow<br>"
-                   "- WaveForm_AUTO - Fast, experimental, ugly :)";
+    QString info = "Those are eink screen modes, Setting the wrong value can possibly damage you screen in the long term.<br>"
+                   "If you want to understand those settings, look here: <br>https://github.com/Kobo-InkBox/qt5-kobo-platform-plugin/blob/master/src/einkenums.h<br>"
+                   "Changing this setting can reduce flashing a lot.";
     qInfo() << info;
 }
 
@@ -392,27 +395,36 @@ void Settings::on_comboBoxEinkMode_currentTextChanged(const QString &arg1) {
 QString Settings::waveFormNumbToString(int numb) {
     switch (numb) {
         case 1: return "WaveForm_DU";
-        case 4: return "WaveForm_A2";
         case 2: return "WaveForm_GC16";
         case 3: return "WaveForm_GC4";
+        case 4: return "WaveForm_A2";
+        case 5: return "WaveForm_GL16";
+        case 6: return "WaveForm_REAGL";
+        case 7: return "WaveForm_REAGLD";
         case 257: return "WaveForm_AUTO";
     }
     return "error";
 }
 
 int Settings::waveFormStringToInt(QString name) {
-    if (name == "WaveForm_DU")
+    if (name == "WaveForm_DU") {
         return 1;
-    else if (name == "WaveForm_A2")
-        return 4;
-    else if (name == "WaveForm_GC16")
+    } else if (name == "WaveForm_GC16") {
         return 2;
-    else if (name == "WaveForm_GC4")
+    } else if (name == "WaveForm_GC4") {
         return 3;
-    else if (name == "WaveForm_AUTO")
+    } else if (name == "WaveForm_A2") {
+        return 4;
+    } else if (name == "WaveForm_GL16") {
+        return 5;
+    } else if (name == "WaveForm_REAGL") {
+        return 6;
+    } else if (name == "WaveForm_REAGLD") {
+        return 7;
+    } else if (name == "WaveForm_AUTO") {
         return 257;
-    else
-        return -1;
+    }
+    return -1;
 }
 
 void Settings::on_buttonDebuggingData_clicked()
@@ -457,7 +469,18 @@ void Settings::on_tapGestoreCheckBox_stateChanged(int arg1)
 
 void Settings::on_renderCheckBox_stateChanged(int arg1)
 {
-    qDebug() << "renderCheckBox:" << arg1;
-    settingsGlobal->setValue("renderLayer", arg1);
-    qInfo() << "Restart is needed for this setting to apply";
+    if(ignoreCheck == false) {
+        qDebug() << "renderCheckBox:" << arg1;
+        settingsGlobal->setValue("renderLayer", arg1);
+        qInfo() << "Restart is needed for this setting to apply";
+    }
+}
+
+void Settings::on_flashingCheckBox_stateChanged(int arg1)
+{
+    if(ignoreCheck == false) {
+        qDebug() << "renderCheckBox:" << arg1;
+        settingsGlobal->setValue("disableFlashingEverywhere", arg1);
+        qInfo() << "Restart is needed for this setting to apply";
+    }
 }

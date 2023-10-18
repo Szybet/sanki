@@ -20,6 +20,9 @@ extern bool ereader;
 extern bool grender; // graphics render
 extern qGraphicsViewEvents* graphic;
 
+extern bool disableFlashingEverywhere;
+extern bool flashing;
+
 namespace directories {
     extern QDir config;
     extern QDir deckStorage;

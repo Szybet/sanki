@@ -90,7 +90,8 @@ void settingsMenu::on_pomodoroButton_clicked()
 
 void settingsMenu::on_refreshButton_clicked()
 {
-    QTimer::singleShot(300, statusBar, []() {
+    // Because of closing the dialog fully and the bottom line stays
+    QTimer::singleShot(1200, statusBar, []() {
         refreshRect(QRect(0, 0, ereaderVars::screenX, ereaderVars::screenY));
         loadWaveFormSetting();
     });

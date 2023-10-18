@@ -239,10 +239,17 @@ int main(int argc, char *argv[])
     qDebug() << "Render layer according to settings:" << grender;
 
     if(qgetenv("USE_NATIVE_RENDER") == "true") {
-        qDebug() << "Disabling graphics render";
+        qDebug() << "Disabling graphics render by env arg";
         grender = false;
-    } else {
-        qDebug() << "Using graphics render";
+    }
+
+    disableFlashingEverywhere = settingsGlobal.value("disableFlashingEverywhere").toBool();
+    qDebug() << "disableFlashingEverywhere according to settings:" << disableFlashingEverywhere;
+    if(disableFlashingEverywhere == true) {
+#ifdef EREADER
+        KoboPlatformFunctions::setFlashing(false);
+        flashing = false;
+#endif
     }
 
     MainWindow w;
@@ -254,65 +261,65 @@ int main(int argc, char *argv[])
 
         warningsEnabled = true;
 
-        // if i add here any if statement about including QGraphicsScene, it crashes... thats why below its so weird and splitted - yes it wastes memory, whatever
+    // if i add here any if statement about including QGraphicsScene, it crashes... thats why below its so weird and splitted - yes it wastes memory, whatever
 
-        // This is awesome
-        // https://www.mobileread.com/forums/showthread.php?t=356673
-        // Video 2 is the one using this
-        // It uses QGraphicsView MinimalViewportUpdate to adjust it even more for eink render;
-        // It has some issues:
-        // Mainwindow cannot be added to a layout anymore, it refuses: Just use qwidget
-        // QDialogs aren't using this render, they cause even more flashing by using full screen flashing?
-        // Actually maybe? when dialogs have a parent in this mode, they have a window frame with an X button. Idk i cant delete it
-        // Sometimes *** Error in `/sanki': double free or corruption (out): 0x7ebebbf0 *** appears? idk if im closing it right
-        qGraphicsSceneEvents scene;
-        if(grender == true) {
-            qDebug() << "Applying graphics layer for ereader";
-            scene.addWidget(&w);
-        } else {
-            qDebug() << "Not graphics layer for ereader";
-        }
+    // This is awesome
+    // https://www.mobileread.com/forums/showthread.php?t=356673
+    // Video 2 is the one using this
+    // It uses QGraphicsView MinimalViewportUpdate to adjust it even more for eink render;
+    // It has some issues:
+    // Mainwindow cannot be added to a layout anymore, it refuses: Just use qwidget
+    // QDialogs aren't using this render, they cause even more flashing by using full screen flashing?
+    // Actually maybe? when dialogs have a parent in this mode, they have a window frame with an X button. Idk i cant delete it
+    // Sometimes *** Error in `/sanki': double free or corruption (out): 0x7ebebbf0 *** appears? idk if im closing it right
+    qGraphicsSceneEvents scene;
+    if(grender == true) {
+        qDebug() << "Applying graphics layer for ereader";
+        scene.addWidget(&w);
+    } else {
+        qDebug() << "Not using graphics layer for ereader";
+    }
 
-        qGraphicsViewEvents customView;
+    qGraphicsViewEvents customView;
 
-        customView.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        customView.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    customView.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    customView.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-        if(grender == true) {
-            customView.setBaseSize(ereaderVars::screenX, ereaderVars::screenY);
-            customView.setFixedSize(ereaderVars::screenX, ereaderVars::screenY);
-            customView.setMinimumSize(ereaderVars::screenX, ereaderVars::screenY);
+    if(grender == true) {
+        customView.setBaseSize(ereaderVars::screenX, ereaderVars::screenY);
+        customView.setFixedSize(ereaderVars::screenX, ereaderVars::screenY);
+        customView.setMinimumSize(ereaderVars::screenX, ereaderVars::screenY);
 
-            customView.setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
-            customView.setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing);
-            customView.setCacheMode(QGraphicsView::CacheNone);
-            customView.setScene(&scene);
+        customView.setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
+        customView.setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing);
+        customView.setCacheMode(QGraphicsView::CacheNone);
+        customView.setScene(&scene);
 
-            // Madness to get gestures to work ;/
-            // Children don't receive them, so i need to send them manually anyway
-            //customView.setTabletTracking(true);
-            //customView.viewport()->setTabletTracking(true);
-            customView.viewport()->grabGesture(Qt::TapAndHoldGesture);
-            customView.viewport()->grabGesture(Qt::PinchGesture);
-            customView.viewport()->grabGesture(Qt::TapGesture);
-            customView.grabGesture(Qt::TapAndHoldGesture);
-            customView.grabGesture(Qt::PinchGesture);
-            customView.grabGesture(Qt::TapGesture);
-            QTapAndHoldGesture::setTimeout(2250);
+        // Madness to get gestures to work ;/
+        // Children don't receive them, so i need to send them manually anyway
+        //customView.setTabletTracking(true);
+        //customView.viewport()->setTabletTracking(true);
+        customView.viewport()->grabGesture(Qt::TapAndHoldGesture);
+        customView.viewport()->grabGesture(Qt::PinchGesture);
+        customView.viewport()->grabGesture(Qt::TapGesture);
+        customView.grabGesture(Qt::TapAndHoldGesture);
+        customView.grabGesture(Qt::PinchGesture);
+        customView.grabGesture(Qt::TapGesture);
+        QTapAndHoldGesture::setTimeout(2250);
 
-            //customView.setAttribute(Qt::WA_AcceptTouchEvents);
-            //customView.viewport()->setAttribute(Qt::WA_AcceptTouchEvents);
-            //w.setAttribute(Qt::WA_AcceptTouchEvents);
-            QObject::connect(&customView, &qGraphicsViewEvents::eventSignal, &w, &MainWindow::gestureSlot);
-            QObject::connect(&scene, &qGraphicsSceneEvents::eventSignal, &w, &MainWindow::gestureSlot);
-        }
+        //customView.setAttribute(Qt::WA_AcceptTouchEvents);
+        //customView.viewport()->setAttribute(Qt::WA_AcceptTouchEvents);
+        //w.setAttribute(Qt::WA_AcceptTouchEvents);
+        QObject::connect(&customView, &qGraphicsViewEvents::eventSignal, &w, &MainWindow::gestureSlot);
+        QObject::connect(&scene, &qGraphicsSceneEvents::eventSignal, &w, &MainWindow::gestureSlot);
+    }
 
-        if(grender == true) {
-            graphic = &customView;
-            customView.showFullScreen(); // VERY important for gestures - it needs to be full screen
-        } else {
-            w.showFullScreen();
-        }
+    if(grender == true) {
+        graphic = &customView;
+        customView.showFullScreen(); // VERY important for gestures - it needs to be full screen
+    } else {
+        w.showFullScreen();
+    }
 #else
     grender = false;
     w.show();

@@ -94,7 +94,7 @@ bool pomodoroCreated = false;
 void statusBarC::on_ButtonSettings_clicked()
 {
     if(grender) {
-        KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm::WaveForm_A2);
+        KoboPlatformFunctions::setFlashing(false);
     }
 
     if(pomodoroCreated == false) {
@@ -126,7 +126,9 @@ void statusBarC::on_ButtonSettings_clicked()
     QApplication::processEvents();
 
     if(grender) {
-        loadWaveFormSetting();
+        QTimer::singleShot(300, this, [this]() {
+            KoboPlatformFunctions::setFlashing(flashing);
+        });
     }
 }
 

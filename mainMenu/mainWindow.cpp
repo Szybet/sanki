@@ -66,7 +66,8 @@ MainWindow::MainWindow(QWidget *parent)
         // WaveForm_GC16 - 2 - The default that is used everywhere else
         // WaveForm_GC4 - 3 - less black flashing, better looking
         // WaveForm_AUTO - 257 - weird
-        settings.setValue("deckPlayWaveForm", 4); // WaveForm_A2
+        // Well and more...
+        settings.setValue("deckPlayWaveForm", 2); // WaveForm_GC16
         settings.sync();
         settings.deleteLater();
     }

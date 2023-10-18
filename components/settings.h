@@ -46,6 +46,8 @@ private slots:
 
     void on_renderCheckBox_stateChanged(int arg1);
 
+    void on_flashingCheckBox_stateChanged(int arg1);
+
 private:
     Ui::Settings *ui;
     enum Direction{
@@ -60,6 +62,7 @@ private:
     QFont currentFont;
     QString waveFormNumbToString(int numb);
     int waveFormStringToInt(QString name);
+    bool ignoreCheck = false;
 };
 
 #endif // SETTINGS_H

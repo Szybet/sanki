@@ -58,6 +58,11 @@ DeckPlay::~DeckPlay()
 
 void DeckPlay::start(sessionStr newSession)
 {
+#ifdef EREADER
+    KoboPlatformFunctions::setFlashing(false);
+    flashing = false;
+#endif
+
     currectSession = newSession;        
     uint count = 0;
     foreach(QString dir, currectSession.core.deckPathList) {
@@ -285,22 +290,23 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
         });
     }
 
+/*
 #ifdef EREADER
     // Trying to fix some ghosting when in A2
     WaveForm currentWaveFormConverted = static_cast<WaveForm>(currentWaveForm);
-    if(currentWaveFormConverted == WaveForm_A2) {
         qDebug() << "Check if ghost fix is needed";
-        if(text.count() > 200 == true || text.contains("<img") == true || area->horizontalScrollBar()->isVisible() == true || area->verticalScrollBar()->isVisible() == true) {
+        if(text.count() > 300 || text.contains("<img") == true || area->horizontalScrollBar()->isVisible() == true || area->verticalScrollBar()->isVisible() == true) {
             QTimer::singleShot(500, this, [this, area, text]() {
                 qDebug() << "Requesting special refresh for ghosting";
                 QApplication::processEvents();
                 refreshCard(true);
             });
         }
-    }
 #endif
-
-    area->setUpdatesEnabled(true);
+*/
+    QTimer::singleShot(30, this, [this, area]() { // not sure
+        area->setUpdatesEnabled(true);
+    });
 }
 
 void DeckPlay::saveSessionData() {
@@ -359,6 +365,13 @@ void DeckPlay::exitIt() {
         QSqlDatabase::removeDatabase(QString::number(i));
     }
     warningsEnabled = true;
+
+#ifdef EREADER
+    if(disableFlashingEverywhere == false) {
+        KoboPlatformFunctions::setFlashing(true);
+        flashing = true;
+    }
+#endif
 }
 
 void DeckPlay::showStats() {

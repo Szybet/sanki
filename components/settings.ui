@@ -236,12 +236,27 @@
            </item>
            <item>
             <property name="text">
+             <string>WaveForm_GC4</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>WaveForm_A2</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>WaveForm_GC4</string>
+             <string>WaveForm_GL16</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>WaveForm_REAGL</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>WaveForm_REAGLD</string>
             </property>
            </item>
            <item>
@@ -376,6 +391,13 @@
         <widget class="QCheckBox" name="renderCheckBox">
          <property name="text">
           <string>Use additionall graphic render layer for eink</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="flashingCheckBox">
+         <property name="text">
+          <string>Disable flashing everywhere (causes ghosting)</string>
          </property>
         </widget>
        </item>
