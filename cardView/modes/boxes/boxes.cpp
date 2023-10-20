@@ -45,7 +45,7 @@ void boxes::setup(DeckPlay* parentArg, Ui::DeckPlay* parentUiArg) {
     if(parent->saveSession->value("boxMode/box").isNull() == true && parent->saveSession->value("boxMode/box").isValid() == false) {
         qDebug() << "There is no saved config for box mode, asking things";
         theBox = box();
-        askForBoxesOptions* options = new askForBoxesOptions(parent);
+        askForBoxesOptions* options = new askForBoxesOptions();
         options->start(&theBox);
         options->exec();
 

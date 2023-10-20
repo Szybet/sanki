@@ -381,7 +381,7 @@ void DeckPlay::showStats() {
         return void();
     }
     saveSessionData();
-    statistics* newStats = new statistics(this);
+    statistics* newStats = new statistics();
     if(ereader) {
         newStats->show(); // I said before but calculate things important etc;
     }
