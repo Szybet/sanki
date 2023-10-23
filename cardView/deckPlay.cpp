@@ -263,6 +263,8 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
         text = adjustImgSize(finalWidth, text);
     }
 
+    // This doesn't help with the text being blended in with the previous text
+    // area->clear();
     // Making this avoids showing for half a second the first word of the qtextedit
     area->setUpdatesEnabled(false);
 
@@ -278,8 +280,6 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
     // This fixes the issue that after adding text it is cutted in half
     // Doesn't work ui->textFrontCard->verticalScrollBar()->setSliderPosition(0);
     area->verticalScrollBar()->setValue(0);
-
-    refreshCard();
 
     if(firstLaunch == true) {
         firstLaunch = false;
@@ -306,6 +306,10 @@ void DeckPlay::setText(QTextBrowser* area, QString text) {
 */
     QTimer::singleShot(30, this, [this, area]() { // not sure
         area->setUpdatesEnabled(true);
+    });
+
+    QTimer::singleShot(250, this, [this]() { // not sure
+        refreshCard();
     });
 }
 
@@ -402,6 +406,20 @@ void DeckPlay::reloadSettings() {
 
     ui->textBackCard->setFont(font);
     ui->textFrontCard->setFont(font);
+    // Make it look reasonable
+    QApplication::processEvents();
+    QApplication::processEvents();
+    QApplication::processEvents();
+    // Breaks things
+    //this->adjustSize();
+    //ui->scrollArea->adjustSize();
+    // This doesn't work
+    //centerText(ui->textBackCard);
+    //centerText(ui->textFrontCard);
+    //ui->textBackCard->adjustSize();
+    //ui->textFrontCard->adjustSize();
+    setText(ui->textFrontCard, previousFrontText);
+    setText(ui->textBackCard, previousBackText);
 
     if(settingsGlobal.contains("refreshCard")) {
         refreshCardRate = settingsGlobal.value("refreshCard").toInt() * 2;
@@ -425,7 +443,9 @@ void DeckPlay::changeStatusBarTextSlot(QString text) {
 void DeckPlay::refreshCard(bool force) {
     if(refreshCardRate > 0 || force == true) {
         if(refreshCardCount >= refreshCardRate || force == true) {
+            qDebug() << "Refreshing the card screen";
             refreshCardCount = 1;
+            KoboPlatformFunctions::setFlashing(true);
             if(grender == false) {
                refreshRect(ui->gridCard->contentsRect());
                refreshRect(ui->gridManageCard->contentsRect());
@@ -446,10 +466,11 @@ void DeckPlay::refreshCard(bool force) {
                graphic->repaint();
                QApplication::processEvents();
             }
-
             currentWaveForm = loadWaveFormSetting();
+            KoboPlatformFunctions::setFlashing(flashing);
         } else {
             refreshCardCount += 1;
+            qDebug() << "refreshCardCount:" << refreshCardCount;
         }
     }
 }
