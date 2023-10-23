@@ -256,10 +256,11 @@ int main(int argc, char *argv[])
 
 // Here were some weird issues with it crashing because of if else? so i used defines
 #ifdef EREADER
+
     w.setAnimated(false);
     w.setFixedSize(ereaderVars::screenX, ereaderVars::screenY);
 
-        warningsEnabled = true;
+    warningsEnabled = true;
 
     // if i add here any if statement about including QGraphicsScene, it crashes... thats why below its so weird and splitted - yes it wastes memory, whatever
 

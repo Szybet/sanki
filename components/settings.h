@@ -48,6 +48,8 @@ private slots:
 
     void on_flashingCheckBox_stateChanged(int arg1);
 
+    void on_nightModeButton_clicked();
+
 private:
     Ui::Settings *ui;
     enum Direction{

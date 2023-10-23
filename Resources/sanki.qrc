@@ -33,6 +33,7 @@
         <file>timer.svg</file>
         <file>brightness.png</file>
         <file>refresh_window.png</file>
+        <file>nightmode-full.png</file>
     </qresource>
     <qresource prefix="/other">
         <file>eink.qss</file>

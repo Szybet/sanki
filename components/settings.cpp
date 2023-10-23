@@ -484,3 +484,13 @@ void Settings::on_flashingCheckBox_stateChanged(int arg1)
         qInfo() << "Restart is needed for this setting to apply";
     }
 }
+
+void Settings::on_nightModeButton_clicked()
+{
+#ifdef EREADER
+    KoboPlatformFunctions::toggleNightMode();
+    refreshRect(QRect(0, 0, ereaderVars::screenX, ereaderVars::screenY));
+    loadWaveFormSetting();
+#endif
+}
+
