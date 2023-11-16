@@ -61,13 +61,10 @@ MainWindow::MainWindow(QWidget *parent)
         settings.setParent(this);
         QFont defaultFont("DejaVu Sans", 10);
         settings.setValue("playFont", defaultFont);
-        // Possible values:
-        // WaveForm_A2 - 4 - default that is set - speed
-        // WaveForm_GC16 - 2 - The default that is used everywhere else
-        // WaveForm_GC4 - 3 - less black flashing, better looking
-        // WaveForm_AUTO - 257 - weird
-        // Well and more...
-        settings.setValue("deckPlayWaveForm", 2); // WaveForm_GC16
+
+        settings.setValue("deckPlayWaveFormFullscreen", 2); // WaveForm_GC16
+        settings.setValue("deckPlayWaveFormPartial", 6); // WaveForm_REAGL
+        settings.setValue("deckPlayWaveFormFast", 1); // WaveForm_DU
         settings.sync();
         settings.deleteLater();
     }

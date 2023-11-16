@@ -80,7 +80,6 @@ private:
     int refreshCardRate = 20; // setText is called 2 times every card, so this is 2x then it is in reality to work
     int refreshCardCount = 1;
     void refreshCard(bool force = false);
-    int currentWaveForm; // Convert with WaveForm waveformBetter = static_cast<WaveForm>(waveform);
     float zoomFactor = 1.0;
     QElapsedTimer* gestureTimer;
     QString previousFrontText;

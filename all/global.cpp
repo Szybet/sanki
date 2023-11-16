@@ -55,11 +55,11 @@ bool nickelApp = false;
 QString buttonNoFlashStylesheet = "QPushButton:pressed { background: white; color: black } QPushButton:checked { background: white; color: black } QPushButton { background: white; color: black }";
 int screenX = 1920;
 int screenY = 1080;
+bool playWaveFormSettings = false;
 #ifdef EREADER
 ereaderdev::device ereaderDevice;
 #endif
 }
-
 
 bool renameDir(QDir & dir, const QString & newName) {
     // https://stackoverflow.com/questions/39229177/qdirrename-redundant-parameters
@@ -161,16 +161,31 @@ void refreshRect(QRect rect) {
 #endif
 }
 
-int loadWaveFormSetting() {
+void loadWaveFormSetting() {
 #ifdef EREADER
-    QSettings settingsGlobal(directories::globalSettings.fileName(), QSettings::IniFormat);
-    int waveform = settingsGlobal.value("deckPlayWaveForm").toInt();
-    qDebug() << "Setting waveform mode for deckPlay:" << waveform;
-    // Does this work?
-    WaveForm waveformBetter = static_cast<WaveForm>(waveform);
-    KoboPlatformFunctions::setFullScreenRefreshMode(waveformBetter);
-    settingsGlobal.deleteLater();  // Idk if needed
-    return waveform;
+    if(ereaderVars::playWaveFormSettings == true) {
+        QSettings settingsGlobal(directories::globalSettings.fileName(), QSettings::IniFormat);
+        {
+            int waveform = settingsGlobal.value("deckPlayWaveFormFullscreen").toInt();
+            qDebug() << "Setting full screen waveform mode for deckPlay:" << waveform;
+            WaveForm waveformBetter = static_cast<WaveForm>(waveform);
+            KoboPlatformFunctions::setFullScreenRefreshMode(waveformBetter);
+        }
+        {
+            int waveform = settingsGlobal.value("deckPlayWaveFormPartial").toInt();
+            qDebug() << "Setting full screen waveform mode for deckPlay:" << waveform;
+            WaveForm waveformBetter = static_cast<WaveForm>(waveform);
+            KoboPlatformFunctions::setPartialScreenRefreshMode(waveformBetter);
+        }
+        {
+            int waveform = settingsGlobal.value("deckPlayWaveFormFast").toInt();
+            qDebug() << "Setting full screen waveform mode for deckPlay:" << waveform;
+            WaveForm waveformBetter = static_cast<WaveForm>(waveform);
+            KoboPlatformFunctions::setFastScreenRefreshMode(waveformBetter);
+        }
+        settingsGlobal.deleteLater();  // Idk if needed
+    } else {
+        KoboPlatformFunctions::setDefaultWaveform();
+    }
 #endif
-    return 0;
 }

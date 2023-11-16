@@ -22,8 +22,9 @@ private slots:
     void on_ScrollBarBrightness_valueChanged(int value);
     void on_ButtonOk_clicked();
     void requestEreaderPage();
-    void requestMenuPage();
+    void requestPlayPage();
     void requestSyncPage();
+    void requestEinkPage();
     void on_buttonSyncInfo_clicked();
     void on_buttonSync_clicked();
     void on_checkBox_stateChanged(int arg1);
@@ -31,8 +32,6 @@ private slots:
     void on_ButtonFontChange_clicked();
 
     void on_buttonEinkInfo_clicked();
-
-    void on_comboBoxEinkMode_currentTextChanged(const QString &arg1);
 
     void on_buttonDebuggingData_clicked();
 
@@ -49,6 +48,12 @@ private slots:
     void on_flashingCheckBox_stateChanged(int arg1);
 
     void on_nightModeButton_clicked();
+
+    void on_fullscreenEinkModeComboBox_currentTextChanged(const QString &arg1);
+
+    void on_PartialEinkModeComboBox_currentTextChanged(const QString &arg1);
+
+    void on_fastscreenEinkModeComboBox_currentTextChanged(const QString &arg1);
 
 private:
     Ui::Settings *ui;

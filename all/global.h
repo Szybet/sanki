@@ -38,6 +38,7 @@ namespace ereaderVars {
     extern QString buttonNoFlashStylesheet;
     extern int screenX;
     extern int screenY;
+    extern bool playWaveFormSettings;
 #ifdef EREADER
     extern ereaderdev::device ereaderDevice;
 #endif
@@ -60,6 +61,6 @@ int getWhiteBrightnessAlias();
 QString exec(const char *cmd);
 bool createDir(QString absolutePath);
 void refreshRect(QRect rect);
-int loadWaveFormSetting();
+void loadWaveFormSetting();
 
 #endif // GLOBALS_H

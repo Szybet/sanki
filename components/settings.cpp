@@ -21,6 +21,8 @@
 #include "audiodialog.h"
 #endif
 
+bool previousPlay = false;
+
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Settings)
@@ -56,14 +58,9 @@ Settings::Settings(QWidget *parent) :
     qDebug() << "Keys:" << settingsGlobal->allKeys();
     settingsGlobal->setParent(this);
 
-    if(ereader) {
-       int waveform = settingsGlobal->value("deckPlayWaveForm").toInt();
-       ui->comboBoxEinkMode->setCurrentText(waveFormNumbToString(waveform));
-    }
-
     // Set the default page
     ui->stackedWidget->setCurrentIndex(1);
-    requestMenuPage();
+    requestPlayPage();
 
     if(ereader) {
        this->setFixedWidth(ereaderVars::screenX);
@@ -78,7 +75,9 @@ Settings::Settings(QWidget *parent) :
 
 #ifdef EREADER
     qDebug() << "Setting waveform mode";
-    KoboPlatformFunctions::setFullScreenRefreshMode(WaveForm_GC16);
+    previousPlay = ereaderVars::playWaveFormSettings;
+    ereaderVars::playWaveFormSettings = false;
+    loadWaveFormSetting();
 #endif
 }
 
@@ -119,22 +118,6 @@ void Settings::requestEreaderPage()
     brightness_string.append(QString::number(brightness));
     brightness_string.append("%");
     ui->labelBrightness->setText(brightness_string);
-
-    int spinBoxValue = 10;
-    if(settingsGlobal->contains("refreshCard")) {
-        spinBoxValue = settingsGlobal->value("refreshCard").toInt();
-    }
-    qDebug() << "New refresh rate set:" << spinBoxValue;
-    ui->refreshSpinBox->setValue(spinBoxValue);
-
-
-    bool renderLayerBool = settingsGlobal->value("renderLayer").toBool();
-    bool flashing = settingsGlobal->value("disableFlashingEverywhere").toBool();
-
-    ignoreCheck = true;
-    ui->renderCheckBox->setChecked(renderLayerBool);
-    ui->flashingCheckBox->setChecked(flashing);
-    ignoreCheck = false;
 }
 
 void Settings::on_ScrollBarBrightness_valueChanged(int value)
@@ -154,6 +137,7 @@ void Settings::on_ScrollBarBrightness_valueChanged(int value)
 
 void Settings::on_ButtonOk_clicked()
 {
+    ereaderVars::playWaveFormSettings = previousPlay;
     this->close();
 }
 
@@ -165,7 +149,7 @@ void Settings::managePage(int newIndex, Direction fromWhere) {
         newIndex = 0;
     }
 
-    if(ereader != true && newIndex == 0) {
+    if(ereader != true && newIndex == 0 && newIndex == 3) {
         if(fromWhere == Right) {
             managePage(newIndex + 1, fromWhere);
             return void();
@@ -179,14 +163,49 @@ void Settings::managePage(int newIndex, Direction fromWhere) {
     if(newIndex == 0) {
         requestEreaderPage();
     } else if(newIndex == 1) {
-        requestMenuPage();
+        requestPlayPage();
     } else if(newIndex == 2) {
         requestSyncPage();
+    } else if(newIndex == 3) {
+        requestEinkPage();
     }
 }
 
-void Settings::requestMenuPage() {
-    ui->labelPageName->setText("Menu");
+void Settings::requestEinkPage() {
+    ui->labelPageName->setText("E-ink");
+
+    {
+        int waveform = settingsGlobal->value("deckPlayWaveFormFullscreen").toInt();
+        ui->fullscreenEinkModeComboBox->setCurrentText(waveFormNumbToString(waveform));
+    }
+    {
+        int waveform = settingsGlobal->value("deckPlayWaveFormPartial").toInt();
+        ui->PartialEinkModeComboBox->setCurrentText(waveFormNumbToString(waveform));
+    }
+    {
+        int waveform = settingsGlobal->value("deckPlayWaveFormFast").toInt();
+        ui->fastscreenEinkModeComboBox->setCurrentText(waveFormNumbToString(waveform));
+    }
+
+    int spinBoxValue = 10;
+    if(settingsGlobal->contains("refreshCard")) {
+        spinBoxValue = settingsGlobal->value("refreshCard").toInt();
+    }
+    qDebug() << "New refresh rate set:" << spinBoxValue;
+    ui->refreshSpinBox->setValue(spinBoxValue);
+
+
+    bool renderLayerBool = settingsGlobal->value("renderLayer").toBool();
+    bool flashing = settingsGlobal->value("disableFlashingEverywhere").toBool();
+
+    ignoreCheck = true;
+    ui->renderCheckBox->setChecked(renderLayerBool);
+    ui->flashingCheckBox->setChecked(flashing);
+    ignoreCheck = false;
+}
+
+void Settings::requestPlayPage() {
+    ui->labelPageName->setText("Play");
 
     settingsGlobal->sync();
 
@@ -374,7 +393,7 @@ void Settings::on_ButtonFontChange_clicked()
         currentFont = dialog->selectedFont();
         qDebug() << "New current font:" << currentFont;
         settingsGlobal->setValue("playFont", currentFont);
-        requestMenuPage();
+        requestPlayPage();
     }
 }
 
@@ -384,12 +403,6 @@ void Settings::on_buttonEinkInfo_clicked()
                    "If you want to understand those settings, look here: <br>https://github.com/Kobo-InkBox/qt5-kobo-platform-plugin/blob/master/src/einkenums.h<br>"
                    "Changing this setting can reduce flashing a lot.";
     qInfo() << info;
-}
-
-void Settings::on_comboBoxEinkMode_currentTextChanged(const QString &arg1) {
-    int newWaveForm = waveFormStringToInt(arg1);
-    settingsGlobal->setValue("deckPlayWaveForm", newWaveForm);
-    settingsGlobal->sync();
 }
 
 QString Settings::waveFormNumbToString(int numb) {
@@ -494,3 +507,25 @@ void Settings::on_nightModeButton_clicked()
 #endif
 }
 
+void Settings::on_fullscreenEinkModeComboBox_currentTextChanged(const QString &arg1)
+{
+    int newWaveForm = waveFormStringToInt(arg1);
+    settingsGlobal->setValue("deckPlayWaveFormFullscreen", newWaveForm);
+    settingsGlobal->sync();
+}
+
+
+void Settings::on_PartialEinkModeComboBox_currentTextChanged(const QString &arg1)
+{
+    int newWaveForm = waveFormStringToInt(arg1);
+    settingsGlobal->setValue("deckPlayWaveFormPartial", newWaveForm);
+    settingsGlobal->sync();
+}
+
+
+void Settings::on_fastscreenEinkModeComboBox_currentTextChanged(const QString &arg1)
+{
+    int newWaveForm = waveFormStringToInt(arg1);
+    settingsGlobal->setValue("deckPlayWaveFormFast", newWaveForm);
+    settingsGlobal->sync();
+}

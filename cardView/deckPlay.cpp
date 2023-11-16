@@ -35,6 +35,8 @@ DeckPlay::DeckPlay(QWidget *parent) :
     ui->setupUi(this);
 
     if(ereader) {
+        ereaderVars::playWaveFormSettings = true;
+
         // This could be editable in settings
         ui->scrollArea->verticalScrollBar()->setStyleSheet(
             "QScrollBar:vertical { width: 50px; }");
@@ -376,6 +378,9 @@ void DeckPlay::exitIt() {
         flashing = true;
     }
 #endif
+
+    ereaderVars::playWaveFormSettings = false;
+    loadWaveFormSetting();
 }
 
 void DeckPlay::showStats() {
@@ -426,12 +431,11 @@ void DeckPlay::reloadSettings() {
     }
     qDebug() << "refreshCardRate is (doubled):" << refreshCardRate;
 
-    refreshRect(QRect(0, 0, ereaderVars::screenX, ereaderVars::screenY));
-    currentWaveForm = loadWaveFormSetting();
-
-    this->repaint();
-    this->repaint();
-    this->repaint();
+    QTimer::singleShot(400, this, [this]() {
+        // Make once in a while a stronger refresh
+        refreshCard(true);
+        refreshCard(true);
+    });
 
     settingsGlobal.deleteLater(); // Idk if needed
 }
@@ -466,7 +470,7 @@ void DeckPlay::refreshCard(bool force) {
                graphic->repaint();
                QApplication::processEvents();
             }
-            currentWaveForm = loadWaveFormSetting();
+            loadWaveFormSetting();
             KoboPlatformFunctions::setFlashing(flashing);
         } else {
             refreshCardCount += 1;

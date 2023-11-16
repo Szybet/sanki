@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>403</width>
+    <width>419</width>
     <height>472</height>
    </rect>
   </property>
@@ -108,7 +108,7 @@
       <number>0</number>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="Page0Ereader">
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -201,104 +201,6 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>E-ink mode while playing</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_7">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>0</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBoxEinkMode">
-           <item>
-            <property name="text">
-             <string>WaveForm_DU</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>WaveForm_GC16</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>WaveForm_GC4</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>WaveForm_A2</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>WaveForm_GL16</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>WaveForm_REAGL</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>WaveForm_REAGLD</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>WaveForm_AUTO</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_8">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>0</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="buttonEinkInfo">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../Resources/sanki.qrc">
-             <normaloff>:/icons/info.svg</normaloff>:/icons/info.svg</iconset>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
           <widget class="QLabel" name="label_3">
@@ -355,53 +257,6 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <widget class="QLabel" name="label_4">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Refresh after every card rate:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="refreshSpinBox">
-           <property name="suffix">
-            <string/>
-           </property>
-           <property name="prefix">
-            <string/>
-           </property>
-           <property name="maximum">
-            <number>100</number>
-           </property>
-           <property name="value">
-            <number>10</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="renderCheckBox">
-         <property name="text">
-          <string>Use additionall graphic render layer for eink</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="flashingCheckBox">
-         <property name="text">
-          <string>Disable flashing everywhere (causes ghosting)</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QFrame" name="frame_3">
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
@@ -425,17 +280,6 @@
           <property name="spacing">
            <number>0</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QPushButton" name="nightModeButton">
-            <property name="text">
-             <string>Toggle night mode</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../Resources/sanki.qrc">
-              <normaloff>:/icons/nightmode-full.png</normaloff>:/icons/nightmode-full.png</iconset>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
@@ -655,6 +499,328 @@
        </item>
        <item>
         <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="Page3Eink">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QPushButton" name="nightModeButton">
+         <property name="text">
+          <string>Toggle night mode</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../Resources/sanki.qrc">
+           <normaloff>:/icons/nightmode-full.png</normaloff>:/icons/nightmode-full.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <item>
+            <spacer name="horizontalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>E-ink mode while playing</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="buttonEinkInfo">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../Resources/sanki.qrc">
+               <normaloff>:/icons/info.svg</normaloff>:/icons/info.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_10">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_7">
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Fullscreen:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="fullscreenEinkModeComboBox">
+             <item>
+              <property name="text">
+               <string>WaveForm_DU</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_GC16</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_GC4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_A2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_GL16</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_REAGL</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_REAGLD</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_AUTO</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_11">
+           <item>
+            <widget class="QLabel" name="label_6">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Partial:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="PartialEinkModeComboBox">
+             <item>
+              <property name="text">
+               <string>WaveForm_DU</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_GC16</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_GC4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_A2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_GL16</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_REAGL</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_REAGLD</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_AUTO</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_12">
+           <item>
+            <widget class="QLabel" name="label_7">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Fast:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="fastscreenEinkModeComboBox">
+             <item>
+              <property name="text">
+               <string>WaveForm_DU</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_GC16</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_GC4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_A2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_GL16</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_REAGL</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_REAGLD</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WaveForm_AUTO</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Refresh after every card rate:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="refreshSpinBox">
+           <property name="suffix">
+            <string/>
+           </property>
+           <property name="prefix">
+            <string/>
+           </property>
+           <property name="maximum">
+            <number>100</number>
+           </property>
+           <property name="value">
+            <number>10</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="renderCheckBox">
+         <property name="text">
+          <string>Use additionall graphic render layer for eink</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="flashingCheckBox">
+         <property name="text">
+          <string>Disable flashing everywhere (causes ghosting)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
