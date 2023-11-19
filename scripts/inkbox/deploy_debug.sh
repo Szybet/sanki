@@ -2,7 +2,9 @@
 
 cd ../../
 
-servername="root@10.42.0.28"
+#servername="root@10.42.0.28"
+servername="root@192.168.2.2"
+
 passwd="root"
 
 

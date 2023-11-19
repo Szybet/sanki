@@ -74,6 +74,11 @@
          <string>Box mode settings</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Create subSession</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>

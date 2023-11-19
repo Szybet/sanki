@@ -27,6 +27,7 @@ SOURCES += \
     components/other/pomodoro.cpp \
     components/other/reImplementations/QGraphicsSceneEvents.cpp \
     components/other/reImplementations/qGraphicsViewEvents.cpp \
+    components/other/subSession/subSession.cpp \
     components/settings/settingsMenu.cpp \
     components/files/file.cpp \
     components/files/fileChooser.cpp \
@@ -61,6 +62,7 @@ HEADERS += \
     components/other/pomodoro.h \
     components/other/reImplementations/QGraphicsSceneEvents.h \
     components/other/reImplementations/qGraphicsViewEvents.h \
+    components/other/subSession/subSession.h \
     components/settings/settingsMenu.h \
     components/files/file.h \
     components/files/fileChooser.h \
@@ -88,6 +90,7 @@ FORMS += \
     cardView/modeOptions.ui \
     cardView/modes/boxes/askforboxesoptions.ui \
     components/other/pomodoro.ui \
+    components/other/subSession/subSession.ui \
     components/settings/settingsMenu.ui \
     components/files/file.ui \
     components/files/fileChooser.ui \

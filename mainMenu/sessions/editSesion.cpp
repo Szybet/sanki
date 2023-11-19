@@ -3,6 +3,7 @@
 #include "editSession.h"
 #include "ui_editSession.h"
 #include "components/other/statistics.h"
+#include "components/other/subSession/subSession.h"
 
 #include <QDebug>
 
@@ -60,6 +61,12 @@ void editSession::on_comboBox_textActivated(const QString &arg1) {
             options->start(&boxesSettings);
             options->exec();
         }
+    } else if(arg1 == "Create subSession") {
+        subSession* subSess = new subSession();
+        subSess->start(sessionSaved);
+        subSess->exec();
+        emit refreshSessionsSignal();
+        this->close();
     }
 }
 
