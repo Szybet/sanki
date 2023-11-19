@@ -23,6 +23,16 @@ void subSession::start(sessionStr sess) {
     // Bubble sort, I'm lazy
     newSession = sess;
     cardsSorted = newSession.cardList;
+    countCards = cardsSorted.count();
+
+    if(countCards == 0) {
+        QTimer::singleShot(200, this, [this]() {
+            QApplication::processEvents();
+            qInfo() << "This session is propably not initialized";
+            this->close();
+        });
+        return void();
+    }
     bool swapped = true;
     while(swapped == true) {
         swapped = false;
@@ -34,7 +44,6 @@ void subSession::start(sessionStr sess) {
         }
     }
     qDebug() << "cardsSorted:" << cardsSorted;
-    countCards = cardsSorted.count();
     calculatePercantage();
 }
 

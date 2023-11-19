@@ -32,6 +32,7 @@ void editSession::start(sessionStr session) {
     sessionSaved = session;
     if(sessionSaved.core.mode != Boxes) {
         ui->comboBox->removeItem(1);
+        ui->comboBox->removeItem(2);
     }
     ui->lineEdit->setText(sessionSaved.core.name);
     settingsSession = new QSettings(directories::sessionSaves.filePath(session.core.name), QSettings::IniFormat);
