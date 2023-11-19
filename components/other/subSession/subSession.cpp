@@ -65,7 +65,7 @@ void subSession::on_cancelButton_clicked()
 
 void subSession::on_okButton_clicked()
 {
-    newSession.cardList = cardsSorted.mid(0, howManyCards);
+    newSession.cardList = cardsSorted.mid(countCards - 1 - howManyCards, howManyCards);
     for(int i = 0; i < newSession.cardList.count(); i++) {
         card* oneCard = &newSession.cardList[i];
         oneCard->count = 0;
