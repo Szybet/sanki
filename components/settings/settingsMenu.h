@@ -26,6 +26,11 @@ private slots:
 
     void on_refreshButton_clicked();
 
+    void on_reverseButton_clicked();
+
+signals:
+    void tellDeck(QString call);
+
 private:
     Ui::settingsMenu *ui;
     pomodoro* pomodoroWidget;

@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     */
 
     statusBarCWidget = new statusBarC(this);
+    connect(statusBarCWidget, &statusBarC::tellDeck, this, &MainWindow::receiveDeck);
     ui->gridStatus->addWidget(statusBarCWidget);
 
     grid = new fancyGrid(this);
@@ -83,6 +84,7 @@ void MainWindow::resetGrid() {
 void MainWindow::resetStatusBar() {
     statusBarCWidget->disconnect();
     connect(statusBarCWidget, &statusBarC::refreshDecksSignal, this, &MainWindow::updateGrid);
+    connect(statusBarCWidget, &statusBarC::tellDeck, this, &MainWindow::receiveDeck);
 }
 
 void MainWindow::showSessions() {
@@ -401,4 +403,10 @@ void MainWindow::exitApp() {
         graphic->close();
     }
 
+}
+
+void MainWindow::receiveDeck(QString call) {
+    //emit tellDeck(call);
+    qDebug() << "MainWindow::receiveDeck";
+    playDeck->receiveDeckCall(call);
 }

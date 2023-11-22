@@ -594,3 +594,11 @@ void DeckPlay::eventSlot(QEvent* eventItem) {
     //qDebug() << "Received event for graphics render";
     this->event(eventItem);
 }
+
+void DeckPlay::receiveDeckCall(QString call) {
+    qDebug() << "Called receiveDeckCall" << call;
+    if(call == "reverse") {
+        qDebug() << "Reversing cards";
+        reversedCards = !reversedCards;
+    }
+}

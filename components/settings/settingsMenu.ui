@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>106</width>
-    <height>99</height>
+    <height>170</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -185,6 +185,52 @@
           <normaloff>:/icons/refresh_window.png</normaloff>:/icons/refresh_window.png</iconset>
         </property>
        </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="playLayout">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="Line" name="line">
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <property name="lineWidth">
+           <number>2</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="cardLabel">
+          <property name="font">
+           <font>
+            <pointsize>7</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Card options:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="reverseButton">
+          <property name="text">
+           <string>Reverse</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../../Resources/sanki.qrc">
+            <normaloff>:/icons/rotation.png</normaloff>:/icons/rotation.png</iconset>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>

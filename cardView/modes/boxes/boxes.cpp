@@ -139,7 +139,7 @@ void boxes::loop() {
     QString mainCard = cardExtract(choosenCard, parent);
 
     correctMainCard(&mainCard, findMediaFile(choosenCard, &parent->currectSession));
-    splitMainCard(mainCard, &frontCard, &backCard);
+    splitMainCard(mainCard, &frontCard, &backCard, parent);
 
     QString searchPath = directories::deckStorage.filePath(parent->currectSession.core.deckPathList[choosenCard->deckiD]);
     frontText->setSearchPaths(QStringList(searchPath));

@@ -24,6 +24,7 @@ public:
 
 signals:
     void gestureSignal(QEvent* event);
+    void tellDeck(QString call);
 
 public slots:
     void getFile(QString file); // File chooser uses this
@@ -39,6 +40,8 @@ public slots:
 
     void gestureSlot(QEvent* event);
     void exitApp();
+
+    void receiveDeck(QString call);
 
 private slots:
     void extractDeck();

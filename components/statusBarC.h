@@ -23,6 +23,7 @@ public:
 
 public slots:
     void setStatusText(QString text);
+    void receiveDeck(QString call);
 
 private slots:
     void showTime();
@@ -43,6 +44,7 @@ signals:
     void option2ButtonSignal();
     void refreshDecksSignal();
     void closedOptionsDialog();
+    void tellDeck(QString call);
 
 private:
     Ui::statusBarC *ui;

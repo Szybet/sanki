@@ -52,6 +52,9 @@ public:
     bool enabledTapGesture = false;
     bool enabledTapGestureTmp = false; // to ignore tap gestures when they are not needed
 
+    void receiveDeckCall(QString call);
+    bool reversedCards = false;
+
 protected:
     bool event(QEvent* event) override;
 

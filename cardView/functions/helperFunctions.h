@@ -14,7 +14,7 @@
 #include <QSqlQuery>
 #include <QRandomGenerator>
 
-void splitMainCard(QString mainCard, QString* frontCard, QString* backCard);
+void splitMainCard(QString mainCard, QString* frontCard, QString* backCard, DeckPlay* parent);
 void centerText(QTextBrowser* text);
 void correctMainCard(QString* mainCard, QFile mediaFile);
 void dumpScrollBarInfo(QScrollBar* scroll);

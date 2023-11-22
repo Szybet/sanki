@@ -103,6 +103,9 @@ void statusBarC::on_ButtonSettings_clicked()
     }
 
     settingsMenu* menu = new settingsMenu();
+
+    connect(menu, &settingsMenu::tellDeck, this, &statusBarC::receiveDeck);
+
     menu->setWindowModality(Qt::ApplicationModal);
     QPoint menuLoc = ui->ButtonSettings->pos();
     menuLoc.setY(menuLoc.y() + ui->ButtonSettings->size().height());
@@ -178,4 +181,9 @@ void statusBarC::on_ButtonStatus_clicked()
 
 void statusBarC::setStatusText(QString text) {
     ui->ButtonStatus->setText(text);
+}
+
+void statusBarC::receiveDeck(QString call) {
+    qDebug() << "statusBarC::receiveDeck";
+    emit tellDeck(call);
 }

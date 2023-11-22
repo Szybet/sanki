@@ -2,14 +2,19 @@
 
 #include <QRegularExpression>
 
-void splitMainCard(QString mainCard, QString* frontCard, QString* backCard) {
+void splitMainCard(QString mainCard, QString* frontCard, QString* backCard, DeckPlay* parent) {
     // mainCard is:
     // frontCard + this character https://unicode-table.com/en/001F/ + backCard
     QStringList cards = mainCard.split("\u001F");
     qDebug() << "cards splitted are: " << cards;
 
-    *frontCard = cards.first();
-    *backCard = cards.last();
+    if(parent->reversedCards == false) {
+        *frontCard = cards.first();
+        *backCard = cards.last();
+    } else {
+        *frontCard = cards.last();
+        *backCard = cards.first();
+    }
 
     qDebug() << "frontCard is: " << *frontCard;
     qDebug() << "backCard is: " << *backCard;

@@ -17,6 +17,7 @@ settingsMenu::settingsMenu(QWidget *parent) :
     ui->pomodoroButton->setStyleSheet("Text-align: left");
     ui->settingsButton->setStyleSheet("Text-align: left");
     ui->refreshButton->setStyleSheet("Text-align: left");
+    ui->reverseButton->setStyleSheet("Text-align: left");
 }
 
 settingsMenu::~settingsMenu()
@@ -35,6 +36,7 @@ void settingsMenu::start(pomodoro* pomodoroWidgetParent, statusBarC* statusBarPa
     ui->batteryLabel->setFont(font);
     ui->brightnessLabel->setFont(font);
     ui->pomodoroLabel->setFont(font);
+    ui->cardLabel->setFont(font);
 
     int battLev = checkBatteryLevel();
     ui->batteryLabel->setText(QString::number(battLev) + "%");
@@ -97,3 +99,11 @@ void settingsMenu::on_refreshButton_clicked()
     });
     this->close();
 }
+
+void settingsMenu::on_reverseButton_clicked()
+{
+    qDebug() << "settingsMenu::on_reverseButton_clicked";
+    emit tellDeck("reverse");
+    this->close();
+}
+

@@ -54,7 +54,7 @@ void CompletlyRandom::loop()
     QString mainCard = cardExtract(randomCard, parent);
 
     correctMainCard(&mainCard, findMediaFile(randomCard, &parent->currectSession));
-    splitMainCard(mainCard, &frontCard, &backCard);
+    splitMainCard(mainCard, &frontCard, &backCard, parent);
 
     QString searchPath = directories::deckStorage.filePath(parent->currectSession.core.deckPathList[randomCard->deckiD]);
     frontText->setSearchPaths(QStringList(searchPath));
