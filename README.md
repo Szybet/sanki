@@ -25,6 +25,9 @@ To sync sanki with anki ( On Linux host ):
 - For Nickel, just extract the zip to the main folder when connecting via usb - **You also need Nickel Menu, Kfmon and Koreader installed ( from the one click package )**
 - For InkBox, extract it to `.apps` folder
 
+### Keep in mind
+- The app has problems with images above 2MB. It lags and gestures freeze. The sync program at default solves the issue by resizing the images inside
+
 ### Contribute
 Everything really is welcome. 
 

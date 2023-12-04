@@ -1,9 +1,10 @@
 #[macro_use]
 extern crate log;
 
-use std::fs::File;
 use std::io::Write;
+use std::process::Stdio;
 use std::thread;
+use std::{fs::File, process::Command};
 
 use axum::{
     body::Body,
@@ -23,11 +24,12 @@ use tower_http::{
 };
 
 use clap::Parser;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use tokio::time;
+use pnet::datalink;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
@@ -38,6 +40,12 @@ struct Args {
     target_directory: String,
     #[arg(short, long, default_value_t = true)]
     omit_default_deck: bool,
+    #[arg(short, long, default_value_t = true)]
+    resize_images: bool,
+    #[arg(long, default_value_t = 1024)]
+    img_height: u32,
+    #[arg(long, default_value_t = 758)]
+    img_width: u32,
 }
 
 #[derive(Clone)]
@@ -97,10 +105,19 @@ async fn main() {
     env_logger::init_from_env(
         env_logger::Env::default().filter_or(env_logger::DEFAULT_FILTER_ENV, "info"),
     );
-    info!("Starting");
 
     let args = Args::parse();
 
+    let mut interfaces = String::new();
+    for iface in datalink::interfaces() {
+        for ip in iface.ips {
+            if ip.is_ipv4() {
+                interfaces.push_str(&format!("{}:{} ", ip.ip(), args.port));
+            }
+        }
+    }
+    info!("Starting, available at {}", interfaces);
+    
     let client = reqwest::Client::new();
 
     let params_sync: AnkiRequest = AnkiRequest {
@@ -143,6 +160,7 @@ async fn main() {
             .remove(decks.result.iter().position(|r| r == "Default").unwrap());
     }
 
+    std::fs::remove_dir_all(args.target_directory.clone()).unwrap();
     std::fs::create_dir_all(args.target_directory.clone()).unwrap();
     let path_dir = std::fs::canonicalize(PathBuf::from(args.target_directory.clone()))
         .unwrap()
@@ -154,9 +172,11 @@ async fn main() {
 
     for deck_name in decks.result.clone() {
         info!("Exporting deck: \"{}\"", deck_name);
+        let deck_path = format!("{}/{}.apkg", path_dir, deck_name);
+        let tmp_dir_path = format!("{}/{}_dir", path_dir, deck_name);
         let params_deck: AnkiParams = AnkiParams {
             deck: deck_name.clone(),
-            path: format!("{}/{}.apkg", path_dir, deck_name),
+            path: deck_path.clone(),
         };
 
         let request: AnkiDeckRequest = AnkiDeckRequest {
@@ -176,6 +196,58 @@ async fn main() {
             .unwrap();
 
         debug!("export deck result: {}", export_deck);
+
+        if args.resize_images {
+            Command::new("unzip")
+                .arg("-o")
+                .arg(deck_path.clone())
+                .arg("-d")
+                .arg(tmp_dir_path.clone())
+                .stdout(Stdio::null()) // Redirect standard output to /dev/null
+                .stderr(Stdio::null()) // Redirect standard error to /dev/null
+                .spawn()
+                .expect("Failed to execute unzip command")
+                .wait()
+                .expect("Failed to wait for unzip command");
+
+            for num in 0..99 {
+                let img_file = format!("{}/{}", tmp_dir_path, num);
+                if Path::new(&img_file).exists() {
+                    debug!("img file exists: {}", img_file);
+                    Command::new("mogrify")
+                        .arg("-resize")
+                        .arg(format!("{}x{}", args.img_width, args.img_height))
+                        .arg("-quality")
+                        .arg("80")
+                        .arg(img_file)
+                        .stdout(Stdio::null()) // Redirect standard output to /dev/null
+                        .stderr(Stdio::null()) // Redirect standard error to /dev/null
+                        .spawn()
+                        .expect("Failed to execute mogrify command")
+                        .wait()
+                        .expect("Failed to wait for mogrify command");
+                } else {
+                    break;
+                }
+            }
+
+            std::fs::remove_file(deck_path.clone()).unwrap_or_else(|_| panic!("failed to remove deck {}", deck_path));
+
+            Command::new("zip")
+                .arg("-r")
+                .arg(deck_path)
+                .arg(".")
+                .current_dir(tmp_dir_path.clone())
+                .stdout(Stdio::null()) // Redirect standard output to /dev/null
+                .stderr(Stdio::null()) // Redirect standard error to /dev/null
+                .spawn()
+                .expect("Failed to execute zip command")
+                .wait()
+                .expect("Failed to wait for zip command");
+
+            debug!("Removing directory: {}", tmp_dir_path);
+            std::fs::remove_dir_all(tmp_dir_path.clone()).unwrap_or_else(|_| panic!("failed to remove dir {}", tmp_dir_path));
+        }
     }
 
     for deck in decks.result.iter_mut() {
