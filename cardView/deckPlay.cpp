@@ -20,6 +20,9 @@
 #include <QGestureEvent>
 #include <QGestureRecognizer>
 
+#include <QMessageBox>
+#include <QPalette>
+
 #include <algorithm>
 #include <random>
 
@@ -49,6 +52,22 @@ DeckPlay::DeckPlay(QWidget *parent) :
 
     ui->cardStatsLabel->setStyleSheet("font-size: 6pt;");
     ui->zoomLabel->setStyleSheet("font-size: 6pt;");
+
+    // We cant disable selection because of clicking on links
+    //ui->textBackCard->setStyleSheet("selection-color: black; selection-background-color: white;");
+    //ui->textFrontCard->setStyleSheet("selection-color: black; selection-background-color: white;");
+    // {
+    //     QPalette pal = ui->textBackCard->palette();
+    //     pal.setColor(QPalette::HighlightedText, QColor("white"));
+    //     pal.setColor(QPalette::Highlight, QColor("white"));
+    //     ui->textBackCard->setPalette(pal);
+    // }
+    // {
+    //     QPalette pal = ui->textFrontCard->palette();
+    //     pal.setColor(QPalette::HighlightedText, QColor("white"));
+    //     pal.setColor(QPalette::Highlight, QColor("white"));
+    //     ui->textFrontCard->setPalette(pal);
+    // }
 
     manageGestures();
 }
@@ -566,7 +585,7 @@ bool DeckPlay::event(QEvent *event)
         } else if(QGesture* gesture = gEvent->gesture(Qt::TapGesture)) {
             Q_UNUSED(gesture);
             if(enabledTapGesture == true) {
-               qDebug() << "Tap gesture detected";
+               //qDebug() << "Tap gesture detected";
                int elapsed = gestureTimer->elapsed();
                if(gestureTimer->isValid() == true && elapsed > 850) {
                    // doesnt work with qpoint, idk it gives relative point to the widget?...
@@ -601,4 +620,69 @@ void DeckPlay::receiveDeckCall(QString call) {
         qDebug() << "Reversing cards";
         reversedCards = !reversedCards;
     }
+}
+
+void DeckPlay::linkClicked(const QUrl &arg1) {
+    qDebug() << "Link clicked:" << arg1;
+    if(ereaderVars::inkboxUserApp == true) {
+        QString link = arg1.url();
+        QMessageBox msgBox;
+        msgBox.setText("Do you want to open the book?");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        int ret = msgBox.exec();
+        if(ret == QMessageBox::Yes) {
+            qDebug() << "The answer was yes";
+            QString fileName = "/app-temp/" + link.split(BOOK_LINK_SPLIT).first().replace(".png", "");
+            QString filePath = ui->textBackCard->searchPaths().first() + "/" + link.split(BOOK_LINK_SPLIT).last();
+            qDebug() << "fileName of book:" << fileName;
+            qDebug() << "filePath of book:" << filePath;
+
+            {
+               QProcess process;
+               process.setProgram("/app-bin/s2png");
+               QStringList arguments;
+               arguments << "-o" << fileName << filePath;
+               process.setArguments(arguments);
+               process.start();
+               process.waitForStarted();
+               process.waitForFinished(-1);
+            }
+            {
+               QProcess process;
+               process.setProgram("/system-onboard/.apps/koreader/koreader/app-bin/koreader/koreader.sh");
+               QStringList arguments;
+               arguments << fileName;
+               process.setArguments(arguments);
+               process.start();
+               process.waitForStarted();
+               process.waitForFinished(-1);
+            }
+            QFile file(fileName);
+            file.remove();
+        }
+    }
+}
+
+void DeckPlay::on_textBackCard_anchorClicked(const QUrl &arg1)
+{
+    linkClicked(arg1);
+}
+
+void DeckPlay::on_textFrontCard_anchorClicked(const QUrl &arg1)
+{
+    linkClicked(arg1);
+}
+
+void DeckPlay::on_textBackCard_selectionChanged()
+{
+    QTextCursor cursor = ui->textBackCard->textCursor();
+    cursor.clearSelection();
+    ui->textBackCard->setTextCursor(cursor);
+}
+
+void DeckPlay::on_textFrontCard_selectionChanged()
+{
+    QTextCursor cursor = ui->textFrontCard->textCursor();
+    cursor.clearSelection();
+    ui->textFrontCard->setTextCursor(cursor);
 }

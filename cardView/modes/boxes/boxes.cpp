@@ -133,7 +133,7 @@ void boxes::loop() {
     }
     parent->changeStatusBarTextSlot(deckName);
 
-    qDebug() << "Choosed card:" << choosenCard;
+    qDebug() << "Choosed card:" << *choosenCard;
     choosenCard->count += 1;
 
     QString mainCard = cardExtract(choosenCard, parent);

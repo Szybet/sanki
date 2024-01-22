@@ -13,3 +13,6 @@
 [submodule "libraries/ereader/inkbox"]
 	path = libraries/ereader/inkbox
 	url = https://github.com/Kobo-InkBox/inkbox.git
+[submodule "anki-attach/s2png"]
+	path = anki-attach/s2png
+	url = https://github.com/dbohdan/s2png.git

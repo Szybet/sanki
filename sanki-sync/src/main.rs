@@ -38,9 +38,9 @@ struct Args {
     port: u16,
     #[arg(short, long, default_value_t = String::from("decks"))]
     target_directory: String,
-    #[arg(short, long, default_value_t = true)]
+    #[arg(short, long, default_value_t = false)]
     omit_default_deck: bool,
-    #[arg(short, long, default_value_t = true)]
+    #[arg(short, long, default_value_t = false)]
     resize_images: bool,
     #[arg(long, default_value_t = 1024)]
     img_height: u32,
@@ -160,7 +160,7 @@ async fn main() {
             .remove(decks.result.iter().position(|r| r == "Default").unwrap());
     }
 
-    std::fs::remove_dir_all(args.target_directory.clone()).unwrap();
+    let _ = std::fs::remove_dir_all(args.target_directory.clone());
     std::fs::create_dir_all(args.target_directory.clone()).unwrap();
     let path_dir = std::fs::canonicalize(PathBuf::from(args.target_directory.clone()))
         .unwrap()
@@ -247,6 +247,8 @@ async fn main() {
 
             debug!("Removing directory: {}", tmp_dir_path);
             std::fs::remove_dir_all(tmp_dir_path.clone()).unwrap_or_else(|_| panic!("failed to remove dir {}", tmp_dir_path));
+        } else {
+            info!("Not resizing images");
         }
     }
 

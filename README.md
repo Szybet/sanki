@@ -21,6 +21,11 @@ To sync sanki with anki ( On Linux host ):
 6. On the ereader, input your host IP address and port like that: <ip_address>:\<port> for example 192.168.1.1:8766
 7. Sync :)
 
+### anki-attach
+This tool allows to open koreader and read books directly from sanki. Notes:
+- Works only on InkBox OS
+- Don't resize the images with sanki-sync if using this
+
 ### Installation
 - For Nickel, just extract the zip to the main folder when connecting via usb - **You also need Nickel Menu, Kfmon and Koreader installed ( from the one click package )**
 - For InkBox, extract it to `.apps` folder

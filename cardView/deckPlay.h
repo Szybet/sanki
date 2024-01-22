@@ -54,6 +54,7 @@ public:
 
     void receiveDeckCall(QString call);
     bool reversedCards = false;
+    void linkClicked(const QUrl &arg1);
 
 protected:
     bool event(QEvent* event) override;
@@ -71,6 +72,13 @@ signals:
 
 private slots:
     void on_horizontalScrollBar_valueChanged(int value);
+
+    void on_textBackCard_anchorClicked(const QUrl &arg1);
+
+    void on_textFrontCard_anchorClicked(const QUrl &arg1);
+    void on_textBackCard_selectionChanged();
+
+    void on_textFrontCard_selectionChanged();
 
 private:
     Ui::DeckPlay *ui;

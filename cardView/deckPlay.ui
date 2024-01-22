@@ -177,7 +177,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <number>0</number>
            </property>
            <property name="textInteractionFlags">
-            <set>Qt::NoTextInteraction</set>
+            <set>Qt::TextBrowserInteraction</set>
+           </property>
+           <property name="openExternalLinks">
+            <bool>false</bool>
            </property>
            <property name="openLinks">
             <bool>false</bool>
@@ -242,7 +245,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <number>0</number>
            </property>
            <property name="textInteractionFlags">
-            <set>Qt::NoTextInteraction</set>
+            <set>Qt::TextBrowserInteraction</set>
            </property>
            <property name="openExternalLinks">
             <bool>false</bool>

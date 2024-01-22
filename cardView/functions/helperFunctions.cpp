@@ -34,6 +34,14 @@ void centerText(QTextBrowser* text) {
     }
 }
 
+bool containsBook(QString str) {
+    if(str.contains(".epub") || str.contains(".pdf") || str.contains(".txt")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void correctMainCard(QString* mainCard, QFile mediaFile)
 {
     // turn those weird image id's to file names
@@ -66,8 +74,51 @@ void correctMainCard(QString* mainCard, QFile mediaFile)
             {
                 qDebug() << "mainCard contains items_last";
                 mainCard = &mainCard->replace(replace_items.last(), replace_items.first());
+                QString lastItem = replace_items.last();
+                if(containsBook(lastItem)) {
+                    qDebug() << "It contains a book, detected in json handling";
+                    QString last = replace_items.last();
+                    QString first = replace_items.first();
+                    last.chop(1);
+                    first.remove(0, 1);
+                    QString newLink = last + BOOK_LINK_SPLIT + first;
+                    qDebug() << "newLink:" << newLink;
+
+                    mainCard = &mainCard->replace(replace_items.first(), newLink);
+                }
             }
         }
+    }
+
+    if(containsBook(*mainCard)) {
+        qDebug() << "This card contains a book" << *mainCard;
+
+        QStringList splittedhtml = mainCard->split("<");
+        QString tmpCard = splittedhtml.first();
+        splittedhtml.removeFirst();
+        foreach(QString str, splittedhtml) {
+            if(str.startsWith("img")) {
+                if(containsBook(str)) {
+                    qDebug() << "Detected in in img";
+                    QStringList split2 = str.split(">");
+                    QString newStr = split2.first().replace("img src=\"", "");
+
+                    while(newStr.endsWith(">") || newStr.endsWith(" ") || newStr.endsWith("\"")) {
+                        qDebug() << "Removing...";
+                        newStr.chop(1);
+                    }
+                    qDebug() << "Clear link is:" << newStr;
+
+                    tmpCard.append("<a href=\"" + newStr + "\">" + newStr.split(BOOK_LINK_SPLIT).first() + "</a>" + split2.last());
+                } else {
+                    tmpCard.append("<" + str);
+                }
+            } else {
+                tmpCard.append("<" + str);
+            }
+        }
+        *mainCard = tmpCard;
+        qDebug() << "Final link:" << *mainCard;
     }
 
     // Weird: &nbsp; ( hard space in html ) sometimes doesn't get parsed

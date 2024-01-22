@@ -14,6 +14,8 @@
 #include <QSqlQuery>
 #include <QRandomGenerator>
 
+#define BOOK_LINK_SPLIT "@#$$#@"
+
 void splitMainCard(QString mainCard, QString* frontCard, QString* backCard, DeckPlay* parent);
 void centerText(QTextBrowser* text);
 void correctMainCard(QString* mainCard, QFile mediaFile);

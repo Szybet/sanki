@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=anki-drop
+Exec=~/.local/bin/anki-drop.sh %f
+Icon=/usr/share/pixmaps/anki.png
+Type=Application
+Categories=Utility;
+MimeType=application/txt;application/pdf;application/epub+zip;

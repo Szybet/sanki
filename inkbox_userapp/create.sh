@@ -3,6 +3,11 @@
 cd ../
 
 cp build/ereader/sanki inkbox_userapp/sanki/app-bin/sanki.bin
+cd anki-attach/
+cd s2png/
+cross build --release --target arm-unknown-linux-musleabihf
+cd ../../
+cp anki-attach/s2png/target/arm-unknown-linux-musleabihf/release/s2png inkbox_userapp/sanki/app-bin/
 
 rm -rf inkbox_userapp/sanki/app-lib/*
 cp libraries/ereader/ereaderdev-lib/ereaderdev/build/* inkbox_userapp/sanki/app-lib/
