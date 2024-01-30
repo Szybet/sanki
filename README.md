@@ -27,7 +27,6 @@ To sync sanki with anki ( On Linux host ):
 ### anki-attach
 This tool allows to open koreader and read books directly from sanki. Notes:
 - Works only on InkBox OS
-- Don't resize the images with sanki-sync if using this
 
 ### Installation
 - For Nickel, just extract the zip to the main folder when connecting via usb - **You also need Nickel Menu, Kfmon and Koreader installed ( from the one click package )**

@@ -1,35 +1,29 @@
 #[macro_use]
 extern crate log;
 
-use std::io::Write;
+use std::collections::HashMap;
+use std::io::{BufReader, Read, Write};
 use std::process::Stdio;
 use std::thread;
 use std::{fs::File, process::Command};
 
 use axum::{
-    body::Body,
     extract::State,
     handler::HandlerWithoutStateExt,
     http::{Request, StatusCode},
     middleware::map_request_with_state,
-    routing::get,
     Router,
 };
 use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
-use tower::ServiceExt;
-use tower_http::{
-    services::{ServeDir, ServeFile},
-    trace::TraceLayer,
-};
+use tower_http::{services::ServeDir, trace::TraceLayer};
 
 use clap::Parser;
 use std::path::{Path, PathBuf};
 
-use std::sync::Arc;
+use pnet::datalink;
 use tokio::sync::Mutex;
 use tokio::time;
-use pnet::datalink;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
@@ -38,9 +32,9 @@ struct Args {
     port: u16,
     #[arg(short, long, default_value_t = String::from("decks"))]
     target_directory: String,
-    #[arg(short, long, default_value_t = false)]
+    #[arg(short, long, default_value_t = true)]
     omit_default_deck: bool,
-    #[arg(short, long, default_value_t = false)]
+    #[arg(short, long, default_value_t = true)]
     resize_images: bool,
     #[arg(long, default_value_t = 1024)]
     img_height: u32,
@@ -117,7 +111,7 @@ async fn main() {
         }
     }
     info!("Starting, available at {}", interfaces);
-    
+
     let client = reqwest::Client::new();
 
     let params_sync: AnkiRequest = AnkiRequest {
@@ -210,28 +204,54 @@ async fn main() {
                 .wait()
                 .expect("Failed to wait for unzip command");
 
-            for num in 0..99 {
+            let mut file = File::open(format!("{}/media", tmp_dir_path)).unwrap();
+
+            let mut content = String::new();
+            file.read_to_string(&mut content).unwrap();
+
+            let map: HashMap<String, String> =
+                serde_json::from_str(&content).expect("Failed to parse JSON");
+
+            for num in 0..999 {
                 let img_file = format!("{}/{}", tmp_dir_path, num);
                 if Path::new(&img_file).exists() {
                     debug!("img file exists: {}", img_file);
-                    Command::new("mogrify")
-                        .arg("-resize")
-                        .arg(format!("{}x{}", args.img_width, args.img_height))
-                        .arg("-quality")
-                        .arg("80")
-                        .arg(img_file)
-                        .stdout(Stdio::null()) // Redirect standard output to /dev/null
-                        .stderr(Stdio::null()) // Redirect standard error to /dev/null
-                        .spawn()
-                        .expect("Failed to execute mogrify command")
-                        .wait()
-                        .expect("Failed to wait for mogrify command");
+
+                    let file_name = map.get(&num.to_string());
+                    debug!("File media name: {:?}", file_name);
+
+                    if let Some(real_file_name) = file_name {
+                        if !real_file_name.contains(".txt")
+                            && !real_file_name.contains(".epub")
+                            && !real_file_name.contains(".pdf")
+                        {
+                            debug!("Resizing media file {}", img_file);
+                            Command::new("mogrify")
+                                .arg("-resize")
+                                .arg(format!("{}x{}", args.img_width, args.img_height))
+                                .arg("-quality")
+                                .arg("80")
+                                .arg(img_file)
+                                .stdout(Stdio::null()) // Redirect standard output to /dev/null
+                                .stderr(Stdio::null()) // Redirect standard error to /dev/null
+                                .spawn()
+                                .expect("Failed to execute mogrify command")
+                                .wait()
+                                .expect("Failed to wait for mogrify command");
+                        } else {
+                            debug!("Ignoring resizing for file {} because it's a book", img_file);
+                        }
+                    } else {
+                        error!("There is no entry in media file for {}", img_file);
+                        continue;
+                    }
                 } else {
                     break;
                 }
             }
 
-            std::fs::remove_file(deck_path.clone()).unwrap_or_else(|_| panic!("failed to remove deck {}", deck_path));
+            std::fs::remove_file(deck_path.clone())
+                .unwrap_or_else(|_| panic!("failed to remove deck {}", deck_path));
 
             Command::new("zip")
                 .arg("-r")
@@ -246,9 +266,10 @@ async fn main() {
                 .expect("Failed to wait for zip command");
 
             debug!("Removing directory: {}", tmp_dir_path);
-            std::fs::remove_dir_all(tmp_dir_path.clone()).unwrap_or_else(|_| panic!("failed to remove dir {}", tmp_dir_path));
+            std::fs::remove_dir_all(tmp_dir_path.clone())
+                .unwrap_or_else(|_| panic!("failed to remove dir {}", tmp_dir_path));
         } else {
-            info!("Not resizing images");
+            debug!("Not resizing images");
         }
     }
 
@@ -307,6 +328,6 @@ async fn main() {
     server_thread.abort();
     info!("Finished downloading all decks, cleaning and exiting...");
     if !args.target_directory.is_empty() {
-        std::fs::remove_dir_all(path_dir);
+        let _ = std::fs::remove_dir_all(path_dir);
     }
 }
