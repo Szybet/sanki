@@ -1,4 +1,4 @@
-Resources, links for developement:
+Resources, links for development:
 - https://docs.ankiweb.net/resources.html
 - https://www.juliensobczak.com/write/2016/12/26/anki-scripting.html
 - https://faqs.ankiweb.net/what-spaced-repetition-algorithm.html
